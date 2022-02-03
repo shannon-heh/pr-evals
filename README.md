@@ -22,7 +22,7 @@ npm run start
 To install packages for the app:
 
 ```
-npm install
+npm ci
 ```
 
 For formatting, use Prettier with default settings.
