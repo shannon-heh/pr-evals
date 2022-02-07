@@ -6,21 +6,16 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import CustomHead from "../components/CustomHead";
-import { useRouter } from "next/router";
-import useSWR from "swr";
+import useCAS from "../hooks/useCAS";
 
 export default function Home() {
-  const router = useRouter();
-  const { ticket } = router.query;
-  const fetcher = (url: string) => fetch(url).then((r) => r.json());
-  const { data, error } = useSWR(`/api/auth?ticket=${ticket}`, fetcher);
-  let loggedIn: boolean = !error && data && "netid" in data;
+  const { isLoggedIn, isLoading, netID } = useCAS();
 
-  if (loggedIn) {
+  if (isLoggedIn) {
     console.log("TODO: now logged in, so redirect to somewhere");
   }
 
-  if (!data)
+  if (isLoading)
     return (
       <>
         <CustomHead pageTitle="Loading" />
@@ -64,12 +59,12 @@ export default function Home() {
                 variant="contained"
                 size="large"
                 startIcon={
-                  loggedIn ? null : <LoginRoundedIcon fontSize="large" />
+                  isLoggedIn ? null : <LoginRoundedIcon fontSize="large" />
                 }
                 href={`${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/login?service=${process.env.NEXT_PUBLIC_HOSTNAME}`}
-                disabled={loggedIn}
+                disabled={isLoggedIn}
               >
-                {loggedIn ? `Logged in as ${data["netid"]}` : "Login with CAS"}
+                {isLoggedIn ? `Logged in as ${netID}` : "Login with CAS"}
               </Button>
             </Box>
             {/* TODO: Move logout button to navbar */}
@@ -78,10 +73,10 @@ export default function Home() {
                 variant="contained"
                 size="large"
                 startIcon={
-                  !loggedIn ? null : <LogoutRoundedIcon fontSize="large" />
+                  !isLoggedIn ? null : <LogoutRoundedIcon fontSize="large" />
                 }
                 href="/logout"
-                disabled={!loggedIn}
+                disabled={!isLoggedIn}
               >
                 Log out
               </Button>
