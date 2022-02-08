@@ -11,10 +11,6 @@ import useCAS from "../hooks/useCAS";
 export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
 
-  if (isLoggedIn) {
-    console.log("TODO: now logged in, so redirect to somewhere");
-  }
-
   if (isLoading)
     return (
       <>
@@ -61,13 +57,14 @@ export default function Home() {
                 startIcon={
                   isLoggedIn ? null : <LoginRoundedIcon fontSize="large" />
                 }
+                // TODO: @nicholaspad add /dashboard after service=
                 href={`${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/login?service=${process.env.NEXT_PUBLIC_HOSTNAME}`}
                 disabled={isLoggedIn}
               >
                 {isLoggedIn ? `Logged in as ${netID}` : "Login with CAS"}
               </Button>
             </Box>
-            {/* TODO: Move logout button to navbar */}
+            {/* TODO: @shannon-heh Move logout button to navbar */}
             <Box sx={{ mt: 4 }}>
               <Button
                 variant="contained"
