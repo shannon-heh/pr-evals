@@ -1,7 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import urllib from "urllib";
 import sessionstorage from "sessionstorage";
-import { MongoClient } from "mongodb";
+import { getDB } from "../../src/database";
+import { ReqLib } from "../../src/reqLib";
+
+const BASE_URL = "https://api.princeton.edu:443/active-directory/1.0.4";
+const USERS = "/users";
 
 type Data = {
   netid?: string;
@@ -19,11 +23,9 @@ export default async function handler(
   }
 
   // connect to DB
-  const client = new MongoClient(process.env.DATABASE_URL);
-  await client.connect();
-  const usersCollection = client.db("course-evals-iw").collection("users");
+  const usersCollection = (await getDB()).collection("users");
 
-  // otherwise, perform CAS login
+  // if netID not in session, perform CAS login
   await urllib
     .request(
       `${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/validate?service=${process.env.NEXT_PUBLIC_HOSTNAME}&ticket=${req.query.ticket}`
@@ -48,25 +50,61 @@ export default async function handler(
     })
     .then((netid: string) => {
       if (!netid) return;
-      // if necessary, create user document in database
-      usersCollection
-        .updateOne(
-          { netid: netid },
-          // TODO: correctly set class_year, is_instructor, instructorid from /users
-          {
-            $set: {
-              netid: netid,
-              student_courses: [],
-              class_year: null,
-              major_code: null,
-              is_instructor: false,
-              instructor_courses: [], // TODO: @shannon-heh add logic to populate instructor_courses
-              instructorid: null,
-            },
-          },
-          { upsert: true }
-        )
-        .then(() => client.close());
+
+      new ReqLib()
+        .getJSON(BASE_URL, USERS, {
+          uid: netid,
+        })
+        .then((data: Array<Object>) => {
+          const userData = data[0];
+
+          const pustatusMapping = {
+            fac: "instructor",
+            undergraduate: "undergrad",
+            graduate: "grad",
+          };
+          const pustatus = userData["pustatus"];
+
+          const isInstructor = pustatus == "fac";
+          let classYear =
+            pustatus == "undergraduate"
+              ? userData["department"].split(" ").at(-1)
+              : null;
+
+          // if necessary, create or update user document in database
+          // first, populate fields that won't automatically change (i.e. from semester to semester)
+          // then, populate fields that might or will change
+          usersCollection
+            .updateOne(
+              { netid: netid },
+              {
+                $set: {
+                  netid: netid,
+                  student_courses: [],
+                  major_code: null,
+                  instructor_courses: [], // TODO: @shannon-heh add logic to populate instructor_courses
+                },
+              },
+              { upsert: true }
+            )
+            .then(() => {
+              usersCollection.updateOne(
+                { netid: netid },
+                {
+                  $set: {
+                    class_year: classYear,
+                    person_type:
+                      pustatus in pustatusMapping
+                        ? pustatusMapping[pustatus]
+                        : "other",
+                    instructorid: isInstructor
+                      ? userData["universityid"]
+                      : null,
+                  },
+                }
+              );
+            });
+        });
     })
     .catch((err) => {
       console.log(err);
