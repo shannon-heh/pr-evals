@@ -7,6 +7,8 @@ const COURSE_COURSES = "/courses/courses";
 const CURR_TERM = "1224";
 
 // API endpoint to add basic course data to DB.
+// Calls /courses/courses endpoint on MobileApp API.
+// Usage: /api/populate-courses
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

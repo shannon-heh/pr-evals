@@ -1,6 +1,6 @@
 // Adapted from https://github.com/vr2amesh/COS333-API-Code-Examples/blob/master/ActiveDirectory/python/req_lib.py
 
-// Create ReqLib object to call Princeton's APIS
+// Create ReqLib object to access Princeton APIs
 export class ReqLib {
   ACCESS_TOKEN = null;
   REFRESH_TOKEN_URL =
