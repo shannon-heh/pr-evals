@@ -72,11 +72,8 @@ export default function Home() {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={
-                  !isLoggedIn ? null : <LogoutRoundedIcon fontSize="large" />
-                }
+                startIcon={<LogoutRoundedIcon fontSize="large" />}
                 href="/logout"
-                disabled={!isLoggedIn}
               >
                 Log out
               </Button>
