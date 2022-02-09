@@ -32,12 +32,12 @@ export default async function handler(
       // validate CAS response
       let casData: string = res_.data.toString();
       if (!casData) {
-        res.status(201).json({});
+        res.status(401).json({});
         return "";
       }
       let casDataParts: string[] = casData.split("\n");
       if (casDataParts.length < 3 || casDataParts[0] != "yes") {
-        res.status(201).json({});
+        res.status(401).json({});
         return "";
       }
       // CAS response validated, save netID to session
@@ -52,14 +52,24 @@ export default async function handler(
       usersCollection
         .updateOne(
           { netid: netid },
-          // TODO: correctly set isInstructor and instructorid from /users
-          { $set: { netid: netid, isInstructor: false, instructorid: 0 } },
+          // TODO: correctly set class_year, is_instructor, instructorid from /users
+          {
+            $set: {
+              netid: netid,
+              student_courses: [],
+              class_year: null,
+              major_code: null,
+              is_instructor: false,
+              instructor_courses: [], // TODO: @shannon-heh add logic to populate instructor_courses
+              instructorid: null,
+            },
+          },
           { upsert: true }
         )
         .then(() => client.close());
     })
     .catch((err) => {
       console.log(err);
-      res.status(201).json({});
+      res.status(401).json({});
     });
 }
