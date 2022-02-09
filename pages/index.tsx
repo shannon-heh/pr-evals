@@ -7,9 +7,11 @@ import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import CustomHead from "../components/CustomHead";
 import useCAS from "../hooks/useCAS";
+import { useState } from "react";
 
 export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
+  const [loginButtonDisabled, setLoginButtonDisabled] = useState(false);
 
   if (isLoading)
     return (
@@ -59,7 +61,8 @@ export default function Home() {
                 }
                 // TODO: @nicholaspad add /dashboard after service=
                 href={`${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/login?service=${process.env.NEXT_PUBLIC_HOSTNAME}`}
-                disabled={isLoggedIn}
+                onClick={() => setLoginButtonDisabled(true)}
+                disabled={isLoggedIn || loginButtonDisabled}
               >
                 {isLoggedIn ? `Logged in as ${netID}` : "Login with CAS"}
               </Button>
