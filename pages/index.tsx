@@ -1,21 +1,39 @@
 import Button from "@mui/material/Button";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
 import CustomHead from "../components/CustomHead";
-import { useRouter } from "next/router";
-import useSWR from "swr";
+import useCAS from "../hooks/useCAS";
+import { useState } from "react";
 
 export default function Home() {
-  const router = useRouter();
-  const { ticket } = router.query;
-  const fetcher = (url: string) => fetch(url).then((r) => r.json());
-  const { data, error } = useSWR(`/api/auth?ticket=${ticket}`, fetcher);
+  const { isLoggedIn, isLoading, netID } = useCAS();
+  const [loginButtonDisabled, setLoginButtonDisabled] = useState(false);
 
-  if (data && "netid" in data) {
-    alert(data["netid"]);
-  }
+  if (isLoading)
+    return (
+      <>
+        <CustomHead pageTitle="Loading" />
+        <Container maxWidth={false}>
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            style={{ minHeight: "100vh" }}
+          >
+            <Grid item xs={3} sx={{ textAlign: "center" }}>
+              <CircularProgress />
+              <h2>Loading...</h2>
+            </Grid>
+          </Grid>
+        </Container>
+      </>
+    );
 
   return (
     <>
@@ -38,14 +56,26 @@ export default function Home() {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<LoginRoundedIcon fontSize="large" />}
-                onClick={() => {
-                  router.push(
-                    `${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/login?service=${process.env.NEXT_PUBLIC_HOSTNAME}`
-                  );
-                }}
+                startIcon={
+                  isLoggedIn ? null : <LoginRoundedIcon fontSize="large" />
+                }
+                // TODO: @nicholaspad add /dashboard after service=
+                href={`${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/login?service=${process.env.NEXT_PUBLIC_HOSTNAME}`}
+                onClick={() => setLoginButtonDisabled(true)}
+                disabled={isLoggedIn || loginButtonDisabled}
               >
-                Login with CAS
+                {isLoggedIn ? `Logged in as ${netID}` : "Login with CAS"}
+              </Button>
+            </Box>
+            {/* TODO: @shannon-heh Move logout button to navbar and make sure to delete from this file */}
+            <Box sx={{ mt: 4 }}>
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<LogoutRoundedIcon fontSize="large" />}
+                href="/logout"
+              >
+                Log out
               </Button>
             </Box>
           </Grid>
