@@ -60,6 +60,7 @@ async function getAllCourses(reqLib: ReqLib): Promise<Object[]> {
               class_number: class_["class_number"],
               section: class_["section"],
               type_name: class_["type_name"],
+              weekly_meetings: class_["schedule"]["meetings"][0]["days"].length,
             };
           });
           return course;

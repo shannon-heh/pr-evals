@@ -1,16 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/database";
 
-type classData = {
+export type classData = {
   classID: string;
   classType: string;
+  weeklyMeetingsCount: number;
 };
 
 export type courseData = {
   courseTitle: string;
   catalogTitle: string;
   courseID: string;
-  instructorIDs: string;
+  instructorIDs: string[];
   crosslistingCatalogTitles: string[];
   classes: classData[];
 };
@@ -31,7 +32,7 @@ export default async function handler(
         courseTitle: data["title"],
         catalogTitle: data["catalog_title"],
         courseID: data["course_id"],
-        instructorIDs: data["instructors"].join(","),
+        instructorIDs: data["instructors"],
         crosslistingCatalogTitles: data["crosslistings"].map(
           (crosslisting: Object) => {
             return crosslisting["catalog_title"];
@@ -41,6 +42,7 @@ export default async function handler(
           return {
             classID: class_["class_number"],
             classType: class_["type_name"],
+            weeklyMeetingsCount: class_["weekly_meetings"],
           };
         }),
       };
