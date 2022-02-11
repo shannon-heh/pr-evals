@@ -18,8 +18,7 @@ export default async function handler(
   // attempt to retrieve netID from session (i.e. user logged in already)
   let netid: string = sessionstorage.getItem("netid");
   if (netid) {
-    res.status(200).json({ netid: netid.toLowerCase() });
-    return;
+    return res.status(200).json({ netid: netid.toLowerCase() });
   }
 
   // connect to DB

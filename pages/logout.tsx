@@ -1,7 +1,3 @@
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import CircularProgress from "@mui/material/CircularProgress";
-import CustomHead from "../components/CustomHead";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Loading from "../components/Loading";
