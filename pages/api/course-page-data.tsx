@@ -6,7 +6,7 @@ type classData = {
   classType: string;
 };
 
-type courseData = {
+export type courseData = {
   courseTitle: string;
   catalogTitle: string;
   courseID: string;
