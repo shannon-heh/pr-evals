@@ -7,7 +7,7 @@ import Error from "../../components/Error";
 import Loading from "../../components/Loading";
 import pluralize from "pluralize";
 import useCAS from "../../hooks/useCAS";
-import { courseData, classData } from "../api/course-page-data";
+import { courseData, classData, instructorData } from "../api/course-page-data";
 
 export default function Course() {
   const { isLoading, netID } = useCAS();
@@ -28,6 +28,12 @@ export default function Course() {
     let counts = {};
     for (let { classType, weeklyMeetingsCount } of classes) {
       classType = classType == "Unknown" ? "Other" : classType;
+      if (
+        classType in counts &&
+        counts[classType]["weeklyMeetingsCount"] > weeklyMeetingsCount
+      ) {
+        weeklyMeetingsCount = counts[classType]["weeklyMeetingsCount"];
+      }
       counts[classType] = {
         classType,
         weeklyMeetingsCount,
@@ -67,7 +73,7 @@ export default function Course() {
         </Grid>
         <Grid item xs={4} sx={{ my: 3 }}>
           <Box>Quick Facts</Box>
-          <Box># Instructors: {courseData.instructorIDs.length}</Box>
+          <Box># Instructors: {courseData.instructors.length}</Box>
           <Box>Meetings per week:</Box>
           {countUniqueSections(courseData.classes).map((class_) => {
             return (
@@ -83,8 +89,12 @@ export default function Course() {
         </Grid>
         <Grid item xs={12} sx={{ my: 3 }}>
           <Box>
-            {pluralize("Instructor", courseData.instructorIDs.length)}:{" "}
-            {courseData.instructorIDs.join(" • ")}
+            {pluralize("Instructor", courseData.instructors.length)}:{" "}
+            {courseData.instructors
+              .map((instr: instructorData) => {
+                return instr["instructor_name"];
+              })
+              .join(" • ")}
           </Box>
         </Grid>
       </Grid>

@@ -46,7 +46,10 @@ async function getAllCourses(reqLib: ReqLib): Promise<Object[]> {
           course["catalog_number"] = data["catalog_number"];
           course["catalog_title"] = deptCode + data["catalog_number"];
           course["instructors"] = data["instructors"].map((instr: Object) => {
-            return instr["emplid"];
+            return {
+              instructorid: instr["emplid"],
+              instructor_name: instr["full_name"],
+            };
           });
           course["crosslistings"] = data["crosslistings"].map(
             (class_: Object) => {

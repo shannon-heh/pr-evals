@@ -7,15 +7,21 @@ export type classData = {
   weeklyMeetingsCount: number;
 };
 
+export type instructorData = {
+  instructorID: string;
+  instructorName: string;
+};
+
 export type courseData = {
   courseTitle: string;
   catalogTitle: string;
   courseID: string;
-  instructorIDs: string[];
+  instructors: instructorData[];
   crosslistingCatalogTitles: string[];
   classes: classData[];
 };
 
+// retrieves course-related data used on course pages
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<courseData>
@@ -32,7 +38,7 @@ export default async function handler(
         courseTitle: data["title"],
         catalogTitle: data["catalog_title"],
         courseID: data["course_id"],
-        instructorIDs: data["instructors"],
+        instructors: data["instructors"],
         crosslistingCatalogTitles: data["crosslistings"].map(
           (crosslisting: Object) => {
             return crosslisting["catalog_title"];
