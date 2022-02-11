@@ -78,11 +78,14 @@ export default function Course() {
           {countUniqueSections(courseData.classes).map((class_) => {
             return (
               <Box key={class_["classType"]}>
-                {pluralize(
-                  class_["classType"],
-                  class_["weeklyMeetingsCount"],
-                  true
-                )}
+                {class_["weeklyMeetingsCount"] == 0 &&
+                class_["classType"] == "Lecture"
+                  ? "Pre-Recorded Lectures"
+                  : pluralize(
+                      class_["classType"],
+                      class_["weeklyMeetingsCount"],
+                      true
+                    )}
               </Box>
             );
           })}
