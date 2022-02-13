@@ -55,7 +55,7 @@ export default async function handler(
         .getJSON(BASE_URL, USERS, {
           uid: netid,
         })
-        .then((data: Array<Object>) => {
+        .then(async (data: Array<Object>) => {
           const userData = data[0];
 
           const pustatusMapping = {
@@ -74,6 +74,9 @@ export default async function handler(
           // if necessary, create or update user document in database
           // first, populate fields that won't automatically change (i.e. from semester to semester)
           // then, populate fields that might or will change
+          const instrCourses = isInstructor
+            ? await getInstrCourses(userData["universityid"])
+            : [];
           usersCollection
             .updateOne(
               { netid: netid },
@@ -82,7 +85,7 @@ export default async function handler(
                   netid: netid,
                   student_courses: [],
                   major_code: null,
-                  instructor_courses: [], // TODO: @shannon-heh add logic to populate instructor_courses
+                  instructor_courses: instrCourses,
                 },
               },
               { upsert: true }
@@ -109,5 +112,22 @@ export default async function handler(
     .catch((err) => {
       console.log(err);
       res.status(401).json({});
+    });
+}
+
+// Returns list of course IDs taught by an instructor
+async function getInstrCourses(emplid: string) {
+  const dbCourses = (await getDB()).collection("courses");
+  return dbCourses
+    .find(
+      { instructors: { $elemMatch: { instructorid: emplid } } },
+      { projection: { _id: 0, course_id: 1 } }
+    )
+    .toArray()
+    .then((allCourses: Object[]) => {
+      const courseIds = allCourses.map((course) => {
+        return course["course_id"];
+      });
+      return courseIds;
     });
 }

@@ -1,9 +1,20 @@
 import { MongoClient } from "mongodb";
 
-// Helper method to connect to DB
-export async function getDB() {
+// Global DB object
+let db = null; 
+
+// Connect to MongoDB
+async function connect() {
     const client = new MongoClient(process.env.DATABASE_URL);
     const dbName = "course-evals-iw";
     await client.connect();
-    return client.db(dbName);
+    db = client.db(dbName);
+}
+
+// Return DB object
+export async function getDB() {
+    if (db == null) {
+        await connect();
+    }
+    return db;
 }
