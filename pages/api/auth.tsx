@@ -102,6 +102,7 @@ export default async function handler(
                     instructorid: isInstructor
                       ? userData["universityid"]
                       : null,
+                    name: userData["displayname"],
                   },
                 }
               );
