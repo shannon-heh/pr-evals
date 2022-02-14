@@ -1,5 +1,7 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { blue, grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import CustomHead from "../../components/CustomHead";
@@ -47,58 +49,120 @@ export default function Course() {
       <CustomHead
         pageTitle={`${courseData.catalogTitle}: ${courseData.courseTitle}`}
       />
-      <Grid
-        container
-        spacing={2}
-        sx={{ textAlign: "center", borderStyle: "dashed" }}
-      >
+      <Grid container spacing={2} sx={{ textAlign: "center" }}>
+        <Grid item container md={8} direction="column">
+          <Box
+            sx={{
+              m: 2,
+              mb: 0,
+              p: 5,
+              background: blue[200],
+              borderRadius: 3,
+              boxShadow: 7,
+              height: "100%",
+              alignItems: "center",
+              color: grey[800],
+            }}
+          >
+            <Typography variant="h3" color="white" fontWeight="bold">
+              {courseData.catalogTitle}
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              {pluralize(
+                "Crosslisting",
+                courseData.crosslistingCatalogTitles.length
+              )}
+              : {courseData.crosslistingCatalogTitles.join(" • ")}
+            </Typography>
+            <Typography variant="h5" fontWeight="bolder">
+              {courseData.courseTitle}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item container md={4} direction="column">
+          <Box
+            sx={{
+              m: 2,
+              mb: 0,
+              p: 5,
+              background: blue[200],
+              borderRadius: 3,
+              boxShadow: 7,
+              height: "100%",
+              color: grey[800],
+            }}
+          >
+            <Typography variant="h5" color="white" fontWeight="bold">
+              Quick Facts
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              # Instructors:{" "}
+              <Typography display="inline" fontWeight="normal">
+                {courseData.instructors.length}
+              </Typography>
+            </Typography>
+            <Typography variant="subtitle1" fontWeight="medium">
+              Meetings per week:{" "}
+              <Typography
+                display="inline"
+                variant="subtitle1"
+                fontWeight="normal"
+              >
+                {countUniqueSections(courseData.classes)
+                  .map((class_) => {
+                    return class_["weeklyMeetingsCount"] == 0 &&
+                      class_["classType"] == "Lecture"
+                      ? "Pre-Recorded Lectures"
+                      : pluralize(
+                          class_["classType"],
+                          class_["weeklyMeetingsCount"],
+                          true
+                        );
+                  })
+                  .join(" • ")}
+              </Typography>
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item md={12}>
+          <Box
+            sx={{
+              m: 2,
+              p: 1.2,
+              background: blue[200],
+              borderRadius: 3,
+              boxShadow: 7,
+              color: grey[800],
+            }}
+          >
+            <Typography variant="h6" color="white" fontWeight="bold">
+              {pluralize("Instructor", courseData.instructors.length)}:{" "}
+              <Typography
+                display="inline"
+                variant="subtitle1"
+                fontWeight="medium"
+                color={grey[800]}
+              >
+                {courseData.instructors
+                  .map((instr: instructorData) => {
+                    return instr["instructor_name"];
+                  })
+                  .join(" • ")}
+              </Typography>
+            </Typography>
+          </Box>
+        </Grid>
         <Grid
           item
-          container
-          xs={8}
-          direction="column"
-          display="flex"
-          justifyContent="center"
-          sx={{ my: 3 }}
+          md={12}
+          sx={{
+            backgroundColor: blue[900],
+            minHeight: "50vh",
+            color: "white",
+            mt: 2,
+          }}
         >
-          <Box>{courseData.catalogTitle}</Box>
-          <Box>
-            {pluralize(
-              "Crosslisting",
-              courseData.crosslistingCatalogTitles.length
-            )}
-            : {courseData.crosslistingCatalogTitles.join(" • ")}
-          </Box>
-          <Box>{courseData.courseTitle}</Box>
-        </Grid>
-        <Grid item xs={4} sx={{ my: 3 }}>
-          <Box>Quick Facts</Box>
-          <Box># Instructors: {courseData.instructors.length}</Box>
-          <Box>Meetings per week:</Box>
-          {countUniqueSections(courseData.classes).map((class_) => {
-            return (
-              <Box key={class_["classType"]}>
-                {class_["weeklyMeetingsCount"] == 0 &&
-                class_["classType"] == "Lecture"
-                  ? "Pre-Recorded Lectures"
-                  : pluralize(
-                      class_["classType"],
-                      class_["weeklyMeetingsCount"],
-                      true
-                    )}
-              </Box>
-            );
-          })}
-        </Grid>
-        <Grid item xs={12} sx={{ my: 3 }}>
-          <Box>
-            {pluralize("Instructor", courseData.instructors.length)}:{" "}
-            {courseData.instructors
-              .map((instr: instructorData) => {
-                return instr["instructor_name"];
-              })
-              .join(" • ")}
-          </Box>
+          Main content!
         </Grid>
       </Grid>
     </>
