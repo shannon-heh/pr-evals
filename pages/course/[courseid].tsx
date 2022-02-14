@@ -44,6 +44,15 @@ export default function Course() {
     return Object.values(counts);
   };
 
+  const commonHeaderBoxStyles = {
+    m: 2,
+    background: blue[200],
+    borderRadius: 3,
+    boxShadow: 7,
+    alignItems: "center",
+    color: grey[800],
+  };
+
   return (
     <>
       <CustomHead
@@ -51,19 +60,7 @@ export default function Course() {
       />
       <Grid container spacing={2} sx={{ textAlign: "center" }}>
         <Grid item container md={8} direction="column">
-          <Box
-            sx={{
-              m: 2,
-              mb: 0,
-              p: 5,
-              background: blue[200],
-              borderRadius: 3,
-              boxShadow: 7,
-              height: "100%",
-              alignItems: "center",
-              color: grey[800],
-            }}
-          >
+          <Box sx={{ ...commonHeaderBoxStyles, p: 5, mb: 0, height: "100%" }}>
             <Typography variant="h3" color="white" fontWeight="bold">
               {courseData.catalogTitle}
             </Typography>
@@ -80,18 +77,7 @@ export default function Course() {
           </Box>
         </Grid>
         <Grid item container md={4} direction="column">
-          <Box
-            sx={{
-              m: 2,
-              mb: 0,
-              p: 5,
-              background: blue[200],
-              borderRadius: 3,
-              boxShadow: 7,
-              height: "100%",
-              color: grey[800],
-            }}
-          >
+          <Box sx={{ ...commonHeaderBoxStyles, p: 5, mb: 0, height: "100%" }}>
             <Typography variant="h5" color="white" fontWeight="bold">
               Quick Facts
             </Typography>
@@ -125,16 +111,7 @@ export default function Course() {
           </Box>
         </Grid>
         <Grid item md={12}>
-          <Box
-            sx={{
-              m: 2,
-              p: 1.2,
-              background: blue[200],
-              borderRadius: 3,
-              boxShadow: 7,
-              color: grey[800],
-            }}
-          >
+          <Box sx={{ ...commonHeaderBoxStyles, m: 2, p: 1.2 }}>
             <Typography variant="h6" color="white" fontWeight="bold">
               {pluralize("Instructor", courseData.instructors.length)}:{" "}
               <Typography
