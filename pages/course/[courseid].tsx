@@ -22,7 +22,8 @@ export default function Course() {
   const courseData = data as courseData;
 
   if (error) return <Error text={"Error fetching course!"} />;
-  if (isLoading || !data) return <Loading text={"Loading course..."} />;
+  if (isLoading || !data || !netID)
+    return <Loading text={"Loading course..."} />;
 
   return (
     <>

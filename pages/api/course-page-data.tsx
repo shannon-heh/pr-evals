@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getDB } from "../../src/database";
+import { getDB } from "../../src/mongodb";
 
 export type classData = {
   classID: string;

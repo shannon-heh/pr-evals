@@ -16,7 +16,7 @@ export default function CourseMainContent() {
     borderRadius: 1,
     borderColor: grey[800],
     borderStyle: "solid",
-    height: 500, // temporary
+    height: 400, // temporary
   };
 
   type TabPanelProps = {
