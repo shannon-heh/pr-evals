@@ -46,7 +46,10 @@ async function getAllCourses(reqLib: ReqLib): Promise<Object[]> {
           course["catalog_number"] = data["catalog_number"];
           course["catalog_title"] = deptCode + data["catalog_number"];
           course["instructors"] = data["instructors"].map((instr: Object) => {
-            return instr["emplid"];
+            return {
+              instructorid: instr["emplid"],
+              instructor_name: instr["full_name"],
+            };
           });
           course["crosslistings"] = data["crosslistings"].map(
             (class_: Object) => {
@@ -60,6 +63,7 @@ async function getAllCourses(reqLib: ReqLib): Promise<Object[]> {
               class_number: class_["class_number"],
               section: class_["section"],
               type_name: class_["type_name"],
+              weekly_meetings: class_["schedule"]["meetings"][0]["days"].length,
             };
           });
           return course;
