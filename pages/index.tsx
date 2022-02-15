@@ -4,36 +4,17 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import CircularProgress from "@mui/material/CircularProgress";
 import CustomHead from "../components/CustomHead";
 import useCAS from "../hooks/useCAS";
 import { useState } from "react";
+import Loading from "../components/Loading";
+import Link from "@mui/material/Link";
 
 export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
   const [loginButtonDisabled, setLoginButtonDisabled] = useState(false);
 
-  if (isLoading)
-    return (
-      <>
-        <CustomHead pageTitle="Loading" />
-        <Container maxWidth={false}>
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            style={{ minHeight: "100vh" }}
-          >
-            <Grid item xs={3} sx={{ textAlign: "center" }}>
-              <CircularProgress />
-              <h2>Loading...</h2>
-            </Grid>
-          </Grid>
-        </Container>
-      </>
-    );
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -67,16 +48,17 @@ export default function Home() {
                 {isLoggedIn ? `Logged in as ${netID}` : "Login with CAS"}
               </Button>
             </Box>
-            {/* TODO: @shannon-heh Move logout button to navbar and make sure to delete from this file */}
+            {/* TODO: @shannon-heh Move logout button to navbar and delete from this file */}
             <Box sx={{ mt: 4 }}>
-              <Button
-                variant="contained"
-                size="large"
-                startIcon={<LogoutRoundedIcon fontSize="large" />}
-                href="/logout"
-              >
-                Log out
-              </Button>
+              <Link href="/logout">
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<LogoutRoundedIcon fontSize="large" />}
+                >
+                  Log out
+                </Button>
+              </Link>
             </Box>
           </Grid>
         </Grid>
