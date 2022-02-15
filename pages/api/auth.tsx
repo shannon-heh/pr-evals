@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import urllib from "urllib";
 import sessionstorage from "sessionstorage";
-import { getDB } from "../../src/database";
+import { getDB } from "../../src/mongodb";
 import { ReqLib } from "../../src/reqLib";
 
 const BASE_URL = "https://api.princeton.edu:443/active-directory/1.0.4";
@@ -83,12 +83,22 @@ export default async function handler(
                 $set: {
                   netid: netid,
                   student_courses: [],
-                  major_code: null,
                   instructor_courses: instrCourses,
                 },
               },
               { upsert: true }
             )
+            .then(() => {
+              // do not update major if field already exists
+              usersCollection.updateOne(
+                { major_code: { $exists: false } },
+                {
+                  $set: {
+                    major_code: null,
+                  },
+                }
+              );
+            })
             .then(() => {
               usersCollection.updateOne(
                 { netid: netid },
