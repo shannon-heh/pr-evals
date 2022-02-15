@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ReqLib } from "../../src/reqLib";
 import { getDB } from "../../src/mongodb";
 
-const BASE_URL = "https://api.princeton.edu:443/mobile-app/1.0.4";
+const BASE_URL = "https://api.princeton.edu:443/student-app/1.0.0";
 const COURSE_COURSES = "/courses/courses";
 const CURR_TERM = "1224";
 
