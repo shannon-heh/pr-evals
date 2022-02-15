@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getDB } from "../../src/database";
+import { getDB } from "../../src/mongodb";
 
 // API endpoint to return list of stored courses
 // being taught by an instructor / taken by a student
@@ -17,21 +17,23 @@ export default async function handler(
       {
         projection: {
           _id: 0,
-          instructor_courses: 1,
-          student_courses: 1,
-          person_type: 1,
         },
       }
     )
-    .then((user) => {
+    .then((user: Object) => {
       // if given netid is not valid
       if (user == null) {
         return res.status(404).json(`user ${netid} not found in DB`);
       }
+      // return res.status(200).json({ data: user });
       if (user["person_type"] === "instructor") {
-        return res.status(200).json({ course_ids: user["instructor_courses"] });
+        delete user["class_year"];
+        delete user["student_courses"];
+        delete user["major_code"];
       } else {
-        return res.status(200).json({ course_ids: user["student_courses"] });
+        delete user["instructorid"];
+        delete user["instructor_courses"];
       }
+      return res.status(200).json({ data: user });
     });
 }

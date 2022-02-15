@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ReqLib } from "../../src/reqLib";
-import { getDB } from "../../src/database";
+import { getDB } from "../../src/mongodb";
 
 const BASE_URL = "https://api.princeton.edu:443/mobile-app/1.0.4";
 const COURSE_COURSES = "/courses/courses";
 const CURR_TERM = "1224";
 
-// API endpoint to add basic course data to DB.
+// API endpoint to update department list & add basic course data to DB.
 // Calls /courses/courses endpoint on MobileApp API.
 // Usage: /api/populate-courses
 export default async function handler(
@@ -14,17 +14,26 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const reqLib = new ReqLib();
-  const db_courses = (await getDB()).collection("courses");
-  const allCourses = await getAllCourses(reqLib);
-  await db_courses.deleteMany({});
-  return await db_courses.insertMany(allCourses).then(() => {
+
+  // update departments in DB
+  const deptList: string[] = await getDepartments(reqLib);
+  await updateDepartments(deptList);
+
+  // update courses in DB
+  const allCourses = await getAllCourses(reqLib, deptList);
+  const dbCourses = (await getDB()).collection("courses");
+  await dbCourses.deleteMany({});
+  return await dbCourses.insertMany(allCourses).then(() => {
     res.status(200).json({ message: "populated DB with course data!" });
   });
 }
 
 // Returns array of objects, where each object is one course's data.
-async function getAllCourses(reqLib: ReqLib): Promise<Object[]> {
-  const deptString: string = await getDepartments(reqLib);
+async function getAllCourses(
+  reqLib: ReqLib,
+  deptList: string[]
+): Promise<Object[]> {
+  const deptString: string = deptList.join(",");
   let resCourses: Object[] = [];
   return reqLib
     .getJSON(BASE_URL, COURSE_COURSES, {
@@ -74,8 +83,8 @@ async function getAllCourses(reqLib: ReqLib): Promise<Object[]> {
     });
 }
 
-// Returns all department codes as comma-separated string.
-async function getDepartments(reqLib: ReqLib): Promise<string> {
+// Returns list of all department codes from Mobileapp
+async function getDepartments(reqLib: ReqLib): Promise<string[]> {
   return await reqLib
     .getJSON(BASE_URL, COURSE_COURSES, {
       term: CURR_TERM,
@@ -88,7 +97,12 @@ async function getDepartments(reqLib: ReqLib): Promise<string> {
           return subject["code"];
         }
       );
-      const deptString: string = deptList.join(",");
-      return deptString;
+      return deptList;
     });
+}
+
+// Hard-code list of majors into DB, given list of depts
+async function updateDepartments(deptList: string[]) {
+  const dbAdmin = (await getDB()).collection("admin");
+  await dbAdmin.insertOne({ majors: deptList });
 }
