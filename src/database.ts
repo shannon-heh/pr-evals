@@ -1,20 +1,6 @@
-import { MongoClient } from "mongodb";
+import {getDB} from "./mongodb";
 
-// Global DB object
-let db = null; 
-
-// Connect to MongoDB
-async function connect() {
-    const client = new MongoClient(process.env.DATABASE_URL);
-    const dbName = "course-evals-iw";
-    await client.connect();
-    db = client.db(dbName);
-}
-
-// Return DB object
-export async function getDB() {
-    if (db == null) {
-        await connect();
-    }
-    return db;
+export async function getDepartments() {
+    const db = await getDB();
+    return await db.collection("admin").findOne({}, {projection: {"_id": 0, "majors": 1}})
 }
