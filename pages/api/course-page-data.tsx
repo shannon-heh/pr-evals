@@ -33,7 +33,7 @@ export default async function handler(
 
   return coursesCollection
     .findOne({ course_id: courseid })
-    .then((data) => {
+    .then((data: Object) => {
       let course: courseData = {
         courseTitle: data["title"],
         catalogTitle: data["catalog_title"],
