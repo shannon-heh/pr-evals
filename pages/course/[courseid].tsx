@@ -10,7 +10,7 @@ import CourseHead from "../../components/course/CourseHead";
 import CourseMainContent from "../../components/course/CourseMainContent";
 
 export default function Course() {
-  const { isLoading, netID } = useCAS();
+  const { isLoading, netID, isInstructor } = useCAS();
 
   const router = useRouter();
   const fetcher = (url: string) => fetch(url).then((r) => r.json());
