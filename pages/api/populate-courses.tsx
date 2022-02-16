@@ -73,6 +73,7 @@ async function getAllCourses(
               section: class_["section"],
               type_name: class_["type_name"],
               weekly_meetings: class_["schedule"]["meetings"][0]["days"].length,
+              enrollment: class_["enrollment"],
             };
           });
           return course;
