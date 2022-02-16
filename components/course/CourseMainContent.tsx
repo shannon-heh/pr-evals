@@ -60,8 +60,8 @@ export default function CourseMainContent() {
 
   return (
     <>
-      <Grid item container lg={12} direction="column">
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Grid item container md={12} direction="column">
+        <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           <Tabs value={value} onChange={handleChange} centered>
             <Tab icon={<BarChart />} label="Charts" {...a11yProps(0)} />
             <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(1)} />

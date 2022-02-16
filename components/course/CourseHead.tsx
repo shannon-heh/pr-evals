@@ -27,9 +27,8 @@ export default function CourseHead(props: { data: courseData }) {
       if (
         classType in counts &&
         counts[classType]["weeklyMeetingsCount"] > weeklyMeetingsCount
-      ) {
+      )
         weeklyMeetingsCount = counts[classType]["weeklyMeetingsCount"];
-      }
       counts[classType] = {
         classType,
         weeklyMeetingsCount,
@@ -40,7 +39,7 @@ export default function CourseHead(props: { data: courseData }) {
 
   return (
     <>
-      <Grid item container lg={8} direction="column">
+      <Grid item container md={8} direction="column">
         <Box
           sx={{
             ...commonHeaderBoxStyles,
@@ -64,7 +63,7 @@ export default function CourseHead(props: { data: courseData }) {
           </Typography>
         </Box>
       </Grid>
-      <Grid item container lg={4} direction="column">
+      <Grid item container md={4} direction="column">
         <Box
           sx={{
             ...commonHeaderBoxStyles,
@@ -82,13 +81,12 @@ export default function CourseHead(props: { data: courseData }) {
               {props.data.instructors.length}
             </Typography>
           </Typography>
-          <Typography variant="subtitle1" fontWeight="medium">
+          <Typography variant="subtitle1" fontWeight="medium" fontSize="1.1em">
             Meetings per week:{" "}
             <Typography
               display="inline"
               variant="subtitle1"
               fontWeight="normal"
-              fontSize="1.1em"
             >
               {countUniqueSections(props.data.classes)
                 .map((class_) => {
@@ -106,7 +104,7 @@ export default function CourseHead(props: { data: courseData }) {
           </Typography>
         </Box>
       </Grid>
-      <Grid item container lg={12} direction="column">
+      <Grid item container md={12} direction="column">
         <Box sx={{ ...commonHeaderBoxStyles, p: 1.2 }}>
           <Typography variant="h6" color="white" fontWeight="bold">
             {pluralize("Instructor", props.data.instructors.length)}:{" "}
@@ -125,16 +123,6 @@ export default function CourseHead(props: { data: courseData }) {
           </Typography>
         </Box>
       </Grid>
-      <Grid
-        item
-        container
-        lg={12}
-        direction="column"
-        sx={{
-          backgroundColor: grey[800],
-          mt: 2,
-        }}
-      ></Grid>
     </>
   );
 }

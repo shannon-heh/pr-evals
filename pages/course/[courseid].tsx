@@ -8,6 +8,7 @@ import useCAS from "../../hooks/useCAS";
 import { courseData } from "../api/course-page-data";
 import CourseHead from "../../components/course/CourseHead";
 import CourseMainContent from "../../components/course/CourseMainContent";
+import Container from "@mui/material/Container";
 
 export default function Course() {
   const { isLoading, netID, isInstructor } = useCAS();
@@ -30,12 +31,14 @@ export default function Course() {
       <CustomHead
         pageTitle={`${courseData.catalogTitle}: ${courseData.courseTitle}`}
       />
-      <Grid container spacing={2} sx={{ textAlign: "center" }}>
-        {/* Top of course page */}
-        <CourseHead data={courseData} />
-        {/* Main content of course page */}
-        <CourseMainContent />
-      </Grid>
+      <Container maxWidth="lg">
+        <Grid container spacing={1} sx={{ textAlign: "center" }}>
+          {/* Top of course page */}
+          <CourseHead data={courseData} />
+          {/* Main content of course page */}
+          <CourseMainContent />
+        </Grid>
+      </Container>
     </>
   );
 }
