@@ -36,7 +36,7 @@ export default function Course() {
           {/* Top of course page */}
           <CourseHead data={courseData} />
           {/* Main content of course page */}
-          <CourseMainContent />
+          <CourseMainContent courseID={courseid as string} />
         </Grid>
       </Container>
     </>

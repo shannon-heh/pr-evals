@@ -7,16 +7,16 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { SyntheticEvent, useState } from "react";
+import TextualEvaluations from "./TextualEvaluations";
 
-export default function CourseMainContent() {
+export default function CourseMainContent(props: { courseID: string }) {
   const commonMainContentBoxStyles = {
     m: 2,
-    p: 3,
-    background: blue[400],
-    borderRadius: 1,
-    borderColor: grey[800],
-    borderStyle: "solid",
-    height: 400, // temporary
+    px: 3,
+    // background: blue[400],
+    // borderRadius: 1,
+    // borderColor: grey[800],
+    // borderStyle: "solid",
   };
 
   type TabPanelProps = {
@@ -73,7 +73,7 @@ export default function CourseMainContent() {
               ...commonMainContentBoxStyles,
             }}
           >
-            Textual Evaluations
+            Charts and Diagrams
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -82,7 +82,7 @@ export default function CourseMainContent() {
               ...commonMainContentBoxStyles,
             }}
           >
-            Charts and Diagrams
+            <TextualEvaluations courseID={props.courseID} />
           </Box>
         </TabPanel>
       </Grid>
