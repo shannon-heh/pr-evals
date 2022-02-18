@@ -103,7 +103,9 @@ export default function Profile() {
           <MenuItem key="Other" value="Other">
             Other
           </MenuItem>
-          ;
+          <MenuItem key="None" value="None">
+            None
+          </MenuItem>
         </Select>
         <Button
           color="primary"
