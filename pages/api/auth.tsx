@@ -9,6 +9,7 @@ const USERS = "/users";
 
 type Data = {
   netid?: string;
+  isInstructor?: boolean;
 };
 
 export default async function handler(
@@ -17,112 +18,98 @@ export default async function handler(
 ) {
   // attempt to retrieve netID from session (i.e. user logged in already)
   let netid: string = sessionstorage.getItem("netid");
-  if (netid) {
-    return res.status(200).json({ netid: netid.toLowerCase() });
-  }
+  if (netid)
+    return res.status(200).json({
+      netid: netid.toLowerCase(),
+      isInstructor: sessionstorage.getItem("isInstructor"),
+    });
 
   // connect to DB
   const usersCollection = (await getDB()).collection("users");
 
   // if netID not in session, perform CAS login
-  await urllib
-    .request(
-      `${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/validate?service=${process.env.NEXT_PUBLIC_HOSTNAME}&ticket=${req.query.ticket}`
+  const res_ = await urllib.request(
+    `${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/validate?service=${process.env.NEXT_PUBLIC_HOSTNAME}&ticket=${req.query.ticket}`
+  );
+
+  // validate CAS response
+  let casData: string = res_.data.toString();
+  if (!casData) return res.status(401).json({});
+
+  let casDataParts: string[] = casData.split("\n");
+  if (casDataParts.length < 3 || casDataParts[0] != "yes")
+    return res.status(401).json({});
+
+  // @shannon-heh hardcode a netID here to "login" as someone else
+  netid = casDataParts[1].toLowerCase();
+
+  // retrieve and update user data from Users API
+  let data: Array<Object> = await new ReqLib().getJSON(BASE_URL, USERS, {
+    uid: netid,
+  });
+  const userData = data[0];
+
+  const pustatusMapping = {
+    fac: "instructor",
+    undergraduate: "undergrad",
+    graduate: "grad",
+  };
+  const pustatus = userData["pustatus"];
+
+  const isInstructor = pustatus == "fac";
+  const classYear =
+    pustatus == "undergraduate"
+      ? userData["department"].split(" ").at(-1)
+      : null;
+
+  // if necessary, create or update user document in database
+  // first, populate fields that won't automatically change (i.e. from semester to semester)
+  // then, populate fields that might or will change
+  const instrCourses = isInstructor
+    ? await getInstrCourses(userData["universityid"])
+    : [];
+  usersCollection
+    .updateOne(
+      { netid: netid },
+      {
+        $set: {
+          netid: netid,
+          student_courses: [],
+          instructor_courses: instrCourses,
+        },
+      },
+      { upsert: true }
     )
-    .then((res_) => {
-      // validate CAS response
-      let casData: string = res_.data.toString();
-      if (!casData) {
-        res.status(401).json({});
-        return "";
-      }
-      let casDataParts: string[] = casData.split("\n");
-      if (casDataParts.length < 3 || casDataParts[0] != "yes") {
-        res.status(401).json({});
-        return "";
-      }
-      // CAS response validated, save netID to session
-      let netid: string = casDataParts[1].toLowerCase();
-      sessionstorage.setItem("netid", netid);
-      res.status(200).json({ netid: netid });
-      return netid;
+    .then(() => {
+      // do not update major if field already exists
+      usersCollection.updateOne(
+        { major_code: { $exists: false } },
+        {
+          $set: {
+            major_code: null,
+          },
+        }
+      );
     })
-    .then((netid: string) => {
-      if (!netid) return;
-
-      new ReqLib()
-        .getJSON(BASE_URL, USERS, {
-          uid: netid,
-        })
-        .then(async (data: Array<Object>) => {
-          const userData = data[0];
-
-          const pustatusMapping = {
-            fac: "instructor",
-            undergraduate: "undergrad",
-            graduate: "grad",
-          };
-          const pustatus = userData["pustatus"];
-
-          const isInstructor = pustatus == "fac";
-          let classYear =
-            pustatus == "undergraduate"
-              ? userData["department"].split(" ").at(-1)
-              : null;
-
-          // if necessary, create or update user document in database
-          // first, populate fields that won't automatically change (i.e. from semester to semester)
-          // then, populate fields that might or will change
-          const instrCourses = isInstructor
-            ? await getInstrCourses(userData["universityid"])
-            : [];
-          usersCollection
-            .updateOne(
-              { netid: netid },
-              {
-                $set: {
-                  netid: netid,
-                  student_courses: [],
-                  instructor_courses: instrCourses,
-                },
-              },
-              { upsert: true }
-            )
-            .then(() => {
-              // do not update major if field already exists
-              usersCollection.updateOne(
-                { major_code: { $exists: false } },
-                {
-                  $set: {
-                    major_code: null,
-                  },
-                }
-              );
-            })
-            .then(() => {
-              usersCollection.updateOne(
-                { netid: netid },
-                {
-                  $set: {
-                    class_year: classYear,
-                    person_type:
-                      pustatus in pustatusMapping
-                        ? pustatusMapping[pustatus]
-                        : "other",
-                    instructorid: isInstructor
-                      ? userData["universityid"]
-                      : null,
-                    name: userData["displayname"],
-                  },
-                }
-              );
-            });
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(401).json({});
+    .then(() => {
+      usersCollection.updateOne(
+        { netid: netid },
+        {
+          $set: {
+            class_year: classYear,
+            person_type:
+              pustatus in pustatusMapping ? pustatusMapping[pustatus] : "other",
+            instructorid: isInstructor ? userData["universityid"] : null,
+            name: userData["displayname"],
+          },
+        }
+      );
     });
+
+  sessionstorage.setItem("netid", netid);
+  sessionstorage.setItem("isInstructor", isInstructor);
+
+  res.status(200).json({ netid: netid, isInstructor: isInstructor });
 }
 
 // Returns list of course IDs taught by an instructor

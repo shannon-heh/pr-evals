@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getDB } from "../../src/database";
+import { getDB } from "../../src/mongodb";
 
 export type classData = {
   classID: string;
@@ -33,7 +33,7 @@ export default async function handler(
 
   return coursesCollection
     .findOne({ course_id: courseid })
-    .then((data) => {
+    .then((data: Object) => {
       let course: courseData = {
         courseTitle: data["title"],
         catalogTitle: data["catalog_title"],
