@@ -14,7 +14,9 @@ export default function useCAS() {
     ticket ? `/api/auth?ticket=${ticket}` : "/api/auth",
     fetcher
   );
-  const isLoggedIn = !error && data && "netid" in data;
+
+  const isLoggedIn =
+    !error && data && "netid" in data && "isInstructor" in data;
 
   // extract ticket from URL (passed by CAS server)
   useEffect(() => {
@@ -27,5 +29,6 @@ export default function useCAS() {
     isLoggedIn: isLoggedIn,
     isLoading: !data,
     netID: isLoggedIn ? data["netid"] : "",
+    isInstructor: isLoggedIn ? data["isInstructor"] : false,
   };
 }
