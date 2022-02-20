@@ -2,9 +2,9 @@ import Skeleton from "@mui/material/Skeleton";
 import useSWR from "swr";
 import { evalsData } from "../../pages/api/textual-evaluations";
 import Evaluation from "./Evaluation";
+import { fetcher } from "../../src/Helpers";
 
 export default function TextualEvaluations(props: { courseID: string }) {
-  const fetcher = (url: string) => fetch(url).then((r) => r.json());
   const { data, error } = useSWR("/api/textual-evaluations", fetcher);
   const evalsData = data as evalsData[];
 

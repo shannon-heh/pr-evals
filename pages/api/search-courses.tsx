@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { CourseData } from "../../src/Types";
 import { getDB } from "../../src/mongodb";
 
 // API endpoint to search for courses in DB
@@ -15,7 +16,7 @@ export default async function handler(
 
   // if empty query, don't return results
   if (qMod == "") {
-    return res.status(200).json({ courses: [] });
+    return res.status(200).json([]);
   }
 
   // if query is substring of dept + course code, or title
@@ -34,7 +35,7 @@ export default async function handler(
       course_id: 1,
       title: 1,
       catalog_title: 1,
-      "crosslistings.catalog_title": 1,
+      crosslistings: 1,
     },
   };
 
@@ -42,7 +43,19 @@ export default async function handler(
     .collection("courses")
     .find(query, projection)
     .toArray()
-    .then((data: Object) => {
-      return res.status(200).json({ courses: data });
+    .then((data: Object[]) => {
+      const courses: CourseData[] = data.map((course: Object) => {
+        return {
+          course_title: course["title"],
+          catalog_title: course["catalog_title"],
+          course_id: course["course_id"],
+          crosslisting_catalog_titles: course["crosslistings"].map(
+            (crosslisting: Object) => {
+              return crosslisting["catalog_title"];
+            }
+          ),
+        };
+      });
+      return res.status(200).json(courses);
     });
 }
