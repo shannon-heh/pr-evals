@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { fetcher } from "../src/Helpers";
 
 // hook to manage Princeton CAS authentication
 // example usage: const { isLoading, netID } = useCAS();
 export default function useCAS() {
   const router = useRouter();
-  const fetcher = (url: string) => fetch(url).then((r) => r.json());
   const [ticket, setTicket] = useState("");
   // call /api/auth endpoint to verify ticket, exchange for a netID,
   // save that netID, and create a user if necessary
