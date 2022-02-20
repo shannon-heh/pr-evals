@@ -1,3 +1,5 @@
+// If type refers to data retrieved from DB,
+// do not use camel case field names to match MongoDB syntax
 export type ClassData = {
   class_id: string;
   class_type?: string;
