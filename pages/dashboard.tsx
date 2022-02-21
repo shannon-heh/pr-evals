@@ -1,14 +1,8 @@
 import useSWR from "swr";
 import useCAS from "../hooks/useCAS";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { useFormik } from "formik";
-import HoverCard from "../components/course/HoverCard";
 import CustomHead from "../components/CustomHead";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
-import { blue, grey } from "@mui/material/colors";
 import CourseSearch from "../components/dashboard/SearchCourses";
 import MyCourses from "../components/dashboard/MyCourses";
 import { fetcher } from "../src/Helpers";
