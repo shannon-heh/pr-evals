@@ -3,13 +3,9 @@ import { blue, grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import pluralize from "pluralize";
-import {
-  classData,
-  courseData,
-  instructorData,
-} from "../../pages/api/course-page-data";
+import { ClassData, CourseData, InstructorData } from "../../src/Types";
 
-export default function CourseHead(props: { data: courseData }) {
+export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
     m: 2,
     background: blue[200],
@@ -20,18 +16,18 @@ export default function CourseHead(props: { data: courseData }) {
     color: grey[800],
   };
 
-  let countUniqueSections = (classes: classData[]): Object[] => {
+  let countUniqueSections = (classes: ClassData[]): Object[] => {
     let counts = {};
-    for (let { classType, weeklyMeetingsCount } of classes) {
-      classType = classType == "Unknown" ? "Other" : classType;
+    for (let { class_type, weekly_meetings_count } of classes) {
+      class_type = class_type == "Unknown" ? "Other" : class_type;
       if (
-        classType in counts &&
-        counts[classType]["weeklyMeetingsCount"] > weeklyMeetingsCount
+        class_type in counts &&
+        counts[class_type]["weekly_meetings_count"] > weekly_meetings_count
       )
-        weeklyMeetingsCount = counts[classType]["weeklyMeetingsCount"];
-      counts[classType] = {
-        classType,
-        weeklyMeetingsCount,
+        weekly_meetings_count = counts[class_type]["weekly_meetings_count"];
+      counts[class_type] = {
+        class_type,
+        weekly_meetings_count,
       };
     }
     return Object.values(counts);
@@ -49,17 +45,17 @@ export default function CourseHead(props: { data: courseData }) {
           }}
         >
           <Typography variant="h3" color="white" fontWeight="bold">
-            {props.data.catalogTitle}
+            {props.data.catalog_title}
           </Typography>
           <Typography variant="subtitle1" fontWeight="medium" fontSize="1.1em">
             {pluralize(
               "Crosslisting",
-              props.data.crosslistingCatalogTitles.length
+              props.data.crosslisting_catalog_titles.length
             )}
-            : {props.data.crosslistingCatalogTitles.join(" • ")}
+            : {props.data.crosslisting_catalog_titles.join(" • ")}
           </Typography>
           <Typography variant="h5" fontWeight="bolder">
-            {props.data.courseTitle}
+            {props.data.course_title}
           </Typography>
         </Box>
       </Grid>
@@ -90,12 +86,12 @@ export default function CourseHead(props: { data: courseData }) {
             >
               {countUniqueSections(props.data.classes)
                 .map((class_) => {
-                  return class_["weeklyMeetingsCount"] == 0 &&
-                    class_["classType"] == "Lecture"
+                  return class_["weekly_meetings_count"] == 0 &&
+                    class_["class_type"] == "Lecture"
                     ? "Pre-Recorded Lectures"
                     : pluralize(
-                        class_["classType"],
-                        class_["weeklyMeetingsCount"],
+                        class_["class_type"],
+                        class_["weekly_meetings_count"],
                         true
                       );
                 })
@@ -115,7 +111,7 @@ export default function CourseHead(props: { data: courseData }) {
               color={grey[800]}
             >
               {props.data.instructors
-                .map((instr: instructorData) => {
+                .map((instr: InstructorData) => {
                   return instr["instructor_name"];
                 })
                 .join(" • ")}

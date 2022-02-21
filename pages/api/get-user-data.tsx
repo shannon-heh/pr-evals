@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
+import { UserDataDB } from "../../src/Types";
 
-// API endpoint to return list of stored courses
-// being taught by an instructor / taken by a student
+// API endpoint to return data about an instructor or student
 // (given their netid)
-// Usage: /api/get-courses?netid=NETID
+// Usage: /api/get-user-data?netid=NETID
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid = req.query.netid;
+  const netid = req.query.netid as string;
   const dbUsers = (await getDB()).collection("users");
   return dbUsers
     .findOne(
@@ -20,12 +20,11 @@ export default async function handler(
         },
       }
     )
-    .then((user: Object) => {
+    .then((user: UserDataDB) => {
       // if given netid is not valid
       if (user == null) {
         return res.status(404).json(`user ${netid} not found in DB`);
       }
-      // return res.status(200).json({ data: user });
       if (user["person_type"] === "instructor") {
         delete user["class_year"];
         delete user["student_courses"];
@@ -34,6 +33,6 @@ export default async function handler(
         delete user["instructorid"];
         delete user["instructor_courses"];
       }
-      return res.status(200).json({ data: user });
+      return res.status(200).json(user);
     });
 }

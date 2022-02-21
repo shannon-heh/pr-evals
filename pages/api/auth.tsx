@@ -74,7 +74,6 @@ export default async function handler(
       {
         $set: {
           netid: netid,
-          student_courses: [],
           instructor_courses: instrCourses,
         },
       },
@@ -87,6 +86,15 @@ export default async function handler(
         {
           $set: {
             major_code: null,
+          },
+        }
+      );
+      // do not update student courses if field already exists
+      usersCollection.updateOne(
+        { student_courses: { $exists: false } },
+        {
+          $set: {
+            student_courses: [],
           },
         }
       );
