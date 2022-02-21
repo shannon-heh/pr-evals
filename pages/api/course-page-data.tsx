@@ -6,7 +6,7 @@ import { ClassData, CourseData } from "../../src/Types";
 // Usage: /api/course-page-data/courseids=COURSEID1,COURSEID2,COURSEID3
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<CourseData[]>
 ) {
   const coursesCollection = (await getDB()).collection("courses");
 

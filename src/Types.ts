@@ -23,10 +23,10 @@ export type CourseData = {
 export type UserDataDB = {
   netid: string;
   instructor_courses?: string[] | null;
-  major_code: string | null;
-  student_courses: string[] | null;
-  class_year: string | null;
-  instructorid: string | null;
+  major_code?: string | null;
+  student_courses?: string[] | null;
+  class_year?: string | null;
+  instructorid?: string | null;
   person_type: string;
   name: string;
 };
@@ -40,5 +40,5 @@ export type StudentDataDB = {
 };
 
 export type AdminData = {
-  major: string[];
+  majors: string[];
 };
