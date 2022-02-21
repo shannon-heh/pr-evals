@@ -10,6 +10,7 @@ import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
 import { EvalsData } from "../../src/Types";
 import TextualEvaluations from "./TextualEvaluations";
+import WordVisualizations from "./WordVisualizations";
 
 export default function CourseMainContent(props: { courseID: string }) {
   const commonMainContentBoxStyles = {
@@ -40,7 +41,7 @@ export default function CourseMainContent(props: { courseID: string }) {
       >
         {value === index && (
           <Box>
-            <Typography>{children}</Typography>
+            <Typography component="div">{children}</Typography>
           </Box>
         )}
       </div>
@@ -81,7 +82,16 @@ export default function CourseMainContent(props: { courseID: string }) {
         <TabPanel value={value} index={1}>
           <Grid container spacing={1} sx={{ textAlign: "center" }}>
             <Grid item container md={6} direction="column">
-              hi
+              <Box
+                sx={{
+                  ...commonMainContentBoxStyles,
+                }}
+              >
+                <WordVisualizations
+                  evalsData={evalsData as EvalsData[]}
+                  isLoading={!evalsData || evalsError}
+                />
+              </Box>
             </Grid>
             <Grid item container md={6} direction="column">
               <Box

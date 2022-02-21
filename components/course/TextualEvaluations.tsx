@@ -8,8 +8,9 @@ export default function TextualEvaluations(props: {
 }) {
   const processEvals = (evalsData: EvalsData[]) => {
     const evals = Array();
+    let i = 0;
     evalsData.forEach((evalDoc: EvalsData) => {
-      evals.push(<Evaluation evalDoc={evalDoc} />);
+      evals.push(<Evaluation key={i++} evalDoc={evalDoc} />);
     });
     return evals;
   };
@@ -17,6 +18,9 @@ export default function TextualEvaluations(props: {
   if (props.isLoading)
     return (
       <>
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" width="50%" />
+        <br />
         <Skeleton animation="wave" />
         <Skeleton animation="wave" width="50%" />
         <br />

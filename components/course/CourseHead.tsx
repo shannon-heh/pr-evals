@@ -45,17 +45,27 @@ export default function CourseHead(props: { data: CourseData }) {
             height: "100%",
           }}
         >
-          <Typography variant="h3" color="white" fontWeight="bold">
+          <Typography
+            variant="h3"
+            component="div"
+            color="white"
+            fontWeight="bold"
+          >
             {props.data.catalog_title}
           </Typography>
-          <Typography variant="subtitle1" fontWeight="medium" fontSize="1.1em">
+          <Typography
+            variant="subtitle1"
+            component="div"
+            fontWeight="medium"
+            fontSize="1.1em"
+          >
             {pluralize(
               "Crosslisting",
               props.data.crosslisting_catalog_titles.length
             )}
             : {props.data.crosslisting_catalog_titles.join(" • ")}
           </Typography>
-          <Typography variant="h5" fontWeight="bolder">
+          <Typography variant="h5" component="div" fontWeight="bolder">
             {props.data.course_title}
           </Typography>
         </Box>
@@ -69,20 +79,36 @@ export default function CourseHead(props: { data: CourseData }) {
             height: "100%",
           }}
         >
-          <Typography variant="h4" color="white" fontWeight="bold">
+          <Typography
+            variant="h4"
+            component="div"
+            color="white"
+            fontWeight="bold"
+          >
             Quick Facts
           </Typography>
-          <Typography variant="subtitle1" fontWeight="medium" fontSize="1.1em">
+          <Typography
+            variant="subtitle1"
+            component="div"
+            fontWeight="medium"
+            fontSize="1.1em"
+          >
             # Instructors:{" "}
             <Typography display="inline" fontWeight="normal">
               {props.data.instructors.length}
             </Typography>
           </Typography>
-          <Typography variant="subtitle1" fontWeight="medium" fontSize="1.1em">
+          <Typography
+            variant="subtitle1"
+            component="div"
+            fontWeight="medium"
+            fontSize="1.1em"
+          >
             Meetings per week:{" "}
             <Typography
               display="inline"
               variant="subtitle1"
+              component="div"
               fontWeight="normal"
             >
               {countUniqueSections(props.data.classes)
@@ -103,7 +129,12 @@ export default function CourseHead(props: { data: CourseData }) {
       </Grid>
       <Grid item container md={12} direction="column">
         <Box sx={{ ...commonHeaderBoxStyles, p: 1.2 }}>
-          <Typography variant="h6" color="white" fontWeight="bold">
+          <Typography
+            variant="h6"
+            component="div"
+            color="white"
+            fontWeight="bold"
+          >
             {pluralize("Instructor", props.data.instructors.length)}:{" "}
             <Typography
               display="inline"
