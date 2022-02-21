@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-export type evalsData = { text: string };
+import { EvalsData } from "../../src/Types";
 
 // retrieves textual evaluation data for a course page
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<evalsData[]>
+  res: NextApiResponse<EvalsData[]>
 ) {
   const courseid = req.query.courseid as string;
   const dummyData = [

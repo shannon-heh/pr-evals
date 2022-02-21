@@ -1,22 +1,20 @@
 import Skeleton from "@mui/material/Skeleton";
-import useSWR from "swr";
-import { evalsData } from "../../pages/api/textual-evaluations";
 import Evaluation from "./Evaluation";
-import { fetcher } from "../../src/Helpers";
+import { EvalsData } from "../../src/Types";
 
-export default function TextualEvaluations(props: { courseID: string }) {
-  const { data, error } = useSWR("/api/textual-evaluations", fetcher);
-  const evalsData = data as evalsData[];
-
-  const processEvals = (evalsData: evalsData[]) => {
+export default function TextualEvaluations(props: {
+  evalsData: EvalsData[];
+  isLoading: boolean;
+}) {
+  const processEvals = (evalsData: EvalsData[]) => {
     const evals = Array();
-    evalsData.forEach((evalDoc: evalsData) => {
+    evalsData.forEach((evalDoc: EvalsData) => {
       evals.push(<Evaluation evalDoc={evalDoc} />);
     });
     return evals;
   };
 
-  if (!data || error)
+  if (props.isLoading)
     return (
       <>
         <Skeleton animation="wave" />
@@ -27,5 +25,5 @@ export default function TextualEvaluations(props: { courseID: string }) {
       </>
     );
 
-  return <>{processEvals(evalsData)}</>;
+  return <>{processEvals(props.evalsData)}</>;
 }

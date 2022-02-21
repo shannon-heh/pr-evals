@@ -42,3 +42,5 @@ export type StudentDataDB = {
 export type AdminData = {
   majors: string[];
 };
+
+export type EvalsData = { text: string };

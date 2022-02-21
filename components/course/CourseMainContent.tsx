@@ -1,22 +1,19 @@
 import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Box from "@mui/material/Box";
-import { blue, grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { SyntheticEvent, useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "../../src/Helpers";
+import { EvalsData } from "../../src/Types";
 import TextualEvaluations from "./TextualEvaluations";
 
 export default function CourseMainContent(props: { courseID: string }) {
   const commonMainContentBoxStyles = {
     m: 2,
-    px: 3,
-    // background: blue[400],
-    // borderRadius: 1,
-    // borderColor: grey[800],
-    // borderStyle: "solid",
   };
 
   type TabPanelProps = {
@@ -24,6 +21,11 @@ export default function CourseMainContent(props: { courseID: string }) {
     index: number;
     value: number;
   };
+
+  const { data: evalsData, error: evalsError } = useSWR(
+    "/api/textual-evaluations",
+    fetcher
+  );
 
   function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
@@ -77,13 +79,23 @@ export default function CourseMainContent(props: { courseID: string }) {
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Box
-            sx={{
-              ...commonMainContentBoxStyles,
-            }}
-          >
-            <TextualEvaluations courseID={props.courseID} />
-          </Box>
+          <Grid container spacing={1} sx={{ textAlign: "center" }}>
+            <Grid item container md={6} direction="column">
+              hi
+            </Grid>
+            <Grid item container md={6} direction="column">
+              <Box
+                sx={{
+                  ...commonMainContentBoxStyles,
+                }}
+              >
+                <TextualEvaluations
+                  evalsData={evalsData as EvalsData[]}
+                  isLoading={!evalsData || evalsError}
+                />
+              </Box>
+            </Grid>
+          </Grid>
         </TabPanel>
       </Grid>
     </>
