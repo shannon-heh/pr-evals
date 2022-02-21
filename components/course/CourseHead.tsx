@@ -20,6 +20,7 @@ export default function CourseHead(props: { data: CourseData }) {
     let counts = {};
     for (let { class_type, weekly_meetings_count } of classes) {
       class_type = class_type == "Unknown" ? "Other" : class_type;
+      if (class_type != "Lecture" && weekly_meetings_count == 0) continue;
       if (
         class_type in counts &&
         counts[class_type]["weekly_meetings_count"] > weekly_meetings_count
