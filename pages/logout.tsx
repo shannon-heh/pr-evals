@@ -9,7 +9,11 @@ export default function Logout() {
   const { data, error } = useSWR("/api/logout", fetcher);
   let loggedOut: boolean = !error && data;
 
-  if (loggedOut) router.push("/");
+  if (loggedOut) {
+    router.push("/").then(() => {
+      router.reload();
+    });
+  }
   if (error) return <Error text={"Error fetching course!"} />;
 
   return <Loading text={"Logging out..."} />;
