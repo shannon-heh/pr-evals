@@ -9,7 +9,7 @@ export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
     m: 2,
     background: blue[200],
-    borderRadius: 1,
+    borderRadius: "0.75rem",
     borderColor: grey[800],
     borderStyle: "solid",
     alignItems: "center",

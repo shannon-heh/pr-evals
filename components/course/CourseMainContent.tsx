@@ -14,7 +14,8 @@ import WordVisualizations from "./WordVisualizations";
 
 export default function CourseMainContent(props: { courseID: string }) {
   const commonMainContentBoxStyles = {
-    m: 2,
+    // m: 2,
+    p: 2,
   };
 
   type TabPanelProps = {
@@ -80,8 +81,8 @@ export default function CourseMainContent(props: { courseID: string }) {
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Grid container spacing={1} sx={{ textAlign: "center" }}>
-            <Grid item container md={6} direction="column">
+          <Grid container sx={{ textAlign: "center" }}>
+            <Grid item container lg={6} direction="column">
               <Box
                 sx={{
                   ...commonMainContentBoxStyles,
@@ -93,10 +94,13 @@ export default function CourseMainContent(props: { courseID: string }) {
                 />
               </Box>
             </Grid>
-            <Grid item container md={6} direction="column">
+            <Grid item container lg={6} direction="column">
               <Box
                 sx={{
                   ...commonMainContentBoxStyles,
+                  height: 900,
+                  overflowX: "auto",
+                  overflowY: "scroll",
                 }}
               >
                 <TextualEvaluations

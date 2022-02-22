@@ -1,3 +1,5 @@
+import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { EvalsData } from "../../src/Types";
 import HoverCard from "./HoverCard";
