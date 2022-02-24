@@ -1,19 +1,17 @@
-import Box from "@mui/material/Box";
-import { blue, grey } from "@mui/material/colors";
+import { green, grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import pluralize from "pluralize";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
+import HoverCard from "./HoverCard";
 
 export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
-    m: 2,
-    background: blue[200],
-    borderRadius: "0.75rem",
-    borderColor: grey[800],
-    borderStyle: "solid",
+    background: green[200],
+    borderColor: grey[400],
     alignItems: "center",
     color: grey[800],
+    p: 5,
   };
 
   let countUniqueSections = (classes: ClassData[]): Object[] => {
@@ -36,14 +34,13 @@ export default function CourseHead(props: { data: CourseData }) {
 
   return (
     <>
-      <Grid item container md={8} direction="column">
-        <Box
+      <Grid item container md={8} direction="column" sx={{ mt: 2, mb: 1 }}>
+        <HoverCard
           sx={{
             ...commonHeaderBoxStyles,
-            p: 5,
-            mb: 0,
-            height: "100%",
+            justifyContent: "center",
           }}
+          specialCourseHeaderFlex
         >
           <Typography
             variant="h3"
@@ -68,16 +65,12 @@ export default function CourseHead(props: { data: CourseData }) {
           <Typography variant="h5" component="div" fontWeight="bolder">
             {props.data.course_title}
           </Typography>
-        </Box>
+        </HoverCard>
       </Grid>
-      <Grid item container md={4} direction="column">
-        <Box
-          sx={{
-            ...commonHeaderBoxStyles,
-            p: 5,
-            mb: 0,
-            height: "100%",
-          }}
+      <Grid item container md={4} direction="column" sx={{ mt: 2, mb: 1 }}>
+        <HoverCard
+          sx={{ ...commonHeaderBoxStyles, justifyContent: "center" }}
+          specialCourseHeaderFlex
         >
           <Typography
             variant="h4"
@@ -125,10 +118,18 @@ export default function CourseHead(props: { data: CourseData }) {
                 .join(" • ")}
             </Typography>
           </Typography>
-        </Box>
+        </HoverCard>
       </Grid>
-      <Grid item container md={12} direction="column">
-        <Box sx={{ ...commonHeaderBoxStyles, p: 1.2 }}>
+      <Grid item container md={12} direction="column" sx={{ mb: 2 }}>
+        <HoverCard
+          sx={{
+            ...commonHeaderBoxStyles,
+            py: 1.2,
+            px: 5,
+            justifyContent: "center",
+          }}
+          specialCourseHeaderFlex
+        >
           <Typography
             variant="h6"
             component="div"
@@ -149,7 +150,7 @@ export default function CourseHead(props: { data: CourseData }) {
                 .join(" • ")}
             </Typography>
           </Typography>
-        </Box>
+        </HoverCard>
       </Grid>
     </>
   );
