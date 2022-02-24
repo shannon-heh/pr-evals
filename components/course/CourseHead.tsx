@@ -34,7 +34,7 @@ export default function CourseHead(props: { data: CourseData }) {
 
   return (
     <>
-      <Grid item container md={8} direction="column" sx={{ mt: 2, mb: 1 }}>
+      <Grid item container md={8} direction="column" sx={{ mt: 2 }}>
         <HoverCard
           sx={{
             ...commonHeaderBoxStyles,
@@ -67,7 +67,7 @@ export default function CourseHead(props: { data: CourseData }) {
           </Typography>
         </HoverCard>
       </Grid>
-      <Grid item container md={4} direction="column" sx={{ mt: 2, mb: 1 }}>
+      <Grid item container md={4} direction="column" sx={{ mt: 2 }}>
         <HoverCard
           sx={{ ...commonHeaderBoxStyles, justifyContent: "center" }}
           specialCourseHeaderFlex
@@ -120,7 +120,7 @@ export default function CourseHead(props: { data: CourseData }) {
           </Typography>
         </HoverCard>
       </Grid>
-      <Grid item container md={12} direction="column" sx={{ mb: 2 }}>
+      <Grid item container md={12} direction="column" sx={{ my: 2 }}>
         <HoverCard
           sx={{
             ...commonHeaderBoxStyles,

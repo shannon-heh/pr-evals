@@ -98,7 +98,7 @@ export default function CourseMainContent(props: { courseID: string }) {
               <Box
                 sx={{
                   ...commonMainContentBoxStyles,
-                  height: 900,
+                  height: 1000,
                   overflowX: "auto",
                   overflowY: "scroll",
                 }}
