@@ -42,3 +42,11 @@ export type StudentDataDB = {
 export type AdminData = {
   majors: string[];
 };
+
+export type FormMetadata = {
+  form_id: string;
+  num_responses?: number;
+  questions?: Object[],
+  time_created?: Date,
+  title: string
+};
