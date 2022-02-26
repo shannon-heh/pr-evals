@@ -64,11 +64,13 @@ function CreateFormDialog(props: { courseid: string }) {
           description: description,
         }),
       }).then(async (res: Response) => {
-        const data: { formid: string } = await res.json();
-        const formid: string = data.formid;
+        if (res.status == 200) {
+          const data: { formid: string } = await res.json();
+          const formid: string = data.formid;
 
-        // route to new form page
-        router.push(`/new-form/${formid}`);
+          // route to new form page
+          router.push(`/new-form/${formid}`);
+        }
       });
     },
   });
