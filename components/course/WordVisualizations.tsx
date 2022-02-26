@@ -104,6 +104,17 @@ export default function WordVisualizations(props: {
     );
   };
 
+  const donutChartWidth = (width: number) => {
+    if (width >= 900) return 500;
+    if (width >= 600) return 370;
+    return 280;
+  };
+
+  const donutChartHeight = (width: number) => {
+    if (width >= 900) return 370;
+    return donutChartWidth(width);
+  };
+
   if (props.isLoading)
     return <Skeleton variant="rectangular" animation="wave" height="193px" />;
 
@@ -115,7 +126,7 @@ export default function WordVisualizations(props: {
             <TagCloud
               tags={generateTagCloudCounts(props.evalsData, 30)}
               minSize={20}
-              maxSize={70}
+              maxSize={width >= 800 ? 70 : 40}
               colorOptions={{
                 luminosity: "bright",
                 hue: "random",
@@ -133,15 +144,15 @@ export default function WordVisualizations(props: {
       </Tooltip>
       <Tooltip title="Donut Chart" placement="top" arrow>
         <Box sx={{ m: 0, p: 0 }}>
-          <HoverCard sx={{ mt: 2, mb: 4, p: 2.5 }}>
+          <HoverCard sx={{ p: 2.5 }}>
             <DonutChart
               data={generateDonutCounts(props.evalsData, 15)}
-              width={width >= 800 ? 500 : 370}
-              height={370}
+              width={donutChartWidth(width)}
+              height={donutChartHeight(width)}
               formatValues={(values, total) =>
                 `${((values / total) * 100).toFixed(1)}%`
               }
-              legend={width >= 800}
+              legend={width >= 900}
             />
           </HoverCard>
         </Box>
