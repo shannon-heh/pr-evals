@@ -7,16 +7,15 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { SyntheticEvent, useState } from "react";
 import useSWR from "swr";
+import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
 import { EvalsData } from "../../src/Types";
 import TextualEvaluations from "./TextualEvaluations";
 import WordVisualizations from "./WordVisualizations";
 
 export default function CourseMainContent(props: { courseID: string }) {
-  const commonMainContentBoxStyles = {
-    // m: 2,
-    p: 2,
-  };
+  const commonMainContentBoxStyles = { p: 2 };
+  const { width } = useWindowDimensions();
 
   type TabPanelProps = {
     children?: React.ReactNode;
@@ -98,9 +97,10 @@ export default function CourseMainContent(props: { courseID: string }) {
               <Box
                 sx={{
                   ...commonMainContentBoxStyles,
-                  height: 1000,
+                  height: width <= 900 ? 600 : 1000,
                   overflowX: "auto",
                   overflowY: "scroll",
+                  mb: 2,
                 }}
               >
                 <TextualEvaluations
