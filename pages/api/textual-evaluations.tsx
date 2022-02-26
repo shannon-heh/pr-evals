@@ -149,8 +149,18 @@ export default function handler(
   I recommend not taking this course unless you're ready to let it take over your life. This course has main character energy. It thinks it's the only course on your schedule. The head professor has such an ego and it comes through in lectures. The video lectures never held my attention and were redundant, dumbed-down versions of the textbook; the booksite was the most useful resource for me.
   PLEASE TAKE THIS CLASS!!!`;
 
+  const dummyMajors = ["AMS", "COS", "ORF", "ECE", "POL"];
+  const dummyYears = ["Frosh", "Sophomore", "Junior", "Senior"];
+  const dummyDifficulties = [1, 2, 3, 4];
+
   const dummyData: EvalsData[] = raw.split("\n").map((evaluation: string) => {
-    return { text: evaluation.trim() };
+    return {
+      text: evaluation.trim(),
+      major: dummyMajors[Math.floor(Math.random() * dummyMajors.length)],
+      year: dummyYears[Math.floor(Math.random() * dummyYears.length)],
+      difficulty:
+        dummyDifficulties[Math.floor(Math.random() * dummyDifficulties.length)],
+    };
   });
 
   res.status(200).json(dummyData);

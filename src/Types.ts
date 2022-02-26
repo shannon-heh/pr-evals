@@ -43,4 +43,9 @@ export type AdminData = {
   majors: string[];
 };
 
-export type EvalsData = { text: string };
+export type EvalsData = {
+  text: string;
+  major: string;
+  year: string;
+  difficulty: number;
+};
