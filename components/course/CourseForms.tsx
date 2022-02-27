@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
-import { ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 import * as yup from "yup";
 import { useRouter } from "next/router";
@@ -28,7 +28,11 @@ function CreateFormDialog(props: { courseid: string }) {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = (e, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setOpen(false);
+  };
+  const handleButtonClose = () => {
     setOpen(false);
   };
 
@@ -123,7 +127,7 @@ function CreateFormDialog(props: { courseid: string }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleButtonClose}>Cancel</Button>
           <Button
             onClick={(e) => {
               e.preventDefault();
