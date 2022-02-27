@@ -3,6 +3,12 @@ import { blue, green, amber, deepOrange, lime } from "@mui/material/colors";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { EvalsData } from "../../src/Types";
+import Sentiment from "sentiment";
+import removePunctuation from "remove-punctuation";
+import stopwords from "stopwords-iso";
+import sw from "stopword";
+
+const sentiment = new Sentiment();
 
 export default function EvaluationBadges(props: { evalDoc: EvalsData }) {
   const difficultyColorMap = {
@@ -26,6 +32,20 @@ export default function EvaluationBadges(props: { evalDoc: EvalsData }) {
     borderRadius: 2,
     fontWeight: "medium",
     color: "white",
+  };
+
+  const prepText = (evalText: string) => {
+    let rawLowercaseText = evalText
+      .split(" ")
+      .map((word) => word.toLowerCase());
+    const noPunctuationText: string[] = rawLowercaseText.map((word) =>
+      removePunctuation(word)
+    );
+    const noStopwordsText: string[] = sw.removeStopwords(
+      noPunctuationText,
+      stopwords.en
+    );
+    return noStopwordsText.join(" ");
   };
 
   return (
@@ -53,6 +73,18 @@ export default function EvaluationBadges(props: { evalDoc: EvalsData }) {
           }}
         >
           Difficulty: {props.evalDoc.difficulty}
+        </Typography>
+      </Tooltip>
+      <Tooltip
+        title="Sentiment from -5 (negative) to +5 (positive)"
+        placement="top"
+        arrow
+      >
+        <Typography display="inline" sx={badgeStyles}>
+          Sentiment:{" "}
+          {sentiment
+            .analyze(prepText(props.evalDoc.text))
+            ["comparative"].toFixed(2)}
         </Typography>
       </Tooltip>
     </Box>

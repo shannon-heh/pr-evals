@@ -9,6 +9,20 @@ import useWindowDimensions from "../../hooks/windowDimensions";
 import DonutChart from "../../src/donut/DonutChart";
 import { EvalsData } from "../../src/Types";
 import HoverCard from "./HoverCard";
+import Sentiment from "sentiment";
+import {
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip as ChartTooltip,
+  BarChart,
+  Bar,
+  CartesianGrid,
+} from "recharts";
+import { blue } from "@mui/material/colors";
+import Typography from "@mui/material/Typography";
+
+const sentiment = new Sentiment();
 
 type Word = {
   key?: string;
@@ -30,20 +44,62 @@ export default function WordVisualizations(props: {
 }) {
   const { width } = useWindowDimensions();
 
+  const prepText = (evalText: string): string[] => {
+    let rawLowercaseText = evalText
+      .split(" ")
+      .map((word) => word.toLowerCase());
+    const noPunctuationText: string[] = rawLowercaseText.map((word) =>
+      removePunctuation(word)
+    );
+    const noStopwordsText: string[] = sw.removeStopwords(
+      noPunctuationText,
+      stopwords.en
+    );
+    return noStopwordsText;
+  };
+
+  const generateSentiments = (evalsData: EvalsData[]): Array<Object> => {
+    const sentiments: Array<number> = [];
+    evalsData.forEach((evalDoc: EvalsData) => {
+      sentiments.push(
+        sentiment.analyze(prepText(evalDoc.text).join(" "))["comparative"]
+      );
+    });
+    const sentimentBuckets = {
+      "-5 to -4": 0,
+      "-4 to -3": 0,
+      "-3 to -2": 0,
+      "-2 to -1": 0,
+      "-1 to 0": 0,
+      "0 to 1": 0,
+      "1 to 2": 0,
+      "2 to 3": 0,
+      "3 to 4": 0,
+      "4 to 5": 0,
+    };
+    sentiments.forEach((sentiment: number) => {
+      if (sentiment <= -4) sentimentBuckets["-5 to -4"]++;
+      else if (sentiment <= -3) sentimentBuckets["-4 to -3"]++;
+      else if (sentiment <= -2) sentimentBuckets["-3 to -2"]++;
+      else if (sentiment <= -1) sentimentBuckets["-2 to -1"]++;
+      else if (sentiment <= 0) sentimentBuckets["-1 to 0"]++;
+      else if (sentiment <= 1) sentimentBuckets["0 to 1"]++;
+      else if (sentiment <= 2) sentimentBuckets["1 to 2"]++;
+      else if (sentiment <= 3) sentimentBuckets["2 to 3"]++;
+      else if (sentiment <= 4) sentimentBuckets["3 to 4"]++;
+      else if (sentiment <= 5) sentimentBuckets["4 to 5"]++;
+    });
+    const res = [];
+    for (const [key, value] of Object.entries(sentimentBuckets)) {
+      res.push({ name: key, count: value });
+    }
+    return res;
+  };
+
   const generateWordCounts = (evalsData: EvalsData[]): Object => {
     let wordCounts = {};
-    evalsData.forEach((evalsDoc: EvalsData) => {
-      let rawLowercaseText = evalsDoc.text
-        .split(" ")
-        .map((word) => word.toLowerCase());
-      const noPunctuationText: string[] = rawLowercaseText.map((word) =>
-        removePunctuation(word)
-      );
-      const noStopwordsText: string[] = sw.removeStopwords(
-        noPunctuationText,
-        stopwords.en
-      );
-      noStopwordsText.forEach((word: string) => {
+    evalsData.forEach((evalDoc: EvalsData) => {
+      prepText(evalDoc.text).forEach((word: string) => {
         wordCounts[word] = wordCounts[word] ? wordCounts[word] + 1 : 1;
       });
     });
@@ -120,9 +176,37 @@ export default function WordVisualizations(props: {
 
   return (
     <>
-      <Tooltip title="Word Cloud" placement="top" arrow>
+      <Tooltip title="Sentiment Histogram" placement="top" arrow>
         <Box sx={{ m: 0, p: 0 }}>
           <HoverCard sx={{ mt: 2, mb: 4, p: 2.5 }}>
+            <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
+              Sentiment Distribution: -5 (negative) to +5 (positive)
+            </Typography>
+            <ResponsiveContainer width="99%" aspect={1.78}>
+              <BarChart data={generateSentiments(props.evalsData)}>
+                <XAxis dataKey="name" tickCount={6} />
+                <YAxis dataKey="count" />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <ChartTooltip />
+                <Bar type="monotone" dataKey="count" fill={blue[400]} />
+              </BarChart>
+            </ResponsiveContainer>
+            <Typography fontStyle="italic">
+              Each evaluation's sentiment is computed using the{" "}
+              <a
+                href="https://www2.imm.dtu.dk/pubdb/pubs/6010-full.html"
+                target="_blank"
+              >
+                AFINN-165
+              </a>{" "}
+              wordlist.
+            </Typography>
+          </HoverCard>
+        </Box>
+      </Tooltip>
+      <Tooltip title="Word Cloud" placement="top" arrow>
+        <Box sx={{ m: 0, p: 0 }}>
+          <HoverCard sx={{ mb: 4, p: 2.5 }}>
             <TagCloud
               tags={generateTagCloudCounts(props.evalsData, 30)}
               minSize={20}

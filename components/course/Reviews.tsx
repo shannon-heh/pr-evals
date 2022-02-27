@@ -33,6 +33,8 @@ export default function Reviews() {
             height: width <= 900 ? 600 : 1000,
             overflowX: "auto",
             overflowY: "scroll",
+            flexDirection: "column",
+            flexGrow: 1,
           }}
         >
           <TextualEvaluations
