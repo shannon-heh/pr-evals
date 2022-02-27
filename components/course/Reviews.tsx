@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
@@ -14,6 +15,15 @@ export default function Reviews() {
   );
 
   const { width } = useWindowDimensions();
+
+  if (evalsData && (evalsData as EvalsData[]).length == 0)
+    return (
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="subtitle1" fontWeight="medium">
+          This course has no written reviews yet. Check back later!
+        </Typography>
+      </Box>
+    );
 
   return (
     <Grid container sx={{ textAlign: "center" }}>
