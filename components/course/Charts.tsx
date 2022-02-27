@@ -1,39 +1,40 @@
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Box, Grid, Skeleton } from "@mui/material";
+import useSWR from "swr";
+import { fetcher } from "../../src/Helpers";
+import { ChartData } from "../../src/Types";
+import SingleChoiceChart from "./charts/SingleChoiceChart";
 
 export default function Charts() {
-  const data = [
-    { name: "Page A", uv: 400 },
-    { name: "Page B", uv: 500 },
-    { name: "Page B", uv: 400 },
-    { name: "Page B", uv: 300 },
-    { name: "Page B", uv: 400 },
-    { name: "Page B", uv: 200 },
-  ];
+  const { data: chartData_, error } = useSWR("/api/chart-data", fetcher);
+  const chartData = chartData_ as ChartData[];
+
+  if (!chartData || error)
+    return (
+      <Grid container sx={{ textAlign: "center" }}>
+        <Grid item container lg={6} direction="column">
+          <Box sx={{ p: 2 }}>
+            <Skeleton variant="rectangular" animation="wave" height="193px" />
+            <br />
+            <Skeleton variant="rectangular" animation="wave" height="193px" />
+          </Box>
+        </Grid>
+        <Grid item container lg={6} direction="column">
+          <Box sx={{ p: 2 }}>
+            <Skeleton variant="rectangular" animation="wave" height="193px" />
+            <br />
+            <Skeleton variant="rectangular" animation="wave" height="193px" />
+          </Box>
+        </Grid>
+      </Grid>
+    );
 
   return (
     <Grid container sx={{ textAlign: "center" }}>
       <Grid item container lg={6} direction="column">
-        <Box sx={{ p: 2 }}>
-          <ResponsiveContainer width="99%" aspect={1.78}>
-            <LineChart data={data}>
-              <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-            </LineChart>
-          </ResponsiveContainer>
-        </Box>
+        <SingleChoiceChart
+          data={chartData[0].data}
+          title={chartData[0].question}
+        />
       </Grid>
       <Grid item container lg={6} direction="column">
         col2

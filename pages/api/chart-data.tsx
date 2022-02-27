@@ -8,6 +8,17 @@ export default function handler(
   const courseid = req.query.courseid as string;
 
   const dummyData: ChartData[] = [
-    { question: "Test Question", type: "SINGLE_SEL", data: [{}] },
+    {
+      question: "Test Question",
+      type: "SINGLE_SEL",
+      data: [
+        { name: "Very Challenging", value: 12 },
+        { name: "Challenging", value: 3 },
+        { name: "Somewhat Challenging", value: 9 },
+        { name: "Not Challenging", value: 1 },
+      ],
+    },
   ];
+
+  res.status(200).json(dummyData);
 }
