@@ -6,27 +6,15 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { SyntheticEvent, useState } from "react";
-import useSWR from "swr";
-import useWindowDimensions from "../../hooks/windowDimensions";
-import { fetcher } from "../../src/Helpers";
-import { EvalsData } from "../../src/Types";
-import TextualEvaluations from "./TextualEvaluations";
-import WordVisualizations from "./WordVisualizations";
+import Charts from "./Charts";
+import Reviews from "./Reviews";
 
 export default function CourseMainContent(props: { courseID: string }) {
-  const commonMainContentBoxStyles = { p: 2 };
-  const { width } = useWindowDimensions();
-
   type TabPanelProps = {
     children?: React.ReactNode;
     index: number;
     value: number;
   };
-
-  const { data: evalsData, error: evalsError } = useSWR(
-    "/api/textual-evaluations",
-    fetcher
-  );
 
   function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
@@ -71,45 +59,10 @@ export default function CourseMainContent(props: { courseID: string }) {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Box
-            sx={{
-              ...commonMainContentBoxStyles,
-            }}
-          >
-            Charts and Diagrams
-          </Box>
+          <Charts />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Grid container sx={{ textAlign: "center" }}>
-            <Grid item container lg={6} direction="column">
-              <Box
-                sx={{
-                  ...commonMainContentBoxStyles,
-                }}
-              >
-                <WordVisualizations
-                  evalsData={evalsData as EvalsData[]}
-                  isLoading={!evalsData || evalsError}
-                />
-              </Box>
-            </Grid>
-            <Grid item container lg={6} direction="column">
-              <Box
-                sx={{
-                  ...commonMainContentBoxStyles,
-                  height: width <= 900 ? 600 : 1000,
-                  overflowX: "auto",
-                  overflowY: "scroll",
-                  mb: 2,
-                }}
-              >
-                <TextualEvaluations
-                  evalsData={evalsData as EvalsData[]}
-                  isLoading={!evalsData || evalsError}
-                />
-              </Box>
-            </Grid>
-          </Grid>
+          <Reviews />
         </TabPanel>
       </Grid>
     </>
