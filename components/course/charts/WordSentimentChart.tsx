@@ -1,5 +1,3 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import {
   BarChart,
   CartesianGrid,
@@ -14,6 +12,7 @@ import HoverCard from "../HoverCard";
 import Sentiment from "sentiment";
 import { prepText } from "../../../src/Helpers";
 import { blue } from "@mui/material/colors";
+import { Box, Typography } from "@mui/material";
 
 const sentiment = new Sentiment();
 

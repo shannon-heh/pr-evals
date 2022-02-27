@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import DonutChart from "../../../src/donut/DonutChart";
 import { generateWordCounts } from "../../../src/Helpers";
 import { ChartItem, EvalsData } from "../../../src/Types";

@@ -1,4 +1,4 @@
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
 import { EvalsData } from "../../src/Types";
 import EvaluationBadges from "./EvaluationBadges";
 import HoverCard from "./HoverCard";

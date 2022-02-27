@@ -1,4 +1,3 @@
-import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import CustomHead from "../../components/CustomHead";
@@ -8,8 +7,8 @@ import useCAS from "../../hooks/useCAS";
 import { CourseData } from "../../src/Types";
 import CourseHead from "../../components/course/CourseHead";
 import CourseMainContent from "../../components/course/CourseMainContent";
-import Container from "@mui/material/Container";
 import { fetcher } from "../../src/Helpers";
+import { Container, Grid } from "@mui/material";
 
 export default function Course() {
   const { isLoading, netID, isInstructor } = useCAS();

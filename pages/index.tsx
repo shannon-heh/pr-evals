@@ -1,14 +1,10 @@
-import Button from "@mui/material/Button";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import CustomHead from "../components/CustomHead";
 import useCAS from "../hooks/useCAS";
 import { useState } from "react";
 import Loading from "../components/Loading";
-import Link from "@mui/material/Link";
+import { Box, Button, Container, Grid, Link } from "@mui/material";
 
 export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
@@ -40,7 +36,6 @@ export default function Home() {
                 startIcon={
                   isLoggedIn ? null : <LoginRoundedIcon fontSize="large" />
                 }
-                // TODO: @nicholaspad add /dashboard after service=
                 href={`${process.env.NEXT_PUBLIC_CAS_SERVER_URL}/login?service=${process.env.NEXT_PUBLIC_HOSTNAME}`}
                 onClick={() => setLoginButtonDisabled(true)}
                 disabled={isLoggedIn || loginButtonDisabled}

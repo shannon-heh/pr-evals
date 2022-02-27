@@ -1,6 +1,6 @@
-import Skeleton from "@mui/material/Skeleton";
 import Evaluation from "./Evaluation";
 import { EvalsData } from "../../src/Types";
+import { Skeleton } from "@mui/material";
 
 export default function TextualEvaluations(props: {
   evalsData: EvalsData[];

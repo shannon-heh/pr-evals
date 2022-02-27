@@ -1,8 +1,8 @@
-import Box from "@mui/material/Box";
 import { ChartWord, EvalsData } from "../../../src/Types";
 import HoverCard from "../HoverCard";
 import { TagCloud } from "react-tagcloud";
 import { generateWordCounts } from "../../../src/Helpers";
+import { Box } from "@mui/material";
 
 export default function WordCloudChart(props: {
   evalsData: EvalsData[];

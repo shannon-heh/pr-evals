@@ -1,8 +1,7 @@
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 import CustomHead from "./CustomHead";
 import ErrorIcon from "@mui/icons-material/Error";
 import SvgIcon from "@mui/icons-material/Error";
+import { Container, Grid } from "@mui/material";
 
 export default function Error(props: { text?: string }) {
   return (

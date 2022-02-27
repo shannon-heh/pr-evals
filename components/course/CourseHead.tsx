@@ -1,6 +1,5 @@
+import { Grid, Typography } from "@mui/material";
 import { green, grey } from "@mui/material/colors";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import pluralize from "pluralize";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
 import HoverCard from "./HoverCard";

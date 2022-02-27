@@ -1,10 +1,9 @@
-import Skeleton from "@mui/material/Skeleton";
-import Tooltip from "@mui/material/Tooltip";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { EvalsData } from "../../src/Types";
 import WordDonutChart from "./charts/WordDonutChart";
 import WordCloudChart from "./charts/WordCloudChart";
 import WordSentimentChart from "./charts/WordSentimentChart";
+import { Skeleton, Tooltip } from "@mui/material";
 
 export default function WordVisualizations(props: {
   evalsData: EvalsData[];

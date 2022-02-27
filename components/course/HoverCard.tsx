@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { SxProps, Theme } from "@mui/material/styles";
 
 // wrapper component to create white cards with a hover effect
