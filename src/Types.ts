@@ -55,3 +55,17 @@ export type ChartData = {
   type: string;
   data: Object[];
 };
+
+export type ChartWord = {
+  key?: string;
+  value: string;
+  count: number;
+  props?: { className?: string; style?: Object };
+};
+
+export type ChartItem = {
+  className?: string;
+  isEmpty?: boolean;
+  label: string;
+  value: number;
+};
