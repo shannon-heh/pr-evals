@@ -49,3 +49,9 @@ export type EvalsData = {
   year: string;
   difficulty: number;
 };
+
+export type ChartData = {
+  question: string;
+  type: string;
+  data: Object[];
+};

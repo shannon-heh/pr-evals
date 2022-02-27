@@ -58,8 +58,8 @@ export default function WordVisualizations(props: {
     return noStopwordsText;
   };
 
-  const generateSentiments = (evalsData: EvalsData[]): Array<Object> => {
-    const sentiments: Array<number> = [];
+  const generateSentiments = (evalsData: EvalsData[]): Object[] => {
+    const sentiments: number[] = [];
     evalsData.forEach((evalDoc: EvalsData) => {
       sentiments.push(
         sentiment.analyze(prepText(evalDoc.text).join(" "))["comparative"]
