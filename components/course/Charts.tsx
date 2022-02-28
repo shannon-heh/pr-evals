@@ -3,6 +3,7 @@ import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
 import { ChartData } from "../../src/Types";
+import MultiChoiceChart from "./charts/MultiChoiceChart";
 import SingleChoiceChart from "./charts/SingleChoiceChart";
 
 export default function Charts() {
@@ -12,19 +13,39 @@ export default function Charts() {
 
   if (!chartData || error)
     return (
-      <Grid container sx={{ textAlign: "center" }}>
+      <Grid container sx={{ textAlign: "center", mt: 2 }}>
         <Grid item container lg={6} direction="column">
           <Box sx={{ p: 2 }}>
-            <Skeleton variant="rectangular" animation="wave" height="193px" />
+            <Skeleton
+              variant="rectangular"
+              sx={{ borderRadius: 2 }}
+              animation="wave"
+              height="193px"
+            />
             <br />
-            <Skeleton variant="rectangular" animation="wave" height="193px" />
+            <Skeleton
+              variant="rectangular"
+              sx={{ borderRadius: 2 }}
+              animation="wave"
+              height="193px"
+            />
           </Box>
         </Grid>
         <Grid item container lg={6} direction="column">
           <Box sx={{ p: 2 }}>
-            <Skeleton variant="rectangular" animation="wave" height="193px" />
+            <Skeleton
+              variant="rectangular"
+              sx={{ borderRadius: 2 }}
+              animation="wave"
+              height="193px"
+            />
             <br />
-            <Skeleton variant="rectangular" animation="wave" height="193px" />
+            <Skeleton
+              variant="rectangular"
+              sx={{ borderRadius: 2 }}
+              animation="wave"
+              height="193px"
+            />
           </Box>
         </Grid>
       </Grid>
@@ -42,7 +63,13 @@ export default function Charts() {
         </Box>
       </Grid>
       <Grid item container lg={6} direction="column">
-        col2
+        <Box sx={{ p: 2 }}>
+          <MultiChoiceChart
+            data={chartData[0].data}
+            title={chartData[0].question}
+            width={width}
+          />
+        </Box>
       </Grid>
     </Grid>
   );

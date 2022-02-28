@@ -18,7 +18,7 @@ export default function TextualEvaluations(props: {
   if (props.isLoading)
     return (
       <>
-        <Skeleton animation="wave" />
+        <Skeleton sx={{ mt: 2 }} animation="wave" />
         <Skeleton animation="wave" width="50%" />
         <br />
         <Skeleton animation="wave" />

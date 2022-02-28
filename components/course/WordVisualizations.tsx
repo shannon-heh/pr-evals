@@ -12,7 +12,14 @@ export default function WordVisualizations(props: {
   const { width } = useWindowDimensions();
 
   if (props.isLoading)
-    return <Skeleton variant="rectangular" animation="wave" height="193px" />;
+    return (
+      <Skeleton
+        variant="rectangular"
+        sx={{ mt: 2, borderRadius: 2 }}
+        animation="wave"
+        height="193px"
+      />
+    );
 
   return (
     <>

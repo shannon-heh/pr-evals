@@ -18,6 +18,16 @@ export default function handler(
         { name: "Not Challenging", value: 1 },
       ],
     },
+    {
+      question: "What aspects of this course did you dislike?",
+      type: "MULTI_SEL",
+      data: [
+        { name: "Precepts", value: 12 },
+        { name: "Assignments", value: 3 },
+        { name: "Exams", value: 9 },
+        { name: "Office hours", value: 1 },
+      ],
+    },
   ];
 
   res.status(200).json(dummyData);
