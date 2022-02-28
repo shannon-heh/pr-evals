@@ -9,7 +9,7 @@ export default function handler(
 
   const dummyData: ChartData[] = [
     {
-      question: "Test Question",
+      question: "How difficult was this course overall?",
       type: "SINGLE_SEL",
       data: [
         { name: "Very Challenging", value: 12 },
