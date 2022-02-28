@@ -17,13 +17,19 @@ export default function WordVisualizations(props: {
   return (
     <>
       <Tooltip title="Sentiment Histogram" placement="top" arrow>
-        <WordSentimentChart evalsData={props.evalsData} />
+        <div>
+          <WordSentimentChart evalsData={props.evalsData} />
+        </div>
       </Tooltip>
       <Tooltip title="Word Cloud" placement="top" arrow>
-        <WordCloudChart evalsData={props.evalsData} width={width} />
+        <div>
+          <WordCloudChart evalsData={props.evalsData} width={width} />
+        </div>
       </Tooltip>
       <Tooltip title="Donut Chart" placement="top" arrow>
-        <WordDonutChart evalsData={props.evalsData} width={width} />
+        <div>
+          <WordDonutChart evalsData={props.evalsData} width={width} />
+        </div>
       </Tooltip>
     </>
   );
