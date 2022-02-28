@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import RatingInput from "../../question-types/RatingInput";
+import * as yup from "yup";
 
 // Allow customization & render Rating in Add Question Dialog
 export default function AddRating(props) {
@@ -13,13 +14,28 @@ export default function AddRating(props) {
   const [max, setMax] = useState(5);
   const [precision, setPrecision] = useState(0.5);
 
+  const validationSchema = yup.object({
+    max: yup
+      .number()
+      .typeError("Max must be an integer")
+      .required("Max is required")
+      .integer("Max must be an integer")
+      .min(1, "Max must be at least 1 star")
+      .max(10, "Max can be at most 10 stars"),
+    precision: yup
+      .number()
+      .typeError("Precision must be a number")
+      .required("Precision is required")
+      .oneOf([0.25, 0.5, 1], "Precision must be 0.25, 0.5, or 1"),
+  });
+
   const formik = useFormik({
     initialValues: {
       max: 5,
       precision: 0.5,
     },
+    validationSchema,
     onSubmit: (values) => {
-      // TO-DO: need field validation
       const max = Number(values.max);
       const precision = Number(values.precision);
 
@@ -46,6 +62,12 @@ export default function AddRating(props) {
           fullWidth
           variant="filled"
           required
+          helperText={
+            formik.touched.max && formik.errors.max ? formik.errors.max : null
+          }
+          FormHelperTextProps={{
+            style: { color: "red" },
+          }}
         />
         <TextField
           autoFocus
@@ -59,6 +81,14 @@ export default function AddRating(props) {
           fullWidth
           variant="filled"
           required
+          helperText={
+            formik.touched.precision && formik.errors.precision
+              ? formik.errors.precision
+              : null
+          }
+          FormHelperTextProps={{
+            style: { color: "red" },
+          }}
         />
         <Button
           onClick={(e) => {

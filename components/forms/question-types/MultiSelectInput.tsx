@@ -7,7 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 export default function MultiSelectInput(props) {
   return (
     <FormControl component="fieldset" variant="standard">
-      <FormGroup row>
+      <FormGroup row={props.rowOrder ?? false}>
         {props.options.map((option: string, i: number) => {
           return (
             <FormControlLabel

@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -55,9 +54,10 @@ export default function AddQuestionDialog(props) {
   const validationSchema = yup.object({
     question: yup
       .string()
+      .trim()
       .required("Required field")
-      .max(100, "Max 100 characters"),
-    description: yup.string().max(1000, "Max 1000 characters"),
+      .max(500, "Max 500 characters"),
+    description: yup.string().max(2000, "Max 2000 characters"),
   });
 
   const formik = useFormik({
@@ -118,6 +118,7 @@ export default function AddQuestionDialog(props) {
                 type="text"
                 multiline
                 fullWidth
+                maxRows={5}
                 variant="filled"
                 helperText={
                   formik.touched.description && formik.errors.description
@@ -158,7 +159,6 @@ export default function AddQuestionDialog(props) {
           <Button
             type="submit"
             onClick={(e) => {
-              e.preventDefault();
               formik.handleSubmit();
             }}
             disabled={

@@ -8,19 +8,27 @@ import FormLabel from "@mui/material/FormLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
 import SingleSelectInput from "../../question-types/SingleSelectInput";
+import * as yup from "yup";
 
 // Allow customization & render preview of SingleSelect in Add Question Dialog
 export default function AddSingleSelect(props) {
   // customization options
   const [options, setOptions] = useState([]);
 
+  const validationSchema = yup.object({
+    option: yup
+      .string()
+      .trim()
+      .min(1, "Must enter a non-whitespace character")
+      .max(500, "Max 500 characters"),
+  });
+
   const formik = useFormik({
     initialValues: {
       option: "",
     },
+    validationSchema,
     onSubmit: (values) => {
-      // do not duplicate options
-      if (options.includes(values.option)) return;
       const newOptions: string[] = [...options, values.option];
       props.setOptions({ options: newOptions });
       setOptions(newOptions);
@@ -43,12 +51,19 @@ export default function AddSingleSelect(props) {
           fullWidth
           variant="filled"
           required
+          helperText={
+            formik.touched.option && formik.errors.option
+              ? formik.errors.option
+              : null
+          }
+          FormHelperTextProps={{
+            style: { color: "red" },
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <Button
                   onClick={(e) => {
-                    e.preventDefault();
                     formik.handleSubmit();
                   }}
                   type="submit"
@@ -66,7 +81,7 @@ export default function AddSingleSelect(props) {
         {options.length == 0 ? (
           <Typography>Add options above to see Preview.</Typography>
         ) : null}
-        <SingleSelectInput options={options} />
+        <SingleSelectInput options={options} rowOrder={true} />
       </Grid>
     </>
   );

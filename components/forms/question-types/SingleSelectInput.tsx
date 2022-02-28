@@ -5,7 +5,11 @@ import Radio from "@mui/material/Radio";
 // Generic Single-Select input
 export default function SingleSelectInput(props) {
   return (
-    <RadioGroup defaultValue="female" name="radio-buttons-group" row>
+    <RadioGroup
+      defaultValue="female"
+      name="radio-buttons-group"
+      row={props.rowOrder ?? false}
+    >
       {props.options.map((option: string, i: number) => {
         return (
           <FormControlLabel

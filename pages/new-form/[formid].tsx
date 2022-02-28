@@ -112,14 +112,18 @@ export default function NewForm() {
             sx={{ py: 2 }}
             justifyContent="space-evenly"
           >
-            <Button variant="contained" onClick={openDialog} sx={{ px: 4 }}>
+            <Button
+              variant="contained"
+              onClick={openDialog}
+              sx={{ px: 4, width: "40%" }}
+            >
               Add Question
             </Button>
             <Button
               type="submit"
               variant="contained"
               onClick={handleSubmit}
-              sx={{ px: 4 }}
+              sx={{ px: 4, width: "40%" }}
             >
               Finish Form
             </Button>

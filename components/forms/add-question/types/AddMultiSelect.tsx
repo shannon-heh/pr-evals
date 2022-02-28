@@ -8,16 +8,26 @@ import FormLabel from "@mui/material/FormLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import Grid from "@mui/material/Grid";
 import MultiSelectInput from "../../question-types/MultiSelectInput";
+import * as yup from "yup";
 
 // Allow customization & render preview of MultiSelect in Add Question Dialog
 export default function AddMultiSelect(props) {
   // customization options
   const [options, setOptions] = useState([]);
 
+  const validationSchema = yup.object({
+    option: yup
+      .string()
+      .trim()
+      .min(1, "Enter a non-whitespace character")
+      .max(500, "Max 500 characters"),
+  });
+
   const formik = useFormik({
     initialValues: {
       option: "",
     },
+    validationSchema,
     onSubmit: (values) => {
       // do not duplicate options
       if (options.includes(values.option)) return;
@@ -43,6 +53,14 @@ export default function AddMultiSelect(props) {
           fullWidth
           variant="filled"
           required
+          helperText={
+            formik.touched.option && formik.errors.option
+              ? formik.errors.option
+              : null
+          }
+          FormHelperTextProps={{
+            style: { color: "red" },
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -66,7 +84,7 @@ export default function AddMultiSelect(props) {
         {options.length == 0 ? (
           <Typography>Add options above to see Preview.</Typography>
         ) : null}
-        <MultiSelectInput options={options} />
+        <MultiSelectInput options={options} rowOrder={true} />
       </Grid>
     </>
   );
