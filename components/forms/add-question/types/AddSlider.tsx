@@ -153,6 +153,7 @@ export default function AddSlider(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           helperText={
             formik.touched.min && formik.errors.min ? formik.errors.min : null
           }
@@ -172,6 +173,7 @@ export default function AddSlider(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           helperText={
             formik.touched.max && formik.errors.max ? formik.errors.max : null
           }
@@ -191,6 +193,7 @@ export default function AddSlider(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           helperText={
             formik.touched.step && formik.errors.step
               ? formik.errors.step
@@ -211,6 +214,7 @@ export default function AddSlider(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           multiline
           helperText={
             formik.touched.marks && formik.errors.marks

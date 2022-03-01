@@ -10,6 +10,7 @@ export default function LongTextInput() {
       rows={3}
       fullWidth
       variant="filled"
+      autoComplete="off"
     />
   );
 }

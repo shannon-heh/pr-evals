@@ -57,6 +57,7 @@ export default function AddSingleSelect(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           required
           helperText={
             formik.touched.option && formik.errors.option

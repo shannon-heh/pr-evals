@@ -102,6 +102,7 @@ function CreateFormDialog(props: { courseid: string }) {
             type="text"
             fullWidth
             variant="standard"
+            autoComplete="off"
             helperText={
               formik.touched.title && formik.errors.title
                 ? formik.errors.title
@@ -123,6 +124,7 @@ function CreateFormDialog(props: { courseid: string }) {
             multiline
             fullWidth
             variant="standard"
+            autoComplete="off"
             helperText={
               formik.touched.description && formik.errors.description
                 ? formik.errors.description

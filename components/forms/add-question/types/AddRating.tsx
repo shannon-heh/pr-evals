@@ -68,6 +68,7 @@ export default function AddRating(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           required
           helperText={
             formik.touched.max && formik.errors.max ? formik.errors.max : null
@@ -87,6 +88,7 @@ export default function AddRating(props: {
           type="text"
           fullWidth
           variant="filled"
+          autoComplete="off"
           required
           helperText={
             formik.touched.precision && formik.errors.precision

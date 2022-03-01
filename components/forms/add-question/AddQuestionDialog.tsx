@@ -101,6 +101,7 @@ export default function AddQuestionDialog(props) {
                 type="text"
                 fullWidth
                 variant="filled"
+                autoComplete="off"
                 helperText={
                   formik.touched.question && formik.errors.question
                     ? formik.errors.question
@@ -123,6 +124,7 @@ export default function AddQuestionDialog(props) {
                 fullWidth
                 maxRows={5}
                 variant="filled"
+                autoComplete="off"
                 helperText={
                   formik.touched.description && formik.errors.description
                     ? formik.errors.description
