@@ -22,6 +22,8 @@ export default function SingleChoiceChart(props: {
       <HoverCard sx={{ mt: 2, mb: 4, p: 2.5 }}>
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
+          <br />
+          <i>Single Choice</i>
         </Typography>
         <ResponsiveContainer width="99%" aspect={1.78}>
           <PieChart>
@@ -31,6 +33,7 @@ export default function SingleChoiceChart(props: {
               outerRadius={100}
               fill={blue[400]}
               animationDuration={1000}
+              animationBegin={0}
               legendType="circle"
               label
             >

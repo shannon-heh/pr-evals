@@ -65,8 +65,8 @@ export default function Charts() {
       <Grid item container lg={6} direction="column">
         <Box sx={{ p: 2 }}>
           <MultiChoiceChart
-            data={chartData[0].data}
-            title={chartData[0].question}
+            data={chartData[1].data}
+            title={chartData[1].question}
             width={width}
           />
         </Box>
