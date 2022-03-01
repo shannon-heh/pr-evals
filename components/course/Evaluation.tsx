@@ -1,11 +1,12 @@
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { evalsData } from "../../pages/api/textual-evaluations";
+import { EvalsData } from "../../src/Types";
+import EvaluationBadges from "./EvaluationBadges";
 import HoverCard from "./HoverCard";
 
-export default function Evaluation(props: { evalDoc: evalsData }) {
+export default function Evaluation(props: { evalDoc: EvalsData }) {
   return (
-    <HoverCard sx={{ my: 4, p: 2.5 }}>
+    <HoverCard sx={{ mt: 2, mb: 4, p: 2.5 }}>
+      <EvaluationBadges evalDoc={props.evalDoc} />
       <Typography textAlign="left">{props.evalDoc.text}</Typography>
     </HoverCard>
   );

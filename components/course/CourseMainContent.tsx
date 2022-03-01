@@ -1,24 +1,15 @@
 import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import Box from "@mui/material/Box";
-import { blue, grey } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { SyntheticEvent, useState } from "react";
-import TextualEvaluations from "./TextualEvaluations";
+import Charts from "./Charts";
+import Reviews from "./Reviews";
 
 export default function CourseMainContent(props: { courseID: string }) {
-  const commonMainContentBoxStyles = {
-    m: 2,
-    px: 3,
-    // background: blue[400],
-    // borderRadius: 1,
-    // borderColor: grey[800],
-    // borderStyle: "solid",
-  };
-
   type TabPanelProps = {
     children?: React.ReactNode;
     index: number;
@@ -38,7 +29,7 @@ export default function CourseMainContent(props: { courseID: string }) {
       >
         {value === index && (
           <Box>
-            <Typography>{children}</Typography>
+            <Typography component="div">{children}</Typography>
           </Box>
         )}
       </div>
@@ -68,22 +59,10 @@ export default function CourseMainContent(props: { courseID: string }) {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Box
-            sx={{
-              ...commonMainContentBoxStyles,
-            }}
-          >
-            Charts and Diagrams
-          </Box>
+          <Charts />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Box
-            sx={{
-              ...commonMainContentBoxStyles,
-            }}
-          >
-            <TextualEvaluations courseID={props.courseID} />
-          </Box>
+          <Reviews />
         </TabPanel>
       </Grid>
     </>

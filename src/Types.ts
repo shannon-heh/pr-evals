@@ -43,6 +43,13 @@ export type AdminData = {
   majors: string[];
 };
 
+export type EvalsData = {
+  text: string;
+  major: string;
+  year: string;
+  difficulty: number;
+};
+
 export type FormMetadata = {
   form_id: string;
   title: string;
