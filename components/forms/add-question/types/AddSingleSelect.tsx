@@ -9,12 +9,16 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
 import SingleSelectInput from "../../question-types/SingleSelectInput";
 import * as yup from "yup";
+import { Dispatch, SetStateAction } from "react";
 
 // Allow customization & render preview of SingleSelect in Add Question Dialog
-export default function AddSingleSelect(props) {
+export default function AddSingleSelect(props: {
+  setOptions: Dispatch<SetStateAction<{}>>;
+}) {
   // customization options
   const [options, setOptions] = useState([]);
 
+  // input validation
   const validationSchema = yup.object({
     option: yup
       .string()
@@ -39,6 +43,9 @@ export default function AddSingleSelect(props) {
       <Grid container item flexDirection="column">
         <Divider sx={{ my: 2 }} />
         <FormLabel>Customize</FormLabel>
+        <Typography variant="caption" color="gray">
+          Set Options below to enable Done button.
+        </Typography>
         <TextField
           autoFocus
           margin="dense"

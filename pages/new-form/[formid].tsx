@@ -1,5 +1,5 @@
 import { fetcher, getFullTitle } from "../../src/Helpers";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { blue, grey } from "@mui/material/colors";
 import CustomHead from "../../components/CustomHead";
-import { CourseData } from "../../src/Types";
+import { CourseData, Question, QuestionMetadata } from "../../src/Types";
 import AddQuestionDialog from "../../components/forms/add-question/AddQuestionDialog";
 import { useState } from "react";
 import ShortTextInput from "../../components/forms/question-types/ShortTextInput";
@@ -17,41 +17,36 @@ import MultiSelectInput from "../../components/forms/question-types/MultiSelectI
 import SliderInput from "../../components/forms/question-types/SliderInput";
 import RatingInput from "../../components/forms/question-types/RatingInput";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 
 export default function NewForm() {
-  const [open, setOpen] = useState(false);
+  // open is true when Add/Confirm dialog is open
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  // stores list of questions & their metadata
   const [questions, setQuestions] = useState([]);
+  // keep trakc of question ID
   const [qid, setQid] = useState(0);
 
   // open / close Add Question dialog
-  const openDialog = () => {
-    setOpen(true);
+  const openAddDialog = () => {
+    setOpenAdd(true);
   };
-  const closeDialog = () => {
-    setOpen(false);
-  };
-
-  const router = useRouter();
-  const formid: string = router.query.formid as string;
-
-  // get course data to display
-  const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
-  const { data: courseData_, error: courseError } = useSWR(
-    courseid ? `/api/course-page-data?courseids=${courseid}` : null,
-    fetcher
-  );
-  const courseData = courseData_ ? (courseData_[0] as CourseData) : null;
-
-  // updates question metadata in DB when instructor adds new question
-  const addQuestion = (newQuestion: Object) => {
-    newQuestion["q_id"] = qid;
-    setQid(qid + 1);
-    setQuestions([...questions, newQuestion]);
+  const closeAddDialog = () => {
+    setOpenAdd(false);
   };
 
-  // updates form metadata in DB when instructor finishes form
+  // open / close Confirmation dialog
+  const openConfirmDialog = () => {
+    setOpenConfirm(true);
+  };
+  const closeConfirmDialog = () => {
+    setOpenConfirm(false);
+  };
+
+  // updates form metadata in DB when instructor publishes form
   const handleSubmit = () => {
+    closeConfirmDialog();
     fetch("/api/submit-form", {
       method: "post",
       headers: {
@@ -68,6 +63,26 @@ export default function NewForm() {
         router.push(`/course/${courseid}`);
       }
     });
+  };
+
+  const router: NextRouter = useRouter();
+  const formid: string = router.query.formid as string;
+
+  // get course data to display
+  const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
+  const { data: courseData_, error: courseError } = useSWR(
+    courseid ? `/api/course-page-data?courseids=${courseid}` : null,
+    fetcher
+  );
+  const courseData: CourseData | null = courseData_
+    ? (courseData_[0] as CourseData)
+    : null;
+
+  // updates question metadata in DB when instructor adds new question
+  const addQuestion = (newQuestion: QuestionMetadata) => {
+    newQuestion["q_id"] = qid;
+    setQid(qid + 1);
+    setQuestions([...questions, newQuestion]);
   };
 
   // get existing form metadata
@@ -114,7 +129,7 @@ export default function NewForm() {
           >
             <Button
               variant="contained"
-              onClick={openDialog}
+              onClick={openAddDialog}
               sx={{ px: 4, width: "40%" }}
             >
               Add Question
@@ -122,29 +137,34 @@ export default function NewForm() {
             <Button
               type="submit"
               variant="contained"
-              onClick={handleSubmit}
+              onClick={openConfirmDialog}
               sx={{ px: 4, width: "40%" }}
             >
               Finish Form
             </Button>
             <AddQuestionDialog
               addQuestion={addQuestion}
-              isOpen={open}
-              closeDialog={closeDialog}
+              isOpen={openAdd}
+              closeDialog={closeAddDialog}
+            />
+            <ConfirmationDialog
+              isOpen={openConfirm}
+              closeDialog={closeConfirmDialog}
+              handleSubmit={handleSubmit}
             />
           </Grid>
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
-            {questions.map((q, i) => {
+            {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
-              if (q.type == "SHORT_TEXT") {
+              if (q.type == Question.ShortText) {
                 input = <ShortTextInput />;
-              } else if (q.type == "LONG_TEXT") {
+              } else if (q.type == Question.LongText) {
                 input = <LongTextInput />;
-              } else if (q.type == "SINGLE_SEL") {
+              } else if (q.type == Question.SingleSelect) {
                 input = <SingleSelectInput options={q.options} />;
-              } else if (q.type == "MULTI_SEL") {
+              } else if (q.type == Question.MultiSelect) {
                 input = <MultiSelectInput options={q.options} />;
-              } else if (q.type == "SLIDER") {
+              } else if (q.type == Question.Slider) {
                 input = (
                   <SliderInput
                     min={q.min}
@@ -153,7 +173,7 @@ export default function NewForm() {
                     marks={q.marks}
                   />
                 );
-              } else if (q.type == "RATING") {
+              } else if (q.type == Question.Rating) {
                 input = <RatingInput max={q.max} precision={q.precision} />;
               }
               return (
@@ -167,7 +187,7 @@ export default function NewForm() {
                     backgroundColor: grey[50],
                     borderRadius: "8px",
                     flexDirection: "column",
-                    pb: q.type == "SLIDER" ? 4.5 : 1.5,
+                    pb: q.type == Question.Slider ? 4.5 : 1.5,
                   }}
                 >
                   <Typography variant="body1">{q.question}</Typography>

@@ -1,9 +1,12 @@
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import { SelectProps } from "../../../src/Types";
 
 // Generic Single-Select input
-export default function SingleSelectInput(props) {
+export default function SingleSelectInput(
+  props: SelectProps & { rowOrder?: boolean }
+) {
   return (
     <RadioGroup
       defaultValue="female"

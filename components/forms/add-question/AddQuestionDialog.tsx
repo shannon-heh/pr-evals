@@ -12,39 +12,41 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import AddQuestionInput from "./AddQuestionInput";
 import Grid from "@mui/material/Grid";
+import { Question, QuestionMetadata, QuestionProps } from "../../../src/Types";
 
 /* Add Question Dialog is shown when user clicks the Add Question
 button on the New Form page. This dialog is the interface for 
 instructors to add a new question to their form. */
 export default function AddQuestionDialog(props) {
   // question type code
-  const [type, setType] = useState("");
+  const [type, setType] = useState(null);
   // set of options for this question
   const [options, setOptions] = useState({});
 
   // passed down to children component to
   // set options for current question type
-  const handleSetOptions = (newOptions: Object) => {
+  const handleSetOptions = (newOptions: QuestionProps) => {
     setOptions(newOptions);
   };
 
   // close dialog when user clicks outside of dialog
   const handleClose = (e, reason: string) => {
-    if (reason && reason == "backdropClick") return;
+    if (reason && (reason == "backdropClick" || reason == "escapeKeyDown"))
+      return;
     handleButtonClose();
   };
 
   // close dialog when user clicks Cancel
   const handleButtonClose = () => {
     props.closeDialog();
-    setType("");
+    setType(null);
     setOptions({});
     formik.resetForm();
   };
 
-  // when instructor changes questoin type
+  // when user changes question type
   const handleTypeChange = (e) => {
-    const typeCode: string = e.target.value;
+    const typeCode: number = e.target.value;
     formik.setFieldValue("type", typeCode);
     setType(typeCode);
     setOptions({});
@@ -69,7 +71,8 @@ export default function AddQuestionDialog(props) {
     validationSchema,
     onSubmit: (values) => {
       // when user clicks Done to add new question
-      const question = {
+      delete options["set"];
+      const question: QuestionMetadata = {
         type: type,
         question: values.question,
         description: values.description,
@@ -141,12 +144,12 @@ export default function AddQuestionDialog(props) {
                 onChange={handleTypeChange}
                 fullWidth
               >
-                <MenuItem value={"SINGLE_SEL"}>Single-Select</MenuItem>
-                <MenuItem value={"MULTI_SEL"}>Multi-Select</MenuItem>
-                <MenuItem value={"SLIDER"}>Slider</MenuItem>
-                <MenuItem value={"RATING"}>Rating</MenuItem>
-                <MenuItem value={"SHORT_TEXT"}>Short Text</MenuItem>
-                <MenuItem value={"LONG_TEXT"}>Long Text</MenuItem>
+                <MenuItem value={Question.ShortText}>Short Text</MenuItem>
+                <MenuItem value={Question.LongText}>Long Text</MenuItem>
+                <MenuItem value={Question.SingleSelect}>Single-Select</MenuItem>
+                <MenuItem value={Question.MultiSelect}>Multi-Select</MenuItem>
+                <MenuItem value={Question.Slider}>Slider</MenuItem>
+                <MenuItem value={Question.Rating}>Rating</MenuItem>
               </Select>
             </Grid>
             <Grid container item flexDirection="column">

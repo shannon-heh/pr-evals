@@ -6,17 +6,16 @@ type Args = {
   courseid: string;
   netid: string;
   title: string;
-  description?: string;
+  description: string;
 };
 
 // API endpoint for instructors to create new form
-// Usage: /api/create-form?netid=NETID&courseid=COURSEID
-// NETID must be an instructor, COURSEID must be a course for that instructor
+// Usage: call using POST request
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let { courseid, netid, title, description }: Args = req.body;
+  const { courseid, netid, title, description }: Args = req.body;
   const db = await getDB();
 
   // validate query args
@@ -53,6 +52,7 @@ export default async function handler(
           questions: [],
           title: title,
           description: description,
+          published: false,
         },
       },
       { upsert: true }

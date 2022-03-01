@@ -1,3 +1,4 @@
+import * as yup from "yup";
 import { useState } from "react";
 import { useFormik } from "formik";
 import Button from "@mui/material/Button";
@@ -6,16 +7,20 @@ import FormLabel from "@mui/material/FormLabel";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import SliderInput from "../../question-types/SliderInput";
-import * as yup from "yup";
+import Typography from "@mui/material/Typography";
+import { Dispatch, SetStateAction } from "react";
 
 // Allow customization & render preview of Slider in Add Question Dialog
-export default function AddSlider(props) {
+export default function AddSlider(props: {
+  setOptions: Dispatch<SetStateAction<{}>>;
+}) {
   // customization options
-  const [step, setStep] = useState(10);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100);
+  const [step, setStep] = useState(10);
   const [marks, setMarks] = useState([{ value: 50, label: "neutral" }]);
 
+  // initial input validation
   const validationSchema = yup.object({
     min: yup
       .number()
@@ -32,41 +37,98 @@ export default function AddSlider(props) {
     step: yup
       .number()
       .typeError("Step must be a number")
-      .moreThan(0, "Step must be greater than 0"),
+      .moreThan(0, "Step must be more than 0, and at most Max minus Min"),
     marks: yup.string(),
   });
 
   const formik = useFormik({
     initialValues: {
-      step: 10,
       min: 0,
       max: 100,
+      step: 10,
       marks: "50,neutral",
     },
     validationSchema,
     onSubmit: (values) => {
+      // we know these are numbers based on validation above
       const min = Number(values.min);
       const max = Number(values.max);
       const step = Number(values.step);
 
+      let hasError: boolean = false; // true if error is found below
+
+      // validate max > min
+      if (max <= min) {
+        formik.setFieldError("min", "Max must be greater than Min");
+        formik.setFieldError("max", "Max must be greater than Min");
+        hasError = true;
+      }
+      // validate step is <= max - min
+      if (step > max - min) {
+        formik.setFieldError(
+          "step",
+          "Step must be more than 0, and at most Max minus Min"
+        );
+        hasError = true;
+      }
+
+      // parse marks entered by instructor
+      let countEmpty = 0; // count number of empty lines
+      const marks_: string[] = values.marks.split(/\r?\n/);
+      const marks: { value: number; label: string }[] = marks_.reduce(
+        (result, mark: string) => {
+          // skip empty lines
+          if (mark.trim() == "") {
+            countEmpty += 1;
+            return result;
+          }
+
+          // validate format is VALUE,LABEL
+          const splitMark = mark.split(",");
+          if (splitMark.length !== 2) {
+            hasError = true;
+            formik.setFieldError(
+              "marks",
+              "Badly formatted mark value. Mark should be VALUE,LABEL, each separated by newlines."
+            );
+            return result;
+          }
+          const [value, label] = splitMark;
+
+          // validate value is anumber between min and max, inclusive
+          if (
+            isNaN(Number(value)) ||
+            Number(value) < min ||
+            Number(value) > max
+          ) {
+            hasError = true;
+            formik.setFieldError(
+              "marks",
+              "Invalid mark value. Must be a number between Min and Max."
+            );
+            return result;
+          }
+
+          // if these checks pass, save this mark
+          result.push({ value: Number(value), label: label });
+          return result;
+        },
+        []
+      );
+
+      // validate either step or marks field is set
+      if (step == 0 && countEmpty == marks_.length) {
+        hasError = true;
+        formik.setFieldError("step", "Either Step or Marks must be set.");
+        formik.setFieldError("marks", "Either Step or Marks must be set.");
+      }
+
+      // if error occurred, do not set options
+      if (hasError) return;
+
       setMin(min);
       setMax(max);
       setStep(step);
-
-      // parse marks entered by instructor
-      const marks_: string[] = values.marks.split(/\r?\n/);
-      const marks = marks_.reduce((result, mark: string) => {
-        const splitMark = mark.split(",");
-        if (splitMark.length !== 2) {
-          return result;
-        }
-        const [value, label] = splitMark;
-        if (isNaN(Number(value))) {
-          return result;
-        }
-        result.push({ value: Number(value), label: label });
-        return result;
-      }, []);
       setMarks(marks);
 
       props.setOptions({ min: min, max: max, step: step, marks: marks });
@@ -77,6 +139,9 @@ export default function AddSlider(props) {
       <Grid container item flexDirection="column">
         <Divider sx={{ my: 2 }} />
         <FormLabel>Customize</FormLabel>
+        <Typography variant="caption" color="gray">
+          Set Options below to enable Done button.
+        </Typography>
         <TextField
           autoFocus
           margin="dense"
@@ -94,6 +159,7 @@ export default function AddSlider(props) {
           FormHelperTextProps={{
             style: { color: "red" },
           }}
+          required
         />
         <TextField
           autoFocus
@@ -112,6 +178,7 @@ export default function AddSlider(props) {
           FormHelperTextProps={{
             style: { color: "red" },
           }}
+          required
         />
         <TextField
           autoFocus
@@ -145,7 +212,16 @@ export default function AddSlider(props) {
           fullWidth
           variant="filled"
           multiline
-          helperText="Add multiple marks, separated by new line. Each mark should look like: VALUE,LABEL."
+          helperText={
+            formik.touched.marks && formik.errors.marks
+              ? formik.errors.marks
+              : "Add multiple marks, separated by a new line. Each mark should formatted as: VALUE,LABEL"
+          }
+          FormHelperTextProps={{
+            style: {
+              color: formik.touched.marks && formik.errors.marks ? "red" : null,
+            },
+          }}
         />
         <Button
           onClick={(e) => {

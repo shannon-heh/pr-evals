@@ -40,6 +40,7 @@ function CreateFormDialog(props: { courseid: string }) {
   const validationSchema = yup.object({
     title: yup
       .string()
+      .trim()
       .required("Required field")
       .max(100, "Max 100 characters"),
     description: yup.string().max(1000, "Max 1000 characters"),
@@ -106,6 +107,9 @@ function CreateFormDialog(props: { courseid: string }) {
                 ? formik.errors.title
                 : null
             }
+            FormHelperTextProps={{
+              style: { color: "red" },
+            }}
             required
           />
           <TextField
@@ -124,6 +128,9 @@ function CreateFormDialog(props: { courseid: string }) {
                 ? formik.errors.description
                 : null
             }
+            FormHelperTextProps={{
+              style: { color: "red" },
+            }}
           />
         </DialogContent>
         <DialogActions>

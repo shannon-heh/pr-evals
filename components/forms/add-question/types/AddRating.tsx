@@ -7,13 +7,18 @@ import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import RatingInput from "../../question-types/RatingInput";
 import * as yup from "yup";
+import Typography from "@mui/material/Typography";
+import { Dispatch, SetStateAction } from "react";
 
 // Allow customization & render Rating in Add Question Dialog
-export default function AddRating(props) {
+export default function AddRating(props: {
+  setOptions: Dispatch<SetStateAction<{}>>;
+}) {
   // customization options
   const [max, setMax] = useState(5);
   const [precision, setPrecision] = useState(0.5);
 
+  // input validation
   const validationSchema = yup.object({
     max: yup
       .number()
@@ -41,7 +46,6 @@ export default function AddRating(props) {
 
       setMax(max);
       setPrecision(precision);
-
       props.setOptions({ max: max, precision: precision });
     },
   });
@@ -50,6 +54,9 @@ export default function AddRating(props) {
       <Grid container item flexDirection="column">
         <Divider sx={{ my: 2 }} />
         <FormLabel>Customize</FormLabel>
+        <Typography variant="caption" color="gray">
+          Set Options below to enable Done button.
+        </Typography>
         <TextField
           autoFocus
           margin="dense"
@@ -92,7 +99,6 @@ export default function AddRating(props) {
         />
         <Button
           onClick={(e) => {
-            e.preventDefault();
             formik.handleSubmit();
           }}
           type="submit"

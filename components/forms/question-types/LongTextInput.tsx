@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
 
 // Generic Long Text input
-export default function LongTextInput(props) {
+export default function LongTextInput() {
   return (
     <TextField
       margin="dense"

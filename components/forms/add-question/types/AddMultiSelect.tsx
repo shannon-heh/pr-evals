@@ -9,12 +9,16 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Grid from "@mui/material/Grid";
 import MultiSelectInput from "../../question-types/MultiSelectInput";
 import * as yup from "yup";
+import { Dispatch, SetStateAction } from "react";
 
 // Allow customization & render preview of MultiSelect in Add Question Dialog
-export default function AddMultiSelect(props) {
+export default function AddMultiSelect(props: {
+  setOptions: Dispatch<SetStateAction<{}>>;
+}) {
   // customization options
   const [options, setOptions] = useState([]);
 
+  // input validation
   const validationSchema = yup.object({
     option: yup
       .string()
@@ -29,8 +33,6 @@ export default function AddMultiSelect(props) {
     },
     validationSchema,
     onSubmit: (values) => {
-      // do not duplicate options
-      if (options.includes(values.option)) return;
       const newOptions: string[] = [...options, values.option];
       props.setOptions({ options: newOptions });
       setOptions(newOptions);
@@ -41,6 +43,9 @@ export default function AddMultiSelect(props) {
       <Grid container item flexDirection="column">
         <Divider sx={{ my: 2 }} />
         <FormLabel>Customize</FormLabel>
+        <Typography variant="caption" color="gray">
+          Set Options below to enable Done button.
+        </Typography>
         <TextField
           autoFocus
           margin="dense"
