@@ -28,6 +28,18 @@ export default function handler(
         { name: "Office hours", value: 1 },
       ],
     },
+    {
+      question: "How many hours per week did you spend on assignments?",
+      type: "SCALE",
+      data: [
+        { name: "0", value: 1 },
+        { name: "1", value: 5 },
+        { name: "2", value: 10 },
+        { name: "3", value: 12 },
+        { name: "4", value: 9 },
+        { name: "5", value: 3 },
+      ],
+    },
   ];
 
   res.status(200).json(dummyData);

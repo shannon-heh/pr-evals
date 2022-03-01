@@ -18,7 +18,7 @@ export default function MultiChoiceChart(props: {
 }) {
   return (
     <Box sx={{ m: 0, p: 0 }}>
-      <HoverCard sx={{ mt: 2, mb: 4, p: 2.5 }}>
+      <HoverCard sx={{ mt: 2, p: 2.5 }}>
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
           <br />
@@ -30,7 +30,12 @@ export default function MultiChoiceChart(props: {
             <XAxis type="number" hide />
             <YAxis dataKey="name" type="category" />
             <Tooltip />
-            <Bar dataKey="value" fill={blue[400]} animationDuration={1000} />
+            <Bar
+              dataKey="value"
+              fill={blue[400]}
+              fillOpacity={0.6}
+              animationDuration={1000}
+            />
           </BarChart>
         </ResponsiveContainer>
       </HoverCard>

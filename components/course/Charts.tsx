@@ -4,6 +4,7 @@ import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
 import { ChartData } from "../../src/Types";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
+import ScaleChart from "./charts/ScaleChart";
 import SingleChoiceChart from "./charts/SingleChoiceChart";
 
 export default function Charts() {
@@ -67,6 +68,15 @@ export default function Charts() {
           <MultiChoiceChart
             data={chartData[1].data}
             title={chartData[1].question}
+            width={width}
+          />
+        </Box>
+      </Grid>
+      <Grid item container lg={6} direction="column">
+        <Box sx={{ p: 2 }}>
+          <ScaleChart
+            data={chartData[2].data}
+            title={chartData[2].question}
             width={width}
           />
         </Box>
