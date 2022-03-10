@@ -54,6 +54,36 @@ export default function handler(
         { name: "5", value: 19 },
       ],
     },
+    {
+      question: "Please give feedback on the first coding assignment.",
+      type: "TEXT",
+      data: [
+        {
+          text: "I kinda loved it!",
+          major: "ENG",
+          year: "Junior",
+          difficulty: 3,
+        },
+        {
+          text: "Was a bit difficult but I got through it",
+          major: "POL",
+          year: "Senior",
+          difficulty: 3,
+        },
+        {
+          text: "I thought that the assignment was too hard and the instructors suck.",
+          major: "COS",
+          year: "Sophomore",
+          difficulty: 4,
+        },
+        {
+          text: "Took me only an hour, very easy...",
+          major: "ECO",
+          year: "Junior",
+          difficulty: 1,
+        },
+      ],
+    },
   ];
 
   res.status(200).json(dummyData);

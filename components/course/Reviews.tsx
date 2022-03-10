@@ -24,33 +24,38 @@ export default function Reviews() {
     );
 
   return (
-    <Grid container sx={{ textAlign: "center" }}>
-      <Grid item container lg={6} direction="column">
-        <Box sx={{ p: 2 }}>
-          <WordVisualizations
-            evalsData={evalsData as EvalsData[]}
-            isLoading={!evalsData || evalsError}
-          />
-        </Box>
+    <>
+      <Typography variant="subtitle1" fontWeight="medium" mt={3.2}>
+        These written responses come from the standardized evaluations form.
+      </Typography>
+      <Grid container sx={{ textAlign: "center" }}>
+        <Grid item container lg={6} direction="column">
+          <Box sx={{ p: 2 }}>
+            <WordVisualizations
+              evalsData={evalsData as EvalsData[]}
+              isLoading={!evalsData || evalsError}
+            />
+          </Box>
+        </Grid>
+        <Grid item container lg={6} direction="column">
+          <Box
+            sx={{
+              p: 2,
+              mb: 2,
+              height: width <= 900 ? 600 : 1000,
+              overflowX: "auto",
+              overflowY: "scroll",
+              flexDirection: "column",
+              flexGrow: 1,
+            }}
+          >
+            <TextualEvaluations
+              evalsData={evalsData as EvalsData[]}
+              isLoading={!evalsData || evalsError}
+            />
+          </Box>
+        </Grid>
       </Grid>
-      <Grid item container lg={6} direction="column">
-        <Box
-          sx={{
-            p: 2,
-            mb: 2,
-            height: width <= 900 ? 600 : 1000,
-            overflowX: "auto",
-            overflowY: "scroll",
-            flexDirection: "column",
-            flexGrow: 1,
-          }}
-        >
-          <TextualEvaluations
-            evalsData={evalsData as EvalsData[]}
-            isLoading={!evalsData || evalsError}
-          />
-        </Box>
-      </Grid>
-    </Grid>
+    </>
   );
 }

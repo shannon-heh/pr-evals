@@ -1,4 +1,4 @@
-import { Box, Grid, Rating, Skeleton } from "@mui/material";
+import { Box, Grid, Rating, Skeleton, Typography } from "@mui/material";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
@@ -6,6 +6,7 @@ import { ChartData } from "../../src/Types";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
 import ScaleChart from "./charts/ScaleChart";
 import SingleChoiceChart from "./charts/SingleChoiceChart";
+import TextChart from "./charts/TextChart";
 
 function ChartWrapper(props: { children?: React.ReactNode }) {
   return (
@@ -65,8 +66,12 @@ export default function Charts() {
             />
           </ChartWrapper>
         );
-      default:
-        return <></>;
+      case "TEXT":
+        return (
+          <ChartWrapper>
+            <TextChart data={data.data} title={data.question} width={width} />
+          </ChartWrapper>
+        );
     }
   };
 
@@ -115,8 +120,13 @@ export default function Charts() {
     );
 
   return (
-    <Grid container sx={{ textAlign: "center", mb: 2 }}>
-      {processChartData(chartData)}
-    </Grid>
+    <>
+      <Typography variant="subtitle1" fontWeight="medium" mt={3.2}>
+        These charts visualize responses from the standardized evaluations form.
+      </Typography>
+      <Grid container sx={{ textAlign: "center", mb: 2 }}>
+        {processChartData(chartData)}
+      </Grid>
+    </>
   );
 }

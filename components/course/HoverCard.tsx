@@ -7,7 +7,7 @@ import { SxProps, Theme } from "@mui/material/styles";
 // <HoverCard sx={{p: 4}}>
 //     <Typography textAlign="left">hello</Typography>
 // </HoverCard>
-export default function Evaluation(props: {
+export default function HoverCard(props: {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
   specialCourseHeaderFlex?: boolean;

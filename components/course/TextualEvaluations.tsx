@@ -6,12 +6,6 @@ export default function TextualEvaluations(props: {
   evalsData: EvalsData[];
   isLoading: boolean;
 }) {
-  const processEvals = (evalsData: EvalsData[]) => {
-    return evalsData.map((evalDoc: EvalsData, i) => (
-      <Evaluation key={i} evalDoc={evalDoc} />
-    ));
-  };
-
   if (props.isLoading)
     return (
       <>
@@ -26,5 +20,11 @@ export default function TextualEvaluations(props: {
       </>
     );
 
-  return <>{processEvals(props.evalsData)}</>;
+  return (
+    <>
+      {props.evalsData.map((evalDoc: EvalsData, i) => (
+        <Evaluation key={i} evalDoc={evalDoc} />
+      ))}
+    </>
+  );
 }

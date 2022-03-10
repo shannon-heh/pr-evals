@@ -52,13 +52,7 @@ export type EvalsData = {
 
 export type ChartData = {
   question: string;
-  type:
-    | "SINGLE_SEL"
-    | "MULTI_SEL"
-    | "SLIDER"
-    | "RATING"
-    | "SHORT_TEXT"
-    | "LONG_TEXT";
+  type: "SINGLE_SEL" | "MULTI_SEL" | "SLIDER" | "RATING" | "TEXT";
   data: Object[];
   precision?: number;
 };
