@@ -8,8 +8,7 @@ import Typography from "@mui/material/Typography";
 import { blue, grey } from "@mui/material/colors";
 import CustomHead from "../../components/CustomHead";
 import { CourseData, Question, QuestionMetadata } from "../../src/Types";
-import AddQuestionDialog from "../../components/forms/add-question/AddQuestionDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShortTextInput from "../../components/forms/question-types/ShortTextInput";
 import LongTextInput from "../../components/forms/question-types/LongTextInput";
 import SingleSelectInput from "../../components/forms/question-types/SingleSelectInput";
@@ -18,23 +17,12 @@ import SliderInput from "../../components/forms/question-types/SliderInput";
 import RatingInput from "../../components/forms/question-types/RatingInput";
 import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
+import { useFormik } from "formik";
+import useCAS from "../../hooks/useCAS";
 
-export default function NewForm() {
+export default function CompleteForm() {
   // open is true when Add/Confirm dialog is open
-  const [openAdd, setOpenAdd] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  // stores list of questions & their metadata
-  const [questions, setQuestions] = useState([]);
-  // keep track of question ID
-  const [qid, setQid] = useState(0);
-
-  // open / close Add Question dialog
-  const openAddDialog = () => {
-    setOpenAdd(true);
-  };
-  const closeAddDialog = () => {
-    setOpenAdd(false);
-  };
 
   // open / close Confirmation dialog
   const openConfirmDialog = () => {
@@ -44,27 +32,7 @@ export default function NewForm() {
     setOpenConfirm(false);
   };
 
-  // updates form metadata in DB when instructor publishes form
-  const handleSubmit = () => {
-    closeConfirmDialog();
-    fetch("/api/create-form", {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        formid: formid,
-        questions: questions,
-      }),
-    }).then((res: Response) => {
-      if (res.status == 200) {
-        // redirect to course page when done
-        router.push(`/course/${courseid}`);
-      }
-    });
-  };
-
+  const { netID } = useCAS();
   const router: NextRouter = useRouter();
   const formid: string = router.query.formid as string;
 
@@ -78,19 +46,67 @@ export default function NewForm() {
     ? (courseData_[0] as CourseData)
     : null;
 
-  // updates question metadata in DB when instructor adds new question
-  const addQuestion = (newQuestion: QuestionMetadata) => {
-    newQuestion["q_id"] = qid;
-    setQid(qid + 1);
-    setQuestions([...questions, newQuestion]);
-  };
-
-  // get existing form metadata
+  // get form metadata
   const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
   const { data: formData, error: formError } = useSWR(url, fetcher);
 
+  const questions: QuestionMetadata[] = formData?.questions;
+
+  const formik = useFormik({
+    initialValues: {},
+    onSubmit: (values) => {
+      const responses = Object.keys(values).map((q_id: string) => {
+        return { q_id: Number(q_id), response: values[q_id] };
+      });
+
+      fetch("/api/submit-form", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          formid: formid,
+          responses: responses,
+          netid: netID,
+        }),
+      }).then((res: Response) => {
+        if (res.status == 200) {
+          // redirect to course page when done
+          router.push(`/course/${courseid}`);
+        }
+      });
+    },
+  });
+
+  // updates form response in DB when student finishes form
+  const handleSubmit = () => {
+    closeConfirmDialog();
+    formik.handleSubmit();
+  };
+
+  // set default field values
+  useEffect(() => {
+    questions?.forEach((q: QuestionMetadata) => {
+      const id = String(q.q_id);
+      if (q.type == Question.ShortText || q.type == Question.LongText) {
+        formik.setFieldValue(id, "");
+      } else if (q.type == Question.MultiSelect) {
+        formik.setFieldValue(id, []);
+      } else if (q.type == Question.SingleSelect) {
+        formik.setFieldValue(id, null);
+      } else if (q.type == Question.Rating) {
+        formik.setFieldValue(id, 0);
+      } else if (q.type == Question.Slider) {
+        formik.setFieldValue(id, q.min);
+      }
+    });
+  }, [questions]);
+
   if (formError || courseError) return <Error />;
   if (!formData || !courseData_) return <Loading />;
+
+  console.log(formik.values);
 
   return (
     <>
@@ -125,28 +141,16 @@ export default function NewForm() {
             container
             flexDirection="row"
             sx={{ py: 2 }}
-            justifyContent="space-evenly"
+            justifyContent="center"
           >
-            <Button
-              variant="contained"
-              onClick={openAddDialog}
-              sx={{ px: 4, width: "40%" }}
-            >
-              Add Question
-            </Button>
             <Button
               type="submit"
               variant="contained"
               onClick={openConfirmDialog}
-              sx={{ px: 4, width: "40%" }}
+              sx={{ px: 4, width: "100%" }}
             >
               Finish Form
             </Button>
-            <AddQuestionDialog
-              addQuestion={addQuestion}
-              isOpen={openAdd}
-              closeDialog={closeAddDialog}
-            />
             <ConfirmationDialog
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
@@ -156,14 +160,27 @@ export default function NewForm() {
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
+              const name: string = String(q.q_id);
               if (q.type == Question.ShortText) {
-                input = <ShortTextInput />;
+                input = <ShortTextInput name={name} formik={formik} />;
               } else if (q.type == Question.LongText) {
-                input = <LongTextInput />;
+                input = <LongTextInput name={name} formik={formik} />;
               } else if (q.type == Question.SingleSelect) {
-                input = <SingleSelectInput options={q.options} />;
+                input = (
+                  <SingleSelectInput
+                    options={q.options}
+                    name={name}
+                    formik={formik}
+                  />
+                );
               } else if (q.type == Question.MultiSelect) {
-                input = <MultiSelectInput options={q.options} />;
+                input = (
+                  <MultiSelectInput
+                    options={q.options}
+                    name={name}
+                    formik={formik}
+                  />
+                );
               } else if (q.type == Question.Slider) {
                 input = (
                   <SliderInput
@@ -171,10 +188,19 @@ export default function NewForm() {
                     max={q.max}
                     step={q.step}
                     marks={q.marks}
+                    name={name}
+                    formik={formik}
                   />
                 );
               } else if (q.type == Question.Rating) {
-                input = <RatingInput max={q.max} precision={q.precision} />;
+                input = (
+                  <RatingInput
+                    max={q.max}
+                    precision={q.precision}
+                    name={name}
+                    formik={formik}
+                  />
+                );
               }
               return (
                 <Grid

@@ -5,13 +5,20 @@ import { SelectProps } from "../../../src/Types";
 
 // Generic Single-Select input
 export default function SingleSelectInput(
-  props: SelectProps & { rowOrder?: boolean }
+  props: SelectProps & {
+    rowOrder?: boolean;
+    name?: string;
+    formik?: any;
+  }
 ) {
+  const { name, formik, rowOrder } = props;
+  const value: any = name ? formik?.values[name] ?? "" : undefined;
   return (
     <RadioGroup
-      defaultValue="female"
-      name="radio-buttons-group"
-      row={props.rowOrder ?? false}
+      row={rowOrder ?? false}
+      name={name}
+      value={value}
+      onChange={formik?.handleChange}
     >
       {props.options.map((option: string, i: number) => {
         return (

@@ -76,6 +76,7 @@ export type QuestionTypes = keyof typeof Question
 type BaseQuestion = {
   question: string,
   description: string,
+  q_id?: number,
 }
 
 // Text input

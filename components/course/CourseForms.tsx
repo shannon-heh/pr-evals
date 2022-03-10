@@ -56,7 +56,7 @@ function CreateFormDialog(props: { courseid: string }) {
       const { title, description } = values;
 
       // create new form with given title & description
-      fetch("/api/create-form", {
+      fetch("/api/start-form", {
         method: "post",
         headers: {
           Accept: "application/json",
