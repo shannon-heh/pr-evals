@@ -26,11 +26,12 @@ export default function handler(
         { name: "Assignments", value: 3 },
         { name: "Exams", value: 9 },
         { name: "Office hours", value: 1 },
+        { name: "Labs", value: 17 },
       ],
     },
     {
       question: "How many hours per week did you spend on assignments?",
-      type: "SCALE",
+      type: "SLIDER",
       data: [
         { name: "0", value: 1 },
         { name: "1", value: 5 },

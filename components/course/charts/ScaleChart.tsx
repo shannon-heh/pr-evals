@@ -25,7 +25,7 @@ import {
 } from "recharts";
 import HoverCard from "../HoverCard";
 
-export default function MultiChoiceChart(props: {
+export default function ScaleChart(props: {
   data: Object[];
   title: string;
   width: number;
@@ -85,7 +85,7 @@ export default function MultiChoiceChart(props: {
                 angle={30}
                 orientation="left"
                 tick={false}
-                domain={[0, Math.max(...values) + 2]}
+                domain={[0, Math.max(...values) + 1]}
               />
               <Radar
                 animationDuration={1000}
