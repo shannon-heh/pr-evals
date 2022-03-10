@@ -41,6 +41,19 @@ export default function handler(
         { name: "5", value: 3 },
       ],
     },
+    {
+      question: "How would you rate this course?",
+      type: "RATING",
+      precision: 0.1,
+      data: [
+        { name: "0", value: 1 },
+        { name: "1", value: 5 },
+        { name: "2", value: 10 },
+        { name: "3", value: 12 },
+        { name: "4", value: 20 },
+        { name: "5", value: 19 },
+      ],
+    },
   ];
 
   res.status(200).json(dummyData);

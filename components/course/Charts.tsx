@@ -1,4 +1,4 @@
-import { Box, Grid, Skeleton } from "@mui/material";
+import { Box, Grid, Rating, Skeleton } from "@mui/material";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
@@ -20,11 +20,11 @@ export default function Charts() {
   const { data: chartData_, error } = useSWR("/api/chart-data", fetcher);
   const chartData = chartData_ as ChartData[];
 
-  const makeChart = (data: ChartData) => {
+  const makeChart = (data: ChartData, i: number) => {
     switch (data.type) {
       case "SINGLE_SEL":
         return (
-          <ChartWrapper>
+          <ChartWrapper key={i}>
             <SingleChoiceChart
               data={data.data}
               title={data.question}
@@ -34,7 +34,7 @@ export default function Charts() {
         );
       case "MULTI_SEL":
         return (
-          <ChartWrapper>
+          <ChartWrapper key={i}>
             <MultiChoiceChart
               data={data.data}
               title={data.question}
@@ -44,8 +44,25 @@ export default function Charts() {
         );
       case "SLIDER":
         return (
-          <ChartWrapper>
-            <ScaleChart data={data.data} title={data.question} width={width} />
+          <ChartWrapper key={i}>
+            <ScaleChart
+              type="Slider"
+              data={data.data}
+              title={data.question}
+              width={width}
+            />
+          </ChartWrapper>
+        );
+      case "RATING":
+        return (
+          <ChartWrapper key={i}>
+            <ScaleChart
+              type="Rating"
+              data={data.data}
+              title={data.question}
+              precision={data.precision}
+              width={width}
+            />
           </ChartWrapper>
         );
       default:
@@ -54,11 +71,7 @@ export default function Charts() {
   };
 
   const processChartData = (allData: ChartData[]) => {
-    const charts = Array();
-    allData.forEach((data) => {
-      charts.push(makeChart(data));
-    });
-    return charts;
+    return allData.map((data, i) => makeChart(data, i));
   };
 
   if (!chartData || error)

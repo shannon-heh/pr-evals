@@ -2,12 +2,13 @@ import {
   Box,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Radio,
   RadioGroup,
+  Rating,
   Typography,
+  Tooltip as HoverTooltip,
 } from "@mui/material";
-import { green } from "@mui/material/colors";
+import { green, purple } from "@mui/material/colors";
 import { useState } from "react";
 import {
   Bar,
@@ -29,13 +30,22 @@ export default function ScaleChart(props: {
   data: Object[];
   title: string;
   width: number;
+  precision?: number;
+  type: "Slider" | "Rating";
 }) {
   const [chartType, setChartType] = useState("Bar");
 
-  const values: number[] = Array<number>();
-  props.data.forEach((sample) => {
-    values.push(sample["value"]);
-  });
+  const computeRatingMean = () => {
+    let total = 0;
+    let count = 0;
+    props.data.forEach((e) => {
+      for (let i = 0; i < e["value"]; i++) {
+        total += Number(e["name"]);
+        count++;
+      }
+    });
+    return Number((total / count).toFixed(2));
+  };
 
   return (
     <Box sx={{ m: 0, p: 0 }}>
@@ -43,9 +53,26 @@ export default function ScaleChart(props: {
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
           <br />
-          <i>Slider / Rating</i>
+          <i>Question type: {props.type}</i>
         </Typography>
-        <FormControl>
+        {props.type == "Rating" ? (
+          <HoverTooltip
+            title={`${computeRatingMean()} stars`}
+            placement="top"
+            arrow
+          >
+            <div>
+              <Rating
+                max={Math.max(...props.data.map((e) => e["name"]))}
+                value={computeRatingMean()}
+                precision={props.precision}
+                size="large"
+                readOnly
+              />
+            </div>
+          </HoverTooltip>
+        ) : null}
+        <FormControl sx={{ mb: 1 }}>
           <RadioGroup
             row
             aria-labelledby="scale-chart-selector"
@@ -72,7 +99,7 @@ export default function ScaleChart(props: {
               <Tooltip />
               <Bar
                 dataKey="value"
-                fill={green[400]}
+                fill={props.type == "Slider" ? green[400] : purple[300]}
                 fillOpacity={0.6}
                 animationDuration={1000}
               />
@@ -85,12 +112,15 @@ export default function ScaleChart(props: {
                 angle={30}
                 orientation="left"
                 tick={false}
-                domain={[0, Math.max(...values) + 1]}
+                domain={[
+                  0,
+                  Math.max(...props.data.map((sample) => sample["value"])) + 1,
+                ]}
               />
               <Radar
                 animationDuration={1000}
                 dataKey="value"
-                fill={green[400]}
+                fill={props.type == "Slider" ? green[400] : purple[300]}
                 fillOpacity={0.6}
               />
               <Tooltip />

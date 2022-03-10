@@ -23,7 +23,7 @@ export default function SingleChoiceChart(props: {
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
           <br />
-          <i>Single Choice</i>
+          <i>Question type: Single Choice</i>
         </Typography>
         <ResponsiveContainer width="99%" aspect={1.78}>
           <PieChart>

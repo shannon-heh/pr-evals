@@ -7,12 +7,9 @@ export default function TextualEvaluations(props: {
   isLoading: boolean;
 }) {
   const processEvals = (evalsData: EvalsData[]) => {
-    const evals = Array();
-    let i = 0;
-    evalsData.forEach((evalDoc: EvalsData) => {
-      evals.push(<Evaluation key={i++} evalDoc={evalDoc} />);
-    });
-    return evals;
+    return evalsData.map((evalDoc: EvalsData, i) => (
+      <Evaluation key={i} evalDoc={evalDoc} />
+    ));
   };
 
   if (props.isLoading)
