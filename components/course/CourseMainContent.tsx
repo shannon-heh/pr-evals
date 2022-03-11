@@ -1,9 +1,11 @@
 import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import Charts from "./Charts";
 import Reviews from "./Reviews";
+import Responses from "./Responses";
 
 export default function CourseMainContent(props: { courseID: string }) {
   type TabPanelProps = {
@@ -50,14 +52,22 @@ export default function CourseMainContent(props: { courseID: string }) {
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           <Tabs value={value} onChange={handleChange} centered>
-            <Tab icon={<BarChart />} label="Charts" {...a11yProps(0)} />
-            <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(1)} />
+            <Tab
+              icon={<DriveFileRenameOutlineIcon />}
+              label="Responses"
+              {...a11yProps(0)}
+            />
+            <Tab icon={<BarChart />} label="Charts" {...a11yProps(1)} />
+            <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Charts />
+          <Responses />
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <Charts />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
           <Reviews />
         </TabPanel>
       </Grid>

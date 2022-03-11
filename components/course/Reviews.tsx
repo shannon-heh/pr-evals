@@ -25,8 +25,9 @@ export default function Reviews() {
 
   return (
     <>
-      <Typography variant="subtitle1" fontWeight="medium" mt={3.2}>
-        These written responses come from the standardized evaluations form.
+      <Typography variant="subtitle1" fontWeight="medium" mt={2}>
+        These written responses were submitted to the standardized evaluations
+        form.
       </Typography>
       <Grid container sx={{ textAlign: "center" }}>
         <Grid item container lg={6} direction="column">

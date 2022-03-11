@@ -121,8 +121,9 @@ export default function Charts() {
 
   return (
     <>
-      <Typography variant="subtitle1" fontWeight="medium" mt={3.2}>
-        These charts visualize responses from the standardized evaluations form.
+      <Typography variant="subtitle1" fontWeight="medium" mt={2}>
+        These charts visualize responses submitted to the standardized
+        evaluations form.
       </Typography>
       <Grid container sx={{ textAlign: "center", mb: 2 }}>
         {processChartData(chartData)}
