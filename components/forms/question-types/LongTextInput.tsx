@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 // Generic Long Text input
 export default function LongTextInput(props: { name?: string; formik?: any }) {
   const { name, formik } = props;
-  const value: any = name ? formik?.values[name] ?? "" : undefined;
+  const value: string = name ? formik?.values[name] ?? "" : undefined;
   return (
     <TextField
       margin="dense"

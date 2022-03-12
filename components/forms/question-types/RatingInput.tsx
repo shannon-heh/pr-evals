@@ -6,7 +6,7 @@ export default function RatingInput(
   props: RatingProps & { name?: string; formik?: any }
 ) {
   const { name, formik, max, precision } = props;
-  const value: any = name ? Number(formik?.values[name]) ?? 0 : undefined;
+  const value: number = name ? Number(formik?.values[name]) ?? 0 : undefined;
   return (
     <>
       <Rating
@@ -15,6 +15,7 @@ export default function RatingInput(
         size="large"
         name={name}
         onChange={(e, value) => {
+          // manually set rating value
           formik.setFieldValue(name, Number(value));
         }}
         value={value}

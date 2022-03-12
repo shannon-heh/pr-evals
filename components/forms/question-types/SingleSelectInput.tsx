@@ -12,7 +12,7 @@ export default function SingleSelectInput(
   }
 ) {
   const { name, formik, rowOrder } = props;
-  const value: any = name ? formik?.values[name] ?? "" : undefined;
+  const value: string = name ? formik?.values[name] ?? "" : undefined;
   return (
     <RadioGroup
       row={rowOrder ?? false}

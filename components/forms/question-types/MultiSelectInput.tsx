@@ -20,15 +20,18 @@ export default function MultiSelectInput(
                   name={option}
                   onChange={(e) => {
                     if (!formik) return undefined;
+                    // must manually set checkbox field value
                     if (e.target.checked) {
+                      // add checked option
                       formik.setFieldValue(
                         name,
                         formik.values[name].concat([option])
                       );
                     } else {
+                      // remove unchecked option
                       formik.setFieldValue(
                         name,
-                        formik.values[name].filter((item) => {
+                        formik.values[name].filter((item: string) => {
                           return item !== option;
                         })
                       );
