@@ -27,6 +27,7 @@ export default function Forms(props: {
   let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
   if (formsError) return <div>Failed to load Forms.</div>;
 
+  // display forms in reverse chronological order
   if (formsData) formsData.reverse();
 
   return (
