@@ -1,5 +1,6 @@
 import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import RateReviewIcon from "@mui/icons-material/RateReview";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Tab from "@mui/material/Tab";
@@ -8,8 +9,12 @@ import Typography from "@mui/material/Typography";
 import { SyntheticEvent, useState } from "react";
 import Charts from "./Charts";
 import Reviews from "./Reviews";
+import Forms from "./Forms";
 
-export default function CourseMainContent(props: { courseID: string }) {
+export default function CourseMainContent(props: {
+  courseID: string;
+  numStudents: number;
+}) {
   type TabPanelProps = {
     children?: React.ReactNode;
     index: number;
@@ -54,14 +59,18 @@ export default function CourseMainContent(props: { courseID: string }) {
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           <Tabs value={value} onChange={handleChange} centered>
-            <Tab icon={<BarChart />} label="Charts" {...a11yProps(0)} />
-            <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(1)} />
+            <Tab icon={<RateReviewIcon />} label="Forms" {...a11yProps(0)} />
+            <Tab icon={<BarChart />} label="Charts" {...a11yProps(1)} />
+            <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Charts />
+          <Forms courseID={props.courseID} numStudents={props.numStudents} />
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <Charts />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
           <Reviews />
         </TabPanel>
       </Grid>

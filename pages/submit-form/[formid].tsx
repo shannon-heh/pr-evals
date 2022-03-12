@@ -20,7 +20,8 @@ import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 
-export default function CompleteForm() {
+// Page for student to submit a form response
+export default function SubmitForm() {
   // open is true when Add/Confirm dialog is open
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -50,15 +51,19 @@ export default function CompleteForm() {
   const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
   const { data: formData, error: formError } = useSWR(url, fetcher);
 
+  // get form questions
   const questions: QuestionMetadata[] = formData?.questions;
 
   const formik = useFormik({
     initialValues: {},
     onSubmit: (values) => {
-      const responses = Object.keys(values).map((q_id: string) => {
+      const responses: { q_id: number; response: any }[] = Object.keys(
+        values
+      ).map((q_id: string) => {
         return { q_id: Number(q_id), response: values[q_id] };
       });
 
+      // update student's form response in DB
       fetch("/api/submit-form", {
         method: "post",
         headers: {
@@ -79,12 +84,6 @@ export default function CompleteForm() {
     },
   });
 
-  // updates form response in DB when student finishes form
-  const handleSubmit = () => {
-    closeConfirmDialog();
-    formik.handleSubmit();
-  };
-
   // set default field values
   useEffect(() => {
     questions?.forEach((q: QuestionMetadata) => {
@@ -103,10 +102,14 @@ export default function CompleteForm() {
     });
   }, [questions]);
 
+  // updates form response in DB when student finishes form
+  const handleSubmit = () => {
+    closeConfirmDialog();
+    formik.handleSubmit();
+  };
+
   if (formError || courseError) return <Error />;
   if (!formData || !courseData_) return <Loading />;
-
-  console.log(formik.values);
 
   return (
     <>
@@ -149,9 +152,11 @@ export default function CompleteForm() {
               onClick={openConfirmDialog}
               sx={{ px: 4, width: "100%" }}
             >
-              Finish Form
+              Submit Form
             </Button>
             <ConfirmationDialog
+              title={"Are you ready to submit your form?"}
+              description={"Click Cancel to continue editing your response."}
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
               handleSubmit={handleSubmit}

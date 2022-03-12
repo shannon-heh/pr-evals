@@ -46,8 +46,8 @@ export default async function handler(
       { form_id: formid },
       {
         $set: {
+          course_id: courseid,
           time_created: new Date(),
-          num_responses: 0,
           questions: [],
           title: title,
           description: description,

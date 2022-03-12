@@ -18,6 +18,7 @@ export type CourseData = {
   instructors?: InstructorData[];
   crosslisting_catalog_titles?: string[];
   classes?: ClassData[];
+  num_students?: number;
 };
 
 export type UserDataDB = {
@@ -57,7 +58,6 @@ export type FormMetadata = {
   published: boolean;
   time_created: Date;
   questions: QuestionMetadata[];
-  num_responses: number;
   time_published?: Date,
 };
 
@@ -127,3 +127,12 @@ export type MultiSelectMetadata = BaseQuestion & SelectProps & {
 export type QuestionProps = RatingProps | SliderProps | SelectProps;
 
 export type QuestionMetadata = ShortTextMetadata | LongTextMetadata | RatingMetadata | SliderMetadata | SingleSelectMetadata | MultiSelectMetadata;
+
+export type CourseFormData = {
+  title: string;
+  form_id: string;
+  time_published: Date;
+  time_submitted?: Date;
+  completed: boolean;
+  num_responses: number;
+};

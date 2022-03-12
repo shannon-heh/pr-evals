@@ -19,6 +19,7 @@ import RatingInput from "../../components/forms/question-types/RatingInput";
 import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 
+// Page for instructor to create a new form
 export default function NewForm() {
   // open is true when Add/Confirm dialog is open
   const [openAdd, setOpenAdd] = useState(false);
@@ -140,7 +141,7 @@ export default function NewForm() {
               onClick={openConfirmDialog}
               sx={{ px: 4, width: "40%" }}
             >
-              Finish Form
+              Publish Form
             </Button>
             <AddQuestionDialog
               addQuestion={addQuestion}
@@ -148,6 +149,8 @@ export default function NewForm() {
               closeDialog={closeAddDialog}
             />
             <ConfirmationDialog
+              title={"Are you ready to publish your form?"}
+              description={"Click Cancel to continue editing your form."}
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
               handleSubmit={handleSubmit}

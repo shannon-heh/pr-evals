@@ -11,15 +11,8 @@ import useCAS from "../../hooks/useCAS";
 import * as yup from "yup";
 import { useRouter } from "next/router";
 
-export default function CourseForms(props: { courseid: string }) {
-  return (
-    <>
-      <CreateFormDialog courseid={props.courseid} />
-    </>
-  );
-}
-
-function CreateFormDialog(props: { courseid: string }) {
+// Actions on course page for instructor to start a new form
+export default function NewFormActions(props: { courseid: string }) {
   const { netID }: { netID: string } = useCAS();
   const router = useRouter();
 
@@ -82,11 +75,16 @@ function CreateFormDialog(props: { courseid: string }) {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Create Form
+      <Button
+        type="submit"
+        variant="contained"
+        onClick={handleClickOpen}
+        sx={{ mb: 2, px: 4, width: "50%" }}
+      >
+        Publish New Form
       </Button>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Create Feedback Form</DialogTitle>
+        <DialogTitle>Publish Feedback Form</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Set a title and description for your feedback form.
@@ -143,7 +141,7 @@ function CreateFormDialog(props: { courseid: string }) {
               formik.handleSubmit();
             }}
           >
-            Create
+            Continue
           </Button>
         </DialogActions>
       </Dialog>

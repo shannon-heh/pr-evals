@@ -6,7 +6,7 @@ import { SelectProps } from "../../../src/Types";
 
 // Generic Multi-Select input
 export default function MultiSelectInput(
-  props: SelectProps & { rowOrder?: boolean; name?: string; formik: any }
+  props: SelectProps & { rowOrder?: boolean; name?: string; formik?: any }
 ) {
   const { name, formik, rowOrder } = props;
   return (
