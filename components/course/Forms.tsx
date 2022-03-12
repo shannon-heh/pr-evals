@@ -27,6 +27,8 @@ export default function Forms(props: {
   let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
   if (formsError) return <div>Failed to load Forms.</div>;
 
+  if (formsData) formsData.reverse();
+
   return (
     <Grid container flexDirection="column" alignItems="center" py={2}>
       {isInstructor ? <NewFormActions courseid={props.courseID} /> : null}
