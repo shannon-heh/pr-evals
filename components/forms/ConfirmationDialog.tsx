@@ -6,7 +6,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function ConfirmationDialog(props) {
+export default function ConfirmationDialog(props: {
+  title: string;
+  description: string;
+  isOpen: boolean;
+  closeDialog;
+  handleSubmit;
+}) {
   return (
     <div>
       <Dialog
@@ -14,12 +20,10 @@ export default function ConfirmationDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          Are you ready to publish your form?
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Click Cancel to keep editing your form.
+            {props.description}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

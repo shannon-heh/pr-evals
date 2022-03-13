@@ -2,13 +2,24 @@ import Rating from "@mui/material/Rating";
 import { RatingProps } from "../../../src/Types";
 
 // Generic Rating input
-export default function RatingInput(props: RatingProps) {
+export default function RatingInput(
+  props: RatingProps & { name?: string; formik?: any }
+) {
+  const { name, formik, max, precision } = props;
+  const value: number = name ? Number(formik?.values[name]) ?? 0 : undefined;
   return (
-    <Rating
-      name="simple-controlled"
-      max={props.max}
-      precision={props.precision}
-      size="large"
-    />
+    <>
+      <Rating
+        max={max}
+        precision={precision}
+        size="large"
+        name={name}
+        onChange={(e, value) => {
+          // manually set rating value
+          formik.setFieldValue(name, Number(value));
+        }}
+        value={value}
+      />
+    </>
   );
 }

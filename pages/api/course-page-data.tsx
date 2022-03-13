@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<CourseData[]>
 ) {
-  const coursesCollection = (await getDB()).collection("courses");
+  const db = await getDB();
 
   // courseIDs passed in as comma-separated string
   const courseids = req.query.courseids as string;
@@ -17,7 +17,7 @@ export default async function handler(
 
   const res_: CourseData[] = [];
   for (const courseid of courseidsList) {
-    const data = await getCourseData(coursesCollection, courseid);
+    const data = await getCourseData(db, courseid);
     // do not 404 if course data cannot be retrieved
     if (data == null) continue;
     res_.push(data);
@@ -28,12 +28,18 @@ export default async function handler(
 // Retrieves course data for a given courseID
 function getCourseData(db, courseId: string): CourseData | null {
   return db
+    .collection("courses")
     .findOne({ course_id: courseId })
-    .then((data: Object | null) => {
+    .then(async (data: Object | null) => {
       if (data == null) {
         return null;
       }
-      let course: CourseData = {
+      // get number of students in course
+      const num_students = await db
+        .collection("users")
+        .find({ student_courses: data["course_id"] })
+        .count();
+      const course: CourseData = {
         course_title: data["title"],
         catalog_title: data["catalog_title"],
         course_id: data["course_id"],
@@ -50,6 +56,7 @@ function getCourseData(db, courseId: string): CourseData | null {
             weekly_meetings_count: class_["weekly_meetings"],
           };
         }),
+        num_students: num_students,
       };
       return course;
     })
