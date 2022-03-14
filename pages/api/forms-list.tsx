@@ -7,9 +7,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const courseid = req.query.courseid as string;
   const dbForms = (await getDB()).collection("forms") as Collection;
   const data = await dbForms
     .find({
+      course_id: courseid,
       published: true,
       num_responses: { $gt: -1 }, // change to 0 later
     })

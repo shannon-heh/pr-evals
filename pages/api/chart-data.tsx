@@ -1,11 +1,15 @@
+import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getDB } from "../../src/mongodb";
 import { ChartData } from "../../src/Types";
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ChartData[]>
 ) {
   const courseid = req.query.courseid as string;
+  const formid = req.query.formid as string;
+  const dbForms = (await getDB()).collection("forms") as Collection;
 
   const dummyData: ChartData[] = [
     {

@@ -62,7 +62,7 @@ export default function CourseMainContent(props: { courseID: string }) {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Responses />
+          <Responses courseID={props.courseID} />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Charts />
