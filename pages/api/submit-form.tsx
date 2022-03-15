@@ -1,10 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { validateStudent } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
+import sessionstorage from "sessionstorage";
 
 type Args = {
   formid: string;
   responses: { q_id: number; response: any }[];
-  netid: string;
+  courseid: string;
 };
 
 // API endpoint for students to submit completed form
@@ -14,7 +16,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const db = await getDB();
-  const { formid, responses, netid }: Args = req.body;
+  const netid: string = sessionstorage.getItem("netid");
+  const { formid, responses, courseid }: Args = req.body;
+
+  const isValid: boolean = await validateStudent(db, netid, courseid);
+  if (!isValid) {
+    return res
+      .status(401)
+      .json(`${netid} is not a student in course ${courseid}`);
+  }
+
   return db
     .collection("responses")
     .updateOne(
@@ -30,6 +41,6 @@ export default async function handler(
     .then(() => {
       return res
         .status(200)
-        .json({ message: `updated ${netid}'s response for form ${formid}` });
+        .json(`updated ${netid}'s response for form ${formid}`);
     });
 }

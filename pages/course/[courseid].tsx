@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import { fetcher } from "../../src/Helpers";
 
 export default function Course() {
-  const { isLoading, netID, isInstructor } = useCAS();
+  const { isLoading, netID } = useCAS();
 
   const router = useRouter();
   const { courseid } = router.query;

@@ -18,6 +18,7 @@ import SliderInput from "../../components/forms/question-types/SliderInput";
 import RatingInput from "../../components/forms/question-types/RatingInput";
 import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
+import useCAS from "../../hooks/useCAS";
 
 // Page for instructor to create a new form
 export default function NewForm() {
@@ -45,6 +46,10 @@ export default function NewForm() {
     setOpenConfirm(false);
   };
 
+  const router: NextRouter = useRouter();
+  const formid: string = router.query.formid as string;
+  const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
+
   // updates form metadata in DB when instructor publishes form
   const handleSubmit = () => {
     closeConfirmDialog();
@@ -57,6 +62,7 @@ export default function NewForm() {
       body: JSON.stringify({
         formid: formid,
         questions: questions,
+        courseid: courseid,
       }),
     }).then((res: Response) => {
       if (res.status == 200) {
@@ -66,11 +72,7 @@ export default function NewForm() {
     });
   };
 
-  const router: NextRouter = useRouter();
-  const formid: string = router.query.formid as string;
-
   // get course data to display
-  const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
   const { data: courseData_, error: courseError } = useSWR(
     courseid ? `/api/course-page-data?courseids=${courseid}` : null,
     fetcher
