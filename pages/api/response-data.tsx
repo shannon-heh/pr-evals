@@ -1,7 +1,11 @@
 import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { ChartData, FormMetadata, ResponseData } from "../../src/Types";
+import {
+  ChartData,
+  FormMetadataResponses,
+  ResponseData,
+} from "../../src/Types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +25,9 @@ export default async function handler(
     })
     .toArray();
 
-  return res.status(200).json({ responses: [], meta: data[0] as FormMetadata });
+  return res
+    .status(200)
+    .json({ responses: [], meta: data[0] as FormMetadataResponses });
 
   const dummyData: ChartData[] = [
     {

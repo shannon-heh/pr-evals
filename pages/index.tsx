@@ -22,7 +22,7 @@ export default function Home() {
           direction="column"
           alignItems="center"
           justifyContent="center"
-          style={{ minHeight: "100vh" }}
+          sx={{ mt: 10 }}
         >
           <Grid item xs={3} sx={{ textAlign: "center" }}>
             <h1>Course Evaluations IW</h1>

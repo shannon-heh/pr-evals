@@ -14,7 +14,7 @@ import { blue, grey, red } from "@mui/material/colors";
 import { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
-import { FormMetadata, ResponseData } from "../../src/Types";
+import { FormMetadataResponses, ResponseData } from "../../src/Types";
 import HoverCard from "./HoverCard";
 
 function FormSelector(props: {
@@ -68,7 +68,7 @@ function FormSelector(props: {
 }
 
 function Charts(props: { id?: string }) {
-  function FormMetadata(props: { meta: FormMetadata }) {
+  function FormMetadata(props: { meta: FormMetadataResponses }) {
     const nonTitleColor = grey[800];
 
     return (
