@@ -43,18 +43,6 @@ export default function Home() {
                 {isLoggedIn ? `Logged in as ${netID}` : "Login with CAS"}
               </Button>
             </Box>
-            {/* TODO: @shannon-heh Move logout button to navbar and delete from this file */}
-            <Box sx={{ mt: 4 }}>
-              <Link href="/logout">
-                <Button
-                  variant="contained"
-                  size="large"
-                  startIcon={<LogoutRoundedIcon fontSize="large" />}
-                >
-                  Log out
-                </Button>
-              </Link>
-            </Box>
           </Grid>
         </Grid>
       </Container>

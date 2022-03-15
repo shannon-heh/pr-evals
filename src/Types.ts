@@ -18,6 +18,7 @@ export type CourseData = {
   instructors?: InstructorData[];
   crosslisting_catalog_titles?: string[];
   classes?: ClassData[];
+  num_students?: number;
 };
 
 export type UserDataDB = {
@@ -71,7 +72,7 @@ export type ChartItem = {
   value: number;
 };
 
-export type FormMetadata = {
+export type FormMetadataResponses = {
   description?: string;
   num_responses: number;
   title: string;
@@ -80,5 +81,101 @@ export type FormMetadata = {
 
 export type ResponseData = {
   responses: ChartData[];
-  meta: FormMetadata;
+  meta: FormMetadataResponses;
+};
+
+export type FormMetadata = {
+  form_id: string;
+  title: string;
+  description: string;
+  published: boolean;
+  time_created: Date;
+  questions: QuestionMetadata[];
+  time_published?: Date;
+};
+
+// Enum for possible question types
+export enum Question {
+  ShortText,
+  LongText,
+  SingleSelect,
+  MultiSelect,
+  Slider,
+  Rating,
+}
+
+export type QuestionTypes = keyof typeof Question;
+
+type BaseQuestion = {
+  question: string;
+  description: string;
+  q_id?: number;
+};
+
+// Text input
+export type ShortTextMetadata = BaseQuestion & {
+  type: Question.ShortText;
+};
+
+export type LongTextMetadata = BaseQuestion & {
+  type: Question.LongText;
+};
+
+// Rating input
+export type RatingProps = {
+  max: number;
+  precision: number;
+};
+
+export type RatingMetadata = BaseQuestion &
+  RatingProps & {
+    type: Question.Rating;
+  };
+
+// Slider input
+export type SliderProps = {
+  min: number;
+  max: number;
+  step: number;
+  marks: { value: number; label: string }[];
+};
+
+export type SliderMetadata = BaseQuestion &
+  SliderProps & {
+    type: Question.Slider;
+  };
+
+// Select input
+export type SelectProps = {
+  options: string[];
+};
+
+export type SingleSelectMetadata = BaseQuestion &
+  SelectProps & {
+    type: Question.SingleSelect;
+  };
+
+export type MultiSelectMetadata = BaseQuestion &
+  SelectProps & {
+    type: Question.MultiSelect;
+  };
+
+// Aggregate types
+export type QuestionProps = RatingProps | SliderProps | SelectProps;
+
+export type QuestionMetadata =
+  | ShortTextMetadata
+  | LongTextMetadata
+  | RatingMetadata
+  | SliderMetadata
+  | SingleSelectMetadata
+  | MultiSelectMetadata;
+
+export type CourseFormData = {
+  title: string;
+  form_id: string;
+  time_published: Date;
+  time_submitted?: Date;
+  completed: boolean;
+  num_responses: number;
 };

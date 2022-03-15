@@ -31,6 +31,7 @@ export default function CourseHead(props: { data: CourseData }) {
     return Object.values(counts);
   };
 
+  // TO-DO: @nicholaspad, add number of students as a quick fact
   return (
     <>
       <Grid item container md={8} direction="column" sx={{ mt: 2 }}>
