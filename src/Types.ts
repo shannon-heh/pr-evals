@@ -55,7 +55,6 @@ export type ChartData = {
   question: string;
   type: "SINGLE_SEL" | "MULTI_SEL" | "SLIDER" | "RATING" | "TEXT";
   data: Object[];
-  precision?: number;
 };
 
 export type ChartWord = {

@@ -67,11 +67,9 @@ export default async function handler(
           res.data.push({ name: i, value: 0 });
         break;
       case "RATING":
-        res["precision"] = question["precision"];
         for (let i = 0; i <= question["max"]; i += question["precision"])
           res.data.push({ name: i, value: 0 });
         break;
-
       // "TEXT" requires no initial setup
     }
 
@@ -115,11 +113,12 @@ export default async function handler(
           });
           break;
         case "TEXT":
+          // TODO: @nicholaspad get major and year using netID
           data[i].data.push({
             text: response as string,
             major: "COS",
             year: "Junior",
-            difficulty: 2,
+            difficulty: 2, // TODO: @nicholaspad extract from standardized form
           });
       }
     });

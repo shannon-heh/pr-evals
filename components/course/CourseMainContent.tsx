@@ -74,7 +74,8 @@ export default function CourseMainContent(props: {
           <Responses courseID={props.courseID} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Charts />
+          {/* TODO: @nicholaspad insert standardized formid here */}
+          <Charts formid="" isStandard={true} />
         </TabPanel>
         <TabPanel value={value} index={3}>
           <Reviews />

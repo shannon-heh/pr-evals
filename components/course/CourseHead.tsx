@@ -1,12 +1,12 @@
 import { Grid, Typography } from "@mui/material";
-import { green, grey } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
 import pluralize from "pluralize";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
 import HoverCard from "./HoverCard";
 
 export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
-    background: green[200],
+    background: blue[300],
     borderColor: grey[400],
     alignItems: "center",
     color: grey[800],

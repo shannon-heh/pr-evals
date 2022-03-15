@@ -25,12 +25,12 @@ import {
   YAxis,
 } from "recharts";
 import HoverCard from "../HoverCard";
+import pluralize from "pluralize";
 
 export default function ScaleChart(props: {
   data: Object[];
   title: string;
   width: number;
-  precision?: number;
   type: "Slider" | "Rating";
 }) {
   const [chartType, setChartType] = useState("Bar");
@@ -57,7 +57,10 @@ export default function ScaleChart(props: {
         </Typography>
         {props.type == "Rating" ? (
           <HoverTooltip
-            title={`${computeRatingMean()} stars`}
+            title={`${computeRatingMean()} ${pluralize(
+              "star",
+              computeRatingMean()
+            )}`}
             placement="top"
             arrow
           >
@@ -65,7 +68,7 @@ export default function ScaleChart(props: {
               <Rating
                 max={Math.max(...props.data.map((e) => e["name"]))}
                 value={computeRatingMean()}
-                precision={props.precision}
+                precision={0.25}
                 size="large"
                 readOnly
               />
@@ -111,7 +114,8 @@ export default function ScaleChart(props: {
               <PolarRadiusAxis
                 angle={30}
                 orientation="left"
-                tick={false}
+                tick={true}
+                axisLine={false}
                 domain={[
                   0,
                   Math.max(...props.data.map((sample) => sample["value"])) + 1,

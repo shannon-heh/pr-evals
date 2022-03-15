@@ -18,7 +18,10 @@ function ChartWrapper(props: { children?: React.ReactNode }) {
   );
 }
 
-export default function Charts(props: { formid?: string }) {
+export default function Charts(props: {
+  formid?: string;
+  isStandard: boolean;
+}) {
   const { width } = useWindowDimensions();
   const { data: chartData_, error } = useSWR(
     `/api/response-data?formid=${props.formid}`,
@@ -66,7 +69,6 @@ export default function Charts(props: { formid?: string }) {
               type="Rating"
               data={data.data}
               title={data.question}
-              precision={data.precision}
               width={width}
             />
           </ChartWrapper>
@@ -126,25 +128,30 @@ export default function Charts(props: { formid?: string }) {
 
   return (
     <>
-      <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
-        <Typography variant="subtitle1" fontWeight="medium" color="white">
-          These charts visualize responses submitted to the standardized
-          evaluations form.
-        </Typography>
-      </HoverCard>
-      {chartData.length > 0 ? (
-        <Grid container sx={{ textAlign: "center", mb: 2 }}>
-          {processChartData(chartData)}
-        </Grid>
-      ) : (
+      {props.isStandard ? (
+        <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
+          <Typography variant="subtitle1" fontWeight="medium" color="white">
+            These charts visualize responses submitted to the standardized
+            evaluations form.
+          </Typography>
+        </HoverCard>
+      ) : null}
+      {chartData.length == 0 ||
+      chartData.every((sample) => sample["data"].length == 0) ? (
         <Typography
           variant="subtitle1"
           fontWeight="medium"
           mt={2}
           color={red[500]}
         >
-          This course doesn't have any responses to its standardized form (yet)!
+          {props.isStandard
+            ? "This course doesn't have any responses to its standardized form (yet)!"
+            : "No responses (yet)!"}
         </Typography>
+      ) : (
+        <Grid container sx={{ textAlign: "center", mb: 2 }}>
+          {processChartData(chartData)}
+        </Grid>
       )}
     </>
   );
