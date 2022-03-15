@@ -1,7 +1,6 @@
 import {
   Box,
   FormControl,
-  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -16,6 +15,7 @@ import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
 import { FormMetadataResponses, ResponseData } from "../../src/Types";
 import HoverCard from "./HoverCard";
+import Charts from "./Charts";
 
 function FormSelector(props: {
   data?: Object[];
@@ -67,7 +67,7 @@ function FormSelector(props: {
   );
 }
 
-function Charts(props: { id?: string }) {
+function ChartsHelper(props: { formid?: string }) {
   function FormMetadata(props: { meta: FormMetadataResponses }) {
     const nonTitleColor = grey[800];
 
@@ -104,12 +104,12 @@ function Charts(props: { id?: string }) {
   }
 
   const { data: data_, error } = useSWR(
-    `/api/response-data?formid=${props.id}`,
+    `/api/response-data?formid=${props.formid}`,
     fetcher
   );
   const data = data_ as ResponseData;
 
-  if (!props.id) return null;
+  if (!props.formid) return null;
   if (!data || error)
     return (
       <Grid container sx={{ textAlign: "center", mt: 2 }}>
@@ -153,6 +153,7 @@ function Charts(props: { id?: string }) {
   return (
     <>
       <FormMetadata meta={data.meta} />
+      <Charts formid={props.formid} />
     </>
   );
 }
@@ -171,7 +172,7 @@ export default function Responses(props: { courseID: string }) {
       {data ? (
         <>
           <FormSelector data={data} setId={setId} id={id} />
-          <Charts id={id} />
+          <ChartsHelper formid={id} />
         </>
       ) : (
         <Box

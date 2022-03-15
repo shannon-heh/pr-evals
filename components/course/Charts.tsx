@@ -18,9 +18,12 @@ function ChartWrapper(props: { children?: React.ReactNode }) {
   );
 }
 
-export default function Charts() {
+export default function Charts(props: { formid?: string }) {
   const { width } = useWindowDimensions();
-  const { data: chartData_, error } = useSWR("/api/response-data", fetcher);
+  const { data: chartData_, error } = useSWR(
+    `/api/response-data?formid=${props.formid}`,
+    fetcher
+  );
   const chartData = (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
