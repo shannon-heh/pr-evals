@@ -51,6 +51,38 @@ export type EvalsData = {
   difficulty: number;
 };
 
+export type ChartData = {
+  question: string;
+  type: "SINGLE_SEL" | "MULTI_SEL" | "SLIDER" | "RATING" | "TEXT";
+  data: Object[];
+};
+
+export type ChartWord = {
+  key?: string;
+  value: string;
+  count: number;
+  props?: { className?: string; style?: Object };
+};
+
+export type ChartItem = {
+  className?: string;
+  isEmpty?: boolean;
+  label: string;
+  value: number;
+};
+
+export type FormMetadataResponses = {
+  description?: string;
+  num_responses: number;
+  title: string;
+  time_published: Date;
+};
+
+export type ResponseData = {
+  responses: ChartData[];
+  meta: FormMetadataResponses;
+};
+
 export type FormMetadata = {
   form_id: string;
   title: string;
@@ -58,7 +90,7 @@ export type FormMetadata = {
   published: boolean;
   time_created: Date;
   questions: QuestionMetadata[];
-  time_published?: Date,
+  time_published?: Date;
 };
 
 // Enum for possible question types
@@ -71,62 +103,72 @@ export enum Question {
   Rating,
 }
 
-export type QuestionTypes = keyof typeof Question
+export type QuestionTypes = keyof typeof Question;
 
 type BaseQuestion = {
-  question: string,
-  description: string,
-  q_id?: number,
-}
+  question: string;
+  description: string;
+  q_id?: number;
+};
 
 // Text input
 export type ShortTextMetadata = BaseQuestion & {
-  type: Question.ShortText,
-}
+  type: Question.ShortText;
+};
 
 export type LongTextMetadata = BaseQuestion & {
-  type: Question.LongText,
-}
+  type: Question.LongText;
+};
 
 // Rating input
 export type RatingProps = {
-  max: number,
-  precision: number
-}
+  max: number;
+  precision: number;
+};
 
-export type RatingMetadata = BaseQuestion & RatingProps & {
-  type: Question.Rating,
-}
+export type RatingMetadata = BaseQuestion &
+  RatingProps & {
+    type: Question.Rating;
+  };
 
 // Slider input
 export type SliderProps = {
-  min: number,
-  max: number,
-  step: number,
-  marks: {value: number, label: string}[]
-}
+  min: number;
+  max: number;
+  step: number;
+  marks: { value: number; label: string }[];
+};
 
-export type SliderMetadata = BaseQuestion & SliderProps & {
-  type: Question.Slider,
-}
+export type SliderMetadata = BaseQuestion &
+  SliderProps & {
+    type: Question.Slider;
+  };
 
 // Select input
 export type SelectProps = {
-  options: string[]
-}
+  options: string[];
+};
 
-export type SingleSelectMetadata = BaseQuestion & SelectProps & {
-  type: Question.SingleSelect,
-}
+export type SingleSelectMetadata = BaseQuestion &
+  SelectProps & {
+    type: Question.SingleSelect;
+  };
 
-export type MultiSelectMetadata = BaseQuestion & SelectProps & {
-  type: Question.MultiSelect,
-}
+export type MultiSelectMetadata = BaseQuestion &
+  SelectProps & {
+    type: Question.MultiSelect;
+  };
 
 // Aggregate types
 export type QuestionProps = RatingProps | SliderProps | SelectProps;
 
-export type QuestionMetadata = ShortTextMetadata | LongTextMetadata | RatingMetadata | SliderMetadata | SingleSelectMetadata | MultiSelectMetadata;
+export type QuestionMetadata =
+  | ShortTextMetadata
+  | LongTextMetadata
+  | RatingMetadata
+  | SliderMetadata
+  | SingleSelectMetadata
+  | MultiSelectMetadata;
 
 export type CourseFormData = {
   title: string;

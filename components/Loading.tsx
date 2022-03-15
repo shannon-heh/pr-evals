@@ -1,6 +1,4 @@
-import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import { CircularProgress, Container, Grid } from "@mui/material";
 import CustomHead from "./CustomHead";
 
 export default function Loading(props: { text?: string }) {

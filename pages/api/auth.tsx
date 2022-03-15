@@ -44,7 +44,7 @@ export default async function handler(
   netid = casDataParts[1].toLowerCase();
 
   // retrieve and update user data from Users API
-  let data: Array<Object> = await new ReqLib().getJSON(BASE_URL, USERS, {
+  let data: Object[] = await new ReqLib().getJSON(BASE_URL, USERS, {
     uid: netid,
   });
   const userData = data[0];

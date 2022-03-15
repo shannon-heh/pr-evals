@@ -1,24 +1,15 @@
-import Skeleton from "@mui/material/Skeleton";
 import Evaluation from "./Evaluation";
 import { EvalsData } from "../../src/Types";
+import { Skeleton } from "@mui/material";
 
 export default function TextualEvaluations(props: {
   evalsData: EvalsData[];
   isLoading: boolean;
 }) {
-  const processEvals = (evalsData: EvalsData[]) => {
-    const evals = Array();
-    let i = 0;
-    evalsData.forEach((evalDoc: EvalsData) => {
-      evals.push(<Evaluation key={i++} evalDoc={evalDoc} />);
-    });
-    return evals;
-  };
-
   if (props.isLoading)
     return (
       <>
-        <Skeleton animation="wave" />
+        <Skeleton sx={{ mt: 2 }} animation="wave" />
         <Skeleton animation="wave" width="50%" />
         <br />
         <Skeleton animation="wave" />
@@ -29,5 +20,11 @@ export default function TextualEvaluations(props: {
       </>
     );
 
-  return <>{processEvals(props.evalsData)}</>;
+  return (
+    <>
+      {props.evalsData.map((evalDoc: EvalsData, i) => (
+        <Evaluation key={i} evalDoc={evalDoc} />
+      ))}
+    </>
+  );
 }

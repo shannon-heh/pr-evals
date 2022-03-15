@@ -1,13 +1,12 @@
-import { green, grey } from "@mui/material/colors";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Typography } from "@mui/material";
+import { blue, grey } from "@mui/material/colors";
 import pluralize from "pluralize";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
 import HoverCard from "./HoverCard";
 
 export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
-    background: green[200],
+    background: blue[300],
     borderColor: grey[400],
     alignItems: "center",
     color: grey[800],
@@ -51,18 +50,20 @@ export default function CourseHead(props: { data: CourseData }) {
           >
             {props.data.catalog_title}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            fontWeight="medium"
-            fontSize="1.1em"
-          >
-            {pluralize(
-              "Crosslisting",
-              props.data.crosslisting_catalog_titles.length
-            )}
-            : {props.data.crosslisting_catalog_titles.join(" • ")}
-          </Typography>
+          {props.data.crosslisting_catalog_titles.length > 0 ? (
+            <Typography
+              variant="subtitle1"
+              component="div"
+              fontWeight="medium"
+              fontSize="1.1em"
+            >
+              {pluralize(
+                "Crosslisting",
+                props.data.crosslisting_catalog_titles.length
+              )}
+              : {props.data.crosslisting_catalog_titles.join(" • ")}
+            </Typography>
+          ) : null}
           <Typography variant="h5" component="div" fontWeight="bolder">
             {props.data.course_title}
           </Typography>

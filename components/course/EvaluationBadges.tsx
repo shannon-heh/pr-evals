@@ -1,12 +1,10 @@
-import Box from "@mui/material/Box";
 import { blue, green, amber, deepOrange, lime } from "@mui/material/colors";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import { EvalsData } from "../../src/Types";
 import Sentiment from "sentiment";
 import removePunctuation from "remove-punctuation";
 import stopwords from "stopwords-iso";
 import sw from "stopword";
+import { Box, Tooltip, Typography } from "@mui/material";
 
 const sentiment = new Sentiment();
 
