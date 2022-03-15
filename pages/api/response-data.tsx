@@ -1,15 +1,27 @@
 import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { ChartData } from "../../src/Types";
+import { ChartData, FormMetadata, ResponseData } from "../../src/Types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ChartData[]>
+  res: NextApiResponse<ResponseData>
 ) {
-  const courseid = req.query.courseid as string;
   const formid = req.query.formid as string;
   const dbForms = (await getDB()).collection("forms") as Collection;
+
+  const data = await dbForms
+    .find({ form_id: formid })
+    .project({
+      title: 1,
+      description: 1,
+      time_published: 1,
+      num_responses: 1,
+      _id: 0,
+    })
+    .toArray();
+
+  return res.status(200).json({ responses: [], meta: data[0] as FormMetadata });
 
   const dummyData: ChartData[] = [
     {
@@ -89,6 +101,4 @@ export default async function handler(
       ],
     },
   ];
-
-  res.status(200).json(dummyData);
 }

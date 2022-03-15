@@ -1,12 +1,14 @@
-import { Box, Grid, Rating, Skeleton, Typography } from "@mui/material";
+import { Box, Grid, Skeleton, Typography } from "@mui/material";
+import { blue, red } from "@mui/material/colors";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
-import { ChartData } from "../../src/Types";
+import { ChartData, ResponseData } from "../../src/Types";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
 import ScaleChart from "./charts/ScaleChart";
 import SingleChoiceChart from "./charts/SingleChoiceChart";
 import TextChart from "./charts/TextChart";
+import HoverCard from "./HoverCard";
 
 function ChartWrapper(props: { children?: React.ReactNode }) {
   return (
@@ -18,8 +20,8 @@ function ChartWrapper(props: { children?: React.ReactNode }) {
 
 export default function Charts() {
   const { width } = useWindowDimensions();
-  const { data: chartData_, error } = useSWR("/api/chart-data", fetcher);
-  const chartData = chartData_ as ChartData[];
+  const { data: chartData_, error } = useSWR("/api/response-data", fetcher);
+  const chartData = (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
     switch (data.type) {
@@ -121,13 +123,26 @@ export default function Charts() {
 
   return (
     <>
-      <Typography variant="subtitle1" fontWeight="medium" mt={2}>
-        These charts visualize responses submitted to the standardized
-        evaluations form.
-      </Typography>
-      <Grid container sx={{ textAlign: "center", mb: 2 }}>
-        {processChartData(chartData)}
-      </Grid>
+      <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
+        <Typography variant="subtitle1" fontWeight="medium" color="white">
+          These charts visualize responses submitted to the standardized
+          evaluations form.
+        </Typography>
+      </HoverCard>
+      {chartData.length > 0 ? (
+        <Grid container sx={{ textAlign: "center", mb: 2 }}>
+          {processChartData(chartData)}
+        </Grid>
+      ) : (
+        <Typography
+          variant="subtitle1"
+          fontWeight="medium"
+          mt={2}
+          color={red[500]}
+        >
+          This course doesn't have any responses to its standardized form (yet)!
+        </Typography>
+      )}
     </>
   );
 }

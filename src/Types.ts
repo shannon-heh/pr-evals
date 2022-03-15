@@ -70,3 +70,15 @@ export type ChartItem = {
   label: string;
   value: number;
 };
+
+export type FormMetadata = {
+  description?: string;
+  num_responses: number;
+  title: string;
+  time_published: Date;
+};
+
+export type ResponseData = {
+  responses: ChartData[];
+  meta: FormMetadata;
+};

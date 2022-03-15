@@ -49,18 +49,20 @@ export default function CourseHead(props: { data: CourseData }) {
           >
             {props.data.catalog_title}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            fontWeight="medium"
-            fontSize="1.1em"
-          >
-            {pluralize(
-              "Crosslisting",
-              props.data.crosslisting_catalog_titles.length
-            )}
-            : {props.data.crosslisting_catalog_titles.join(" • ")}
-          </Typography>
+          {props.data.crosslisting_catalog_titles.length > 0 ? (
+            <Typography
+              variant="subtitle1"
+              component="div"
+              fontWeight="medium"
+              fontSize="1.1em"
+            >
+              {pluralize(
+                "Crosslisting",
+                props.data.crosslisting_catalog_titles.length
+              )}
+              : {props.data.crosslisting_catalog_titles.join(" • ")}
+            </Typography>
+          ) : null}
           <Typography variant="h5" component="div" fontWeight="bolder">
             {props.data.course_title}
           </Typography>
