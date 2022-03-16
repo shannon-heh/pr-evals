@@ -132,6 +132,21 @@ export default async function handler(
     });
   });
 
+  // for slider charts, replace numbers with labels if applicable
+  data.forEach((chart, i) => {
+    if (chart.type == "SLIDER") {
+      const marks: Object[] = questions[i]["marks"];
+      const data_ = chart.data;
+      marks.forEach((mark) => {
+        const value = mark["value"];
+        const label = mark["label"];
+        data_.forEach((sample) => {
+          if (sample["name"] == value) sample["name"] = `${label}`;
+        });
+      });
+    }
+  });
+
   return res
     .status(200)
     .json({ responses: data, meta: form[0] as FormMetadataResponses });
