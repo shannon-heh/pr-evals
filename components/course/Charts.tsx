@@ -30,6 +30,22 @@ export default function Charts(props: {
   const chartData = (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
+    if (data.data.length == 0)
+      return (
+        <ChartWrapper>
+          <HoverCard sx={{ mt: 2, p: 2.5 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="medium"
+              color={red[500]}
+            >
+              The question "{data.question}" has been omitted because it has 0
+              responses.
+            </Typography>
+          </HoverCard>
+        </ChartWrapper>
+      );
+
     switch (data.type) {
       case "SINGLE_SEL":
         return (
