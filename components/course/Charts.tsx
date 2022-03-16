@@ -75,7 +75,7 @@ export default function Charts(props: {
         );
       case "TEXT":
         return (
-          <ChartWrapper>
+          <ChartWrapper key={i}>
             <TextChart data={data.data} title={data.question} width={width} />
           </ChartWrapper>
         );

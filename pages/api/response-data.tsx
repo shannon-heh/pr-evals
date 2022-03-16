@@ -59,6 +59,14 @@ export default async function handler(
         );
         break;
       case "SLIDER":
+        if (question["step"] == 0) {
+          const marks: Object[] = question["marks"];
+          marks.forEach((mark) =>
+            res.data.push({ name: mark["value"], value: 0 })
+          );
+          break;
+        }
+
         for (
           let i = question["min"];
           i <= question["max"];
