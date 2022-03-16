@@ -16,6 +16,13 @@ const questionTypeMap = {
   5: "RATING",
 };
 
+const gradeMap = {
+  "2022": "Senior",
+  "2023": "Junior",
+  "2024": "Sophomore",
+  "2025": "First-year",
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
@@ -24,6 +31,7 @@ export default async function handler(
   if (!formid) return res.end();
   const dbForms = (await getDB()).collection("forms") as Collection;
   const dbResponses = (await getDB()).collection("responses") as Collection;
+  const dbUsers = (await getDB()).collection("users") as Collection;
 
   const form = (await dbForms
     .find({ form_id: formid })
@@ -100,11 +108,16 @@ export default async function handler(
       .status(200)
       .json({ responses: [], meta: form[0] as FormMetadataResponses });
 
+  const userDataCache = {};
+
   // load responses into data
-  allResponses.forEach((doc_) => {
-    const responses = doc_["responses"];
-    responses.forEach((response_: Object[], i: number) => {
-      const response: string | number | string[] = response_["response"];
+  for (let _ = 0; _ < allResponses.length; _++) {
+    const responses = allResponses[_]["responses"];
+    for (let i = 0; i < responses.length; i++) {
+      const response: string | number | string[] = responses[i]["response"];
+
+      if (response == "" || response == []) continue;
+
       switch (data[i].type) {
         case "SINGLE_SEL":
           data[i].data.forEach((sample, j) => {
@@ -132,16 +145,24 @@ export default async function handler(
           });
           break;
         case "TEXT":
-          // TODO: @nicholaspad get major and year using netID
+          const netID = allResponses[_]["netid"];
+          if (!(netID in userDataCache)) {
+            let userData = await dbUsers.findOne({
+              netid: allResponses[_]["netid"],
+            });
+            userDataCache[netID] = userData;
+          }
+
           data[i].data.push({
             text: response as string,
-            major: "COS",
-            year: "Junior",
+            major: userDataCache[netID]["major_code"],
+            year: gradeMap[userDataCache[netID]["class_year"]],
             difficulty: 2, // TODO: @nicholaspad extract from standardized form
           });
+          break;
       }
-    });
-  });
+    }
+  }
 
   // for slider charts, replace numbers with labels if applicable
   data.forEach((chart, i) => {

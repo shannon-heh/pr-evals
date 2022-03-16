@@ -48,11 +48,13 @@ export default function EvaluationBadges(props: { evalDoc: EvalsData }) {
 
   return (
     <Box sx={{ mb: 1.5 }}>
-      <Tooltip title="Concentration" placement="top" arrow>
-        <Typography display="inline" sx={badgeStyles}>
-          {props.evalDoc.major}
-        </Typography>
-      </Tooltip>
+      {props.evalDoc.major != "" ? (
+        <Tooltip title="Concentration" placement="top" arrow>
+          <Typography display="inline" sx={badgeStyles}>
+            {props.evalDoc.major}
+          </Typography>
+        </Tooltip>
+      ) : null}
       <Tooltip title="Class" placement="top" arrow>
         <Typography display="inline" sx={badgeStyles}>
           {props.evalDoc.year}
