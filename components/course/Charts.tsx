@@ -136,8 +136,7 @@ export default function Charts(props: {
           </Typography>
         </HoverCard>
       ) : null}
-      {chartData.length == 0 ||
-      chartData.every((sample) => sample["data"].length == 0) ? (
+      {chartData.length == 0 ? (
         <Typography
           variant="subtitle1"
           fontWeight="medium"

@@ -96,8 +96,7 @@ function ChartsHelper(props: { formid?: string }) {
           fontWeight="medium"
           color={nonTitleColor}
         >
-          {props.meta.num_responses} Responses • Published on{" "}
-          {props.meta.time_published.toString().split("T")[0]}
+          Published on {props.meta.time_published.toString().split("T")[0]}
         </Typography>
       </HoverCard>
     );

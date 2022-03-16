@@ -89,6 +89,17 @@ export default async function handler(
     .project({ netid: 1, responses: 1, _id: 0 })
     .toArray()) as Object[];
 
+  // detect if the form has 0 responses
+  if (
+    allResponses.length == 0 ||
+    allResponses.every(
+      (response) => (response["responses"] as Object[]).length == 0
+    )
+  )
+    return res
+      .status(200)
+      .json({ responses: [], meta: form[0] as FormMetadataResponses });
+
   // load responses into data
   allResponses.forEach((doc_) => {
     const responses = doc_["responses"];
