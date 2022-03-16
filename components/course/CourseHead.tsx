@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Tooltip, Typography } from "@mui/material";
 import { blue, grey } from "@mui/material/colors";
 import pluralize from "pluralize";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
@@ -93,6 +93,23 @@ export default function CourseHead(props: { data: CourseData }) {
               {props.data.instructors.length}
             </Typography>
           </Typography>
+          <Tooltip
+            title="# of students who added this course to their My Courses list"
+            placement="left"
+            arrow
+          >
+            <Typography
+              variant="subtitle1"
+              component="div"
+              fontWeight="medium"
+              fontSize="1.1em"
+            >
+              # Students:{" "}
+              <Typography display="inline" fontWeight="normal">
+                {props.data.num_students}
+              </Typography>
+            </Typography>
+          </Tooltip>
           <Typography
             variant="subtitle1"
             component="div"
