@@ -34,6 +34,7 @@ export default async function handler(
         $set: {
           time_submitted: new Date(),
           responses: responses,
+          course_id: courseid,
         },
       },
       { upsert: true }

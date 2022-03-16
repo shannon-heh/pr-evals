@@ -10,15 +10,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
   const formid = req.query.formid as string;
   const db = await getDB();
-
-  // make sure only instructors can get form metadata
-  const student: boolean = await isStudent(db, netid);
-  if (student) {
-    return res.status(401).json(`${netid} is not an instructor`);
-  }
 
   return await db
     .collection("forms")
