@@ -1,5 +1,6 @@
 import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 import {
   ChartData,
@@ -27,6 +28,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  if (!getNetID()) return res.end();
+
   const formid = req.query.formid as string;
   if (!formid) return res.end();
   const dbForms = (await getDB()).collection("forms") as Collection;

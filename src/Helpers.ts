@@ -1,6 +1,7 @@
 import removePunctuation from "remove-punctuation";
 import sw from "stopword";
 import stopwords from "stopwords-iso";
+import sessionstorage from "sessionstorage";
 import { EvalsData } from "./Types";
 
 export const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -35,3 +36,7 @@ export const generateWordCounts = (evalsData: EvalsData[]): Object => {
   });
   return wordCounts;
 };
+
+export function getNetID(): string | null {
+  return sessionstorage.getItem("netid");
+}

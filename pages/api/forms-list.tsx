@@ -1,5 +1,6 @@
 import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
 // endpoint to get form titles and IDs
@@ -7,6 +8,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (!getNetID()) return res.end();
+
   const courseid = req.query.courseid as string;
   const dbForms = (await getDB()).collection("forms") as Collection;
   const data = await dbForms
