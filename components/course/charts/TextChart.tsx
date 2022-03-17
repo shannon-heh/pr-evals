@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { EvalsData } from "../../../src/Types";
-import Evaluation from "../Evaluation";
+import Evaluation from "./Evaluation";
 import HoverCard from "../HoverCard";
 
 export default function TextChart(props: {

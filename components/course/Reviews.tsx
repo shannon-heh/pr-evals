@@ -1,12 +1,14 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Skeleton, Tooltip, Typography } from "@mui/material";
 import { blue, red } from "@mui/material/colors";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
 import { EvalsData } from "../../src/Types";
+import WordCloudChart from "./charts/WordCloudChart";
+import WordDonutChart from "./charts/WordDonutChart";
+import WordSentimentChart from "./charts/WordSentimentChart";
+import Evaluation from "./charts/Evaluation";
 import HoverCard from "./HoverCard";
-import TextualEvaluations from "./TextualEvaluations";
-import WordVisualizations from "./WordVisualizations";
 
 export default function Reviews() {
   const { data: evalsData, error: evalsError } = useSWR(
@@ -61,6 +63,70 @@ export default function Reviews() {
           </Box>
         </Grid>
       </Grid>
+    </>
+  );
+}
+
+function WordVisualizations(props: {
+  evalsData: EvalsData[];
+  isLoading: boolean;
+}) {
+  const { width } = useWindowDimensions();
+
+  if (props.isLoading)
+    return (
+      <Skeleton
+        variant="rectangular"
+        sx={{ mt: 2, borderRadius: 2 }}
+        animation="wave"
+        height="193px"
+      />
+    );
+
+  return (
+    <>
+      <Tooltip title="Sentiment Histogram" placement="top" arrow>
+        <div>
+          <WordSentimentChart evalsData={props.evalsData} />
+        </div>
+      </Tooltip>
+      <Tooltip title="Word Cloud" placement="top" arrow>
+        <div>
+          <WordCloudChart evalsData={props.evalsData} width={width} />
+        </div>
+      </Tooltip>
+      <Tooltip title="Donut Chart" placement="top" arrow>
+        <div>
+          <WordDonutChart evalsData={props.evalsData} width={width} />
+        </div>
+      </Tooltip>
+    </>
+  );
+}
+
+function TextualEvaluations(props: {
+  evalsData: EvalsData[];
+  isLoading: boolean;
+}) {
+  if (props.isLoading)
+    return (
+      <>
+        <Skeleton sx={{ mt: 2 }} animation="wave" />
+        <Skeleton animation="wave" width="50%" />
+        <br />
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" width="50%" />
+        <br />
+        <Skeleton animation="wave" />
+        <Skeleton animation="wave" width="50%" />
+      </>
+    );
+
+  return (
+    <>
+      {props.evalsData.map((evalDoc: EvalsData, i) => (
+        <Evaluation key={i} evalDoc={evalDoc} />
+      ))}
     </>
   );
 }

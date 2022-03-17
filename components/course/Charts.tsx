@@ -10,14 +10,6 @@ import SingleChoiceChart from "./charts/SingleChoiceChart";
 import TextChart from "./charts/TextChart";
 import HoverCard from "./HoverCard";
 
-function ChartWrapper(props: { children?: React.ReactNode }) {
-  return (
-    <Grid item container lg={6} direction="column">
-      <Box sx={{ p: 2 }}>{props.children}</Box>
-    </Grid>
-  );
-}
-
 export default function Charts(props: {
   formid?: string;
   isStandard: boolean;
@@ -169,5 +161,13 @@ export default function Charts(props: {
         </Grid>
       )}
     </>
+  );
+}
+
+function ChartWrapper(props: { children?: React.ReactNode }) {
+  return (
+    <Grid item container lg={6} direction="column">
+      <Box sx={{ p: 2 }}>{props.children}</Box>
+    </Grid>
   );
 }
