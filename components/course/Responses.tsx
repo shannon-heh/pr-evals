@@ -152,7 +152,7 @@ function ChartsHelper(props: { formid?: string }) {
   return (
     <>
       <FormMetadata meta={data.meta} />
-      <Charts isStandard={false} formid={props.formid} />
+      <Charts isStandard={false} formID={props.formid} />
     </>
   );
 }

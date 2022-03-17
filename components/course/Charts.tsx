@@ -11,12 +11,15 @@ import TextChart from "./charts/TextChart";
 import HoverCard from "./HoverCard";
 
 export default function Charts(props: {
-  formid?: string;
+  courseID?: string;
+  formID?: string;
   isStandard: boolean;
 }) {
   const { width } = useWindowDimensions();
   const { data: chartData_, error } = useSWR(
-    `/api/response-data?formid=${props.formid}`,
+    props.courseID
+      ? `/api/response-data?courseid=${props.courseID}`
+      : `/api/response-data?formid=${props.formID}`,
     fetcher
   );
   const chartData = (chartData_ as ResponseData)?.responses;

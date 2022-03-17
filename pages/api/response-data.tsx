@@ -30,8 +30,18 @@ export default async function handler(
 ) {
   if (!getNetID()) return res.end();
 
-  const formid = req.query.formid as string;
-  if (!formid) return res.end();
+  let formid = req.query.formid as string;
+  const courseid = req.query.courseid as string;
+  if (!formid && !courseid) return res.end();
+
+  // if courseid is provided, we assume that the client wants the course's standardized form, so
+  // set formid to the course's standardized formid
+  // TODO @nicholaspad
+  if (courseid) {
+    formid = "x";
+    return res.end(); // remove later
+  }
+
   const dbForms = (await getDB()).collection("forms") as Collection;
   const dbResponses = (await getDB()).collection("responses") as Collection;
   const dbUsers = (await getDB()).collection("users") as Collection;

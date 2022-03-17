@@ -10,9 +10,9 @@ import WordSentimentChart from "./charts/WordSentimentChart";
 import Evaluation from "./charts/Evaluation";
 import HoverCard from "./HoverCard";
 
-export default function Reviews() {
+export default function Reviews(props: { courseID?: string }) {
   const { data: evalsData, error: evalsError } = useSWR(
-    "/api/textual-evaluations",
+    `/api/response-data?courseid=${props.courseID}`,
     fetcher
   );
 
