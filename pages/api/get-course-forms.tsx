@@ -25,6 +25,7 @@ export default async function handler(
           title: 1,
           form_id: 1,
           time_published: 1,
+          standardized: 1,
         },
       }
     )
@@ -38,6 +39,7 @@ export default async function handler(
             .collection("responses")
             .find({ form_id: form.form_id })
             .count();
+
           // return some more data
           return await db
             .collection("responses")
