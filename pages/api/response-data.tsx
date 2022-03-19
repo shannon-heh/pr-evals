@@ -36,13 +36,17 @@ export default async function handler(
 
   // if courseid is provided, we assume that the client wants the course's standardized form, so
   // set formid to the course's standardized formid
-  // TODO @nicholaspad
+  const dbForms = (await getDB()).collection("forms") as Collection;
+
   if (courseid) {
-    formid = "x";
-    return res.end(); // remove later
+    let _: Object = await dbForms.findOne({
+      course_id: courseid,
+      form_id: /-std$/,
+    });
+    if (!_) return res.end();
+    formid = _["form_id"];
   }
 
-  const dbForms = (await getDB()).collection("forms") as Collection;
   const dbResponses = (await getDB()).collection("responses") as Collection;
   const dbUsers = (await getDB()).collection("users") as Collection;
 

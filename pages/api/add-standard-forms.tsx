@@ -171,8 +171,8 @@ export default async function handler(
           form_id: course.guid + "-std",
           description:
             "Responses to this form are visualized/displayed in the Charts and Reviews tabs!",
-          questions: breadthQuestions
-            .concat(academicRigorQuestions)
+          questions: academicRigorQuestions
+            .concat(breadthQuestions)
             .concat(overallQuestion),
           title: "Standardized Evaluations Form",
           published: true,
