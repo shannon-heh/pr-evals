@@ -15,7 +15,7 @@ export default function Reviews(props: { courseID?: string }) {
     `/api/response-data?courseid=${props.courseID}`,
     fetcher
   );
-  const evalsData = (evalsData_ as ResponseData).responses.filter(
+  const evalsData = (evalsData_ as ResponseData)?.responses.filter(
     (response) => response.type === "TEXT"
   )[0].data;
 

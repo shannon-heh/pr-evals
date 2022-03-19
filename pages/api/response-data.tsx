@@ -167,14 +167,38 @@ export default async function handler(
             let userData = await dbUsers.findOne({
               netid: allResponses[_]["netid"],
             });
-            userDataCache[netID] = userData;
+
+            const difficultyQuestionIdx = 2;
+            let userStdFormData: Object[] = await dbResponses
+              .find({
+                form_id: formid.split("-")[0] + "-std",
+                netid: netID,
+              })
+              .toArray();
+            console.log(userStdFormData[0]["responses"][difficultyQuestionIdx]);
+
+            userDataCache[netID] = {
+              data: userData,
+              difficulty:
+                userStdFormData.length > 0
+                  ? userStdFormData[0]["responses"][difficultyQuestionIdx][
+                      "response"
+                    ]
+                  : 0,
+            };
+
+            if (
+              userDataCache[netID].difficulty < 1 ||
+              userDataCache[netID].difficulty > 5
+            )
+              userDataCache[netID].difficulty = 0;
           }
 
           data[i].data.push({
             text: response as string,
-            major: userDataCache[netID]["major_code"],
-            year: gradeMap[userDataCache[netID]["class_year"]],
-            difficulty: 2, // TODO: @nicholaspad extract from standardized form
+            major: userDataCache[netID]["data"]["major_code"],
+            year: gradeMap[userDataCache[netID]["data"]["class_year"]],
+            difficulty: userDataCache[netID].difficulty,
           });
           break;
       }
