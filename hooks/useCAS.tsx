@@ -22,15 +22,15 @@ export default function useCAS() {
   useEffect(() => {
     const { ticket } = router.query;
     setTicket(ticket as string);
-    if (data && isLoggedIn && router.pathname == "/") {
-      router.push("/dashboard");
-      return;
-    }
+    if (data && isLoggedIn && router.pathname == "/") router.push("/dashboard");
 
-    if (data && !isLoggedIn && router.pathname != "/") {
+    if (
+      data &&
+      !isLoggedIn &&
+      router.pathname != "/" &&
+      router.pathname != "/dashboard"
+    )
       router.push("/");
-      return;
-    }
   });
 
   return {

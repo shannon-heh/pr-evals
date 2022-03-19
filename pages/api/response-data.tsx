@@ -1,5 +1,6 @@
 import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 import {
   ChartData,
@@ -16,14 +17,34 @@ const questionTypeMap = {
   5: "RATING",
 };
 
+const gradeMap = {
+  "2022": "Senior",
+  "2023": "Junior",
+  "2024": "Sophomore",
+  "2025": "First-year",
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  const formid = req.query.formid as string;
-  if (!formid) return res.end();
+  if (!getNetID()) return res.end();
+
+  let formid = req.query.formid as string;
+  const courseid = req.query.courseid as string;
+  if (!formid && !courseid) return res.end();
+
+  // if courseid is provided, we assume that the client wants the course's standardized form, so
+  // set formid to the course's standardized formid
+  // TODO @nicholaspad
+  if (courseid) {
+    formid = "x";
+    return res.end(); // remove later
+  }
+
   const dbForms = (await getDB()).collection("forms") as Collection;
   const dbResponses = (await getDB()).collection("responses") as Collection;
+  const dbUsers = (await getDB()).collection("users") as Collection;
 
   const form = (await dbForms
     .find({ form_id: formid })
@@ -59,6 +80,14 @@ export default async function handler(
         );
         break;
       case "SLIDER":
+        if (question["step"] == 0) {
+          const marks: Object[] = question["marks"];
+          marks.forEach((mark) =>
+            res.data.push({ name: mark["value"], value: 0 })
+          );
+          break;
+        }
+
         for (
           let i = question["min"];
           i <= question["max"];
@@ -81,11 +110,27 @@ export default async function handler(
     .project({ netid: 1, responses: 1, _id: 0 })
     .toArray()) as Object[];
 
+  // detect if the form has 0 responses
+  if (
+    allResponses.length == 0 ||
+    allResponses.every(
+      (response) => (response["responses"] as Object[]).length == 0
+    )
+  )
+    return res
+      .status(200)
+      .json({ responses: [], meta: form[0] as FormMetadataResponses });
+
+  const userDataCache = {};
+
   // load responses into data
-  allResponses.forEach((doc_) => {
-    const responses = doc_["responses"];
-    responses.forEach((response_: Object[], i: number) => {
-      const response: string | number | string[] = response_["response"];
+  for (let _ = 0; _ < allResponses.length; _++) {
+    const responses = allResponses[_]["responses"];
+    for (let i = 0; i < responses.length; i++) {
+      const response: string | number | string[] = responses[i]["response"];
+
+      if (response == "" || response == []) continue;
+
       switch (data[i].type) {
         case "SINGLE_SEL":
           data[i].data.forEach((sample, j) => {
@@ -113,15 +158,38 @@ export default async function handler(
           });
           break;
         case "TEXT":
-          // TODO: @nicholaspad get major and year using netID
+          const netID = allResponses[_]["netid"];
+          if (!(netID in userDataCache)) {
+            let userData = await dbUsers.findOne({
+              netid: allResponses[_]["netid"],
+            });
+            userDataCache[netID] = userData;
+          }
+
           data[i].data.push({
             text: response as string,
-            major: "COS",
-            year: "Junior",
+            major: userDataCache[netID]["major_code"],
+            year: gradeMap[userDataCache[netID]["class_year"]],
             difficulty: 2, // TODO: @nicholaspad extract from standardized form
           });
+          break;
       }
-    });
+    }
+  }
+
+  // for slider charts, replace numbers with labels if applicable
+  data.forEach((chart, i) => {
+    if (chart.type == "SLIDER") {
+      const marks: Object[] = questions[i]["marks"];
+      const data_ = chart.data;
+      marks.forEach((mark) => {
+        const value = mark["value"];
+        const label = mark["label"];
+        data_.forEach((sample) => {
+          if (sample["name"] == value) sample["name"] = `${label}`;
+        });
+      });
+    }
   });
 
   return res
