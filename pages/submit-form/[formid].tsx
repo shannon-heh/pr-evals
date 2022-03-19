@@ -98,7 +98,7 @@ export default function SubmitForm() {
       } else if (q.type == Question.Rating) {
         formik.setFieldValue(id, 0);
       } else if (q.type == Question.Slider) {
-        formik.setFieldValue(id, q.min);
+        formik.setFieldValue(id, formData?.standardized ? 3 : q.min);
       }
     });
   }, [questions]);
