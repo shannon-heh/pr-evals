@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { UserDataDB } from "../../src/Types";
+import sessionstorage from "sessionstorage";
 
 // API endpoint to return data about an instructor or student
 // (given their netid)
@@ -9,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid = req.query.netid as string;
+  const netid: string = sessionstorage.getItem("netid");
   const dbUsers = (await getDB()).collection("users");
   return dbUsers
     .findOne(

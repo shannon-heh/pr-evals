@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 
 // Actions on course page for instructor to start a new form
 export default function NewFormActions(props: { courseid: string }) {
-  const { netID }: { netID: string } = useCAS();
+  const { netID } = useCAS();
   const router = useRouter();
 
   // for open/close dialog

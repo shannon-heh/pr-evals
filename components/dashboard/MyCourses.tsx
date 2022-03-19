@@ -3,16 +3,17 @@ import { blue } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { CourseData } from "../../src/Types";
 import { fetcher, getFullTitle } from "../../src/Helpers";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
+import useCAS from "../../hooks/useCAS";
 
 // Component to display "My Courses" on Dashboard
 export default function MyCourses(props) {
+  const { isInstructor } = useCAS();
   const myCourses: string[] = props.myCourses ?? [];
 
   // get course data given course IDs
@@ -21,7 +22,15 @@ export default function MyCourses(props) {
       ? `/api/course-page-data?courseids=${myCourses.join(",")}`
       : null;
   let { data: courseData, error: courseError } = useSWR(courseUrl, fetcher);
-  if (courseError) return <div>Failed to load Dashboard page.</div>;
+
+  // get stats for each course's forms
+  const formsUrl =
+    myCourses.length != 0
+      ? `/api/course-forms-data?courseids=${myCourses.join(",")}`
+      : null;
+  let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
+
+  if (courseError || formsError) return <div>Failed to load My Courses.</div>;
 
   // handler when user clicks remove course
   const handleRemoveCourse = (courseID: string) => {
@@ -37,6 +46,11 @@ export default function MyCourses(props) {
       course.crosslisting_catalog_titles
     );
     const courseID: string = course["course_id"];
+
+    let stats = { numForms: 0, numSubmitted: 0 };
+    if (formsData && courseID in formsData) {
+      stats = formsData[courseID];
+    }
 
     return (
       <Link
@@ -58,7 +72,11 @@ export default function MyCourses(props) {
             <Grid item>
               <Typography fontWeight="bold">{catalogTitle}</Typography>
               <Typography>{course.course_title}</Typography>
-              <Typography fontStyle="italic">2 / 5 Forms Completed</Typography>
+              <Typography fontStyle="italic">
+                {isInstructor
+                  ? `${stats.numForms} Forms Published`
+                  : `${stats.numSubmitted}/${stats.numForms} Forms Submitted`}
+              </Typography>
             </Grid>
             {!props.isInstructor ? (
               <Grid item>

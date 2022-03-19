@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { UserDataDB } from "../../src/Types";
+import sessionstorage from "sessionstorage";
+import { isStudent } from "../../src/Helpers";
 
 // API endpoint to add or remove course for a student
 // (given their netid)
@@ -10,11 +11,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid = req.query.netid as string;
+  const netid: string = sessionstorage.getItem("netid");
   const courseid = req.query.courseid as string;
   const action = req.query.action as string;
+  const db = await getDB();
 
-  const dbUsers = (await getDB()).collection("users");
+  // make sure only students can modify courses
+  const student: boolean = await isStudent(db, netid);
+  if (!student) {
+    return res.status(401).json(`${netid} is not a student`);
+  }
+
+  const dbUsers = db.collection("users");
   if (action == "add") {
     return dbUsers
       .updateOne(
@@ -26,7 +34,7 @@ export default async function handler(
       .then(() => {
         return res
           .status(200)
-          .json({ message: `added course ${courseid} for student ${netid}` });
+          .json(`added course ${courseid} for student ${netid}`);
       });
   } else if (action == "remove") {
     return dbUsers
@@ -39,7 +47,7 @@ export default async function handler(
       .then(() => {
         return res
           .status(200)
-          .json({ message: `removed course ${courseid} for student ${netid}` });
+          .json(`removed course ${courseid} for student ${netid}`);
       });
   }
 }

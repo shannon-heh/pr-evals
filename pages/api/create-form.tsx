@@ -1,10 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { validateInstructor } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 import { QuestionMetadata } from "../../src/Types";
+import sessionstorage from "sessionstorage";
 
 type Args = {
   formid: string;
   questions: QuestionMetadata[];
+  courseid: string;
 };
 
 // API endpoint for instructors to finish creating new form
@@ -14,7 +17,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const db = await getDB();
-  const { formid, questions }: Args = req.body;
+  const netid: string = sessionstorage.getItem("netid");
+  const { formid, questions, courseid }: Args = req.body;
+
+  const isValid: boolean = await validateInstructor(db, netid, courseid);
+  if (!isValid) {
+    return res
+      .status(401)
+      .json(`${netid} is not an instructor for course ${courseid}`);
+  }
+
   return db
     .collection("forms")
     .updateOne(
@@ -29,8 +41,6 @@ export default async function handler(
       { upsert: true }
     )
     .then(() => {
-      return res
-        .status(200)
-        .json({ message: `updated questions for form ${formid}` });
+      return res.status(200).json(`updated questions for form ${formid}`);
     });
 }

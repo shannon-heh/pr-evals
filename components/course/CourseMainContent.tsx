@@ -8,11 +8,25 @@ import Reviews from "./Reviews";
 import Responses from "./Responses";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Forms from "./Forms";
+import useCAS from "../../hooks/useCAS";
+import useSWR from "swr";
+import { fetcher } from "../../src/Helpers";
 
 export default function CourseMainContent(props: {
   courseID: string;
   numStudents: number;
 }) {
+  const { netID, isInstructor } = useCAS();
+
+  // first check if user has this course
+  const url = netID ? `/api/get-user-data?netid=${netID}` : null;
+  const { data: userData, error: userError } = useSWR(url, fetcher);
+  const isUsersCourse: boolean = !userError
+    ? isInstructor
+      ? userData?.instructor_courses.includes(props.courseID)
+      : userData?.student_courses.includes(props.courseID)
+    : false;
+
   type TabPanelProps = {
     children?: React.ReactNode;
     index: number;
@@ -57,7 +71,9 @@ export default function CourseMainContent(props: {
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           <Tabs value={value} onChange={handleChange} centered>
-            <Tab icon={<RateReviewIcon />} label="Forms" {...a11yProps(0)} />
+            {isUsersCourse ? (
+              <Tab icon={<RateReviewIcon />} label="Forms" {...a11yProps(0)} />
+            ) : null}
             <Tab
               icon={<DriveFileRenameOutlineIcon />}
               label="Responses"
@@ -67,9 +83,11 @@ export default function CourseMainContent(props: {
             <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(3)} />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          <Forms courseID={props.courseID} numStudents={props.numStudents} />
-        </TabPanel>
+        {isUsersCourse ? (
+          <TabPanel value={value} index={0}>
+            <Forms courseID={props.courseID} numStudents={props.numStudents} />
+          </TabPanel>
+        ) : null}
         <TabPanel value={value} index={1}>
           <Responses courseID={props.courseID} />
         </TabPanel>

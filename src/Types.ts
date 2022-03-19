@@ -88,9 +88,11 @@ export type FormMetadata = {
   title: string;
   description: string;
   published: boolean;
-  time_created: Date;
   questions: QuestionMetadata[];
-  time_published?: Date;
+  course_id: string,
+  time_created?: Date;
+  time_published?: Date,
+  standardized?: boolean
 };
 
 // Enum for possible question types
@@ -177,4 +179,5 @@ export type CourseFormData = {
   time_submitted?: Date;
   completed: boolean;
   num_responses: number;
+  standardized?: boolean;
 };

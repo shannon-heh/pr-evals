@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { validateInstructor } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
+import sessionstorage from "sessionstorage";
 
 type Args = {
   courseid: string;
-  netid: string;
   title: string;
   description: string;
 };
@@ -14,15 +15,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { courseid, netid, title, description }: Args = req.body;
+  const netid: string = sessionstorage.getItem("netid");
+  const { courseid, title, description }: Args = req.body;
   const db = await getDB();
 
-  // validate query args
-  const isValid: boolean = await validateInstr(db, netid, courseid);
+  const isValid: boolean = await validateInstructor(db, netid, courseid);
   if (!isValid) {
-    return res.status(401).json({
-      message: `${netid} is not an instructor for course ${courseid}`,
-    });
+    return res
+      .status(401)
+      .json(`${netid} is not an instructor for course ${courseid}`);
   }
 
   // construct new form ID
@@ -60,18 +61,4 @@ export default async function handler(
       // return formid in response
       return res.status(200).json({ formid });
     });
-}
-
-// validate that netid is an instructor, and courseid is one of their courses
-async function validateInstr(db, netid: string, courseid: string) {
-  const { instructor_courses, person_type } = await db
-    .collection("users")
-    .findOne({ netid: netid }, { instructor_courses: 1, person_type: 1 });
-  if (person_type !== "instructor") {
-    return false;
-  }
-  if (!instructor_courses.includes(courseid)) {
-    return false;
-  }
-  return true;
 }

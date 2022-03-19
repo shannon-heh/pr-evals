@@ -74,6 +74,7 @@ export default function SubmitForm() {
           formid: formid,
           responses: responses,
           netid: netID,
+          courseid: courseid,
         }),
       }).then((res: Response) => {
         if (res.status == 200) {
