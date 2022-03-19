@@ -82,9 +82,17 @@ function EvaluationBadges(props: { evalDoc: EvalsData }) {
   return (
     <Box sx={{ mb: 1.5 }}>
       {props.evalDoc.major != "" ? (
-        <Tooltip title="Concentration" placement="top" arrow>
+        <Tooltip
+          title={
+            props.evalDoc.major
+              ? "Concentration"
+              : "No concentration (author has not yet set their concentration on the profile page)"
+          }
+          placement="top"
+          arrow
+        >
           <Typography display="inline" sx={badgeStyles}>
-            {props.evalDoc.major}
+            {props.evalDoc.major ? props.evalDoc.major : "N/A"}
           </Typography>
         </Tooltip>
       ) : null}
