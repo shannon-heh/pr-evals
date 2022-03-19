@@ -82,7 +82,12 @@ function InstructorForms(props: {
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
         <Card variant="outlined">
-          <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+          <CardContent
+            sx={{
+              backgroundColor: form.standardized ? blue[100] : grey[200],
+              padding: 0,
+            }}
+          >
             <Grid
               container
               flexDirection="row"
@@ -170,7 +175,7 @@ function StudentForms(props: { forms: CourseFormData[] }) {
           >
             <CardContent
               sx={{
-                backgroundColor: forms[i].standardized ? blue[100] : grey[200],
+                backgroundColor: form.standardized ? blue[100] : grey[200],
                 padding: 0,
               }}
             >
