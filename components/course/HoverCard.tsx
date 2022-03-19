@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { SxProps, Theme } from "@mui/material/styles";
 
 // wrapper component to create white cards with a hover effect
@@ -7,7 +7,7 @@ import { SxProps, Theme } from "@mui/material/styles";
 // <HoverCard sx={{p: 4}}>
 //     <Typography textAlign="left">hello</Typography>
 // </HoverCard>
-export default function Evaluation(props: {
+export default function HoverCard(props: {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
   specialCourseHeaderFlex?: boolean;
