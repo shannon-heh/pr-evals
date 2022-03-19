@@ -178,6 +178,16 @@ export type CourseFormData = {
   time_published: Date;
   time_submitted?: Date;
   completed: boolean;
+  course_id?: string;
   num_responses: number;
   standardized?: boolean;
 };
+
+export type FormResponseData = {
+  form_id: string;
+  netid: string;
+  responses: {q_id: number, response: any}[];
+  time_submitted: Date,
+  course_id: string
+}
+

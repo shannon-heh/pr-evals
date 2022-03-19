@@ -65,6 +65,7 @@ export default async function handler(
       );
     })
     .then((forms: CourseFormData[]) => {
+      forms.reverse(); // display forms in reverse chron order
       return res.status(200).json(forms);
     });
 }
