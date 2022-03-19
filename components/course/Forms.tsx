@@ -168,7 +168,12 @@ function StudentForms(props: { forms: CourseFormData[] }) {
               },
             }}
           >
-            <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+            <CardContent
+              sx={{
+                backgroundColor: forms[i].standardized ? blue[100] : grey[200],
+                padding: 0,
+              }}
+            >
               <Typography
                 color="text.secondary"
                 sx={{
