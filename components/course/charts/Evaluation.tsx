@@ -45,7 +45,7 @@ function EvaluationBadges(props: { evalDoc: EvalsData }) {
     3: "Average",
     2: "Easy",
     1: "Very Easy",
-    0: "No Response",
+    0: "No response (author has not yet submitted the standardized evaluations form)",
   };
 
   const badgeStyles = {
@@ -105,7 +105,8 @@ function EvaluationBadges(props: { evalDoc: EvalsData }) {
             background: difficultyColorMap[props.evalDoc.difficulty],
           }}
         >
-          Difficulty: {props.evalDoc.difficulty}
+          Difficulty:{" "}
+          {props.evalDoc.difficulty == 0 ? "N/A" : props.evalDoc.difficulty}
         </Typography>
       </Tooltip>
       <Tooltip

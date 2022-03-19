@@ -175,7 +175,6 @@ export default async function handler(
                 netid: netID,
               })
               .toArray();
-            console.log(userStdFormData[0]["responses"][difficultyQuestionIdx]);
 
             userDataCache[netID] = {
               data: userData,
