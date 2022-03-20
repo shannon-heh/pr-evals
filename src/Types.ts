@@ -73,9 +73,9 @@ export type ChartItem = {
 
 export type FormMetadataResponses = {
   description?: string;
-  num_responses: number;
+  num_responses?: number;
   title: string;
-  time_published: Date;
+  time_published?: Date;
 };
 
 export type ResponseData = {
@@ -89,13 +89,13 @@ export type FormMetadata = {
   title: string;
   description: string;
   questions: QuestionMetadata[];
-  course_id: string,
+  course_id: string;
   time_created?: Date;
   published: boolean;
-  time_published?: Date,
+  time_published?: Date;
   released: boolean;
-  time_released?: Date,
-  standardized?: boolean
+  time_released?: Date;
+  standardized?: boolean;
 };
 
 // Enum for possible question types
@@ -175,7 +175,7 @@ export type QuestionMetadata =
   | SingleSelectMetadata
   | MultiSelectMetadata;
 
-// used to construct forms in Forms tab 
+// used to construct forms in Forms tab
 export type CourseFormData = {
   title: string;
   form_id: string;
@@ -192,8 +192,7 @@ export type CourseFormData = {
 export type FormResponseData = {
   form_id: string;
   netid: string;
-  responses: {q_id: number, response: any}[];
-  time_submitted: Date,
-  course_id: string
-}
-
+  responses: { q_id: number; response: any }[];
+  time_submitted: Date;
+  course_id: string;
+};
