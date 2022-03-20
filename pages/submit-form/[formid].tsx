@@ -157,11 +157,12 @@ export default function SubmitForm() {
             </Button>
             <ConfirmationDialog
               title={"Are you ready to submit your form?"}
-              description={"Click Cancel to continue editing your response."}
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
               handleSubmit={handleSubmit}
-            />
+            >
+              Click Cancel to continue editing your response.
+            </ConfirmationDialog>
           </Grid>
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {

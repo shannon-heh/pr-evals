@@ -152,11 +152,12 @@ export default function NewForm() {
             />
             <ConfirmationDialog
               title={"Are you ready to publish your form?"}
-              description={"Click Cancel to continue editing your form."}
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
               handleSubmit={handleSubmit}
-            />
+            >
+              Click Cancel to continue editing your form.
+            </ConfirmationDialog>
           </Grid>
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
