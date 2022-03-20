@@ -112,6 +112,10 @@ export default function Forms(props: {
     ).then((res) => {
       if (res.status == 200) {
         router.reload();
+      } else {
+        console.log(
+          `Failed to release responses for form ${releaseForm.formid} `
+        );
       }
     });
   };
@@ -220,18 +224,25 @@ function InstructorActions(props: {
   const { form, courseID } = props;
   // handler for when form responses are exported
   const handleExport = () => {
-    props.handleOpenExport(); // open Export dialog
     fetch(`/api/export-responses?formid=${form.form_id}&courseid=${courseID}`)
       .then((res) => {
+        return res.status == 200 ? res.text() : null;
         if (res.status == 200) {
           return res.text();
+        } else {
+          throw `Failed to export responses for form ${form.form_id}`;
         }
       })
       .then((csv) => {
+        // open Export dialog
+        props.handleOpenExport();
         // create URL representing file
         const csvFile = new Blob([csv], { type: "text/csv" });
         const newCsvLink = URL.createObjectURL(csvFile);
         props.handleSetExportForm({ title: form.title, csvLink: newCsvLink });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
