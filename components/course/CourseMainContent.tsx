@@ -1,6 +1,7 @@
 import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import GroupsIcon from "@mui/icons-material/Groups";
 import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import Charts from "./Charts";
@@ -11,6 +12,7 @@ import Forms from "./Forms";
 import useCAS from "../../hooks/useCAS";
 import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
+import Students from "./Students";
 
 export default function CourseMainContent(props: {
   courseID: string;
@@ -81,6 +83,7 @@ export default function CourseMainContent(props: {
             />
             <Tab icon={<BarChart />} label="Charts" {...a11yProps(2)} />
             <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(3)} />
+            <Tab icon={<GroupsIcon />} label="Students" {...a11yProps(4)} />
           </Tabs>
         </Box>
         {isUsersCourse ? (
@@ -96,6 +99,9 @@ export default function CourseMainContent(props: {
         </TabPanel>
         <TabPanel value={value} index={3}>
           <Reviews courseID={props.courseID} />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <Students courseID={props.courseID} />
         </TabPanel>
       </Grid>
     </>
