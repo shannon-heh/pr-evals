@@ -233,7 +233,7 @@ function InstructorActions(props: {
           throw `ERROR in exporting responses for this form. Unable to proceed with requested action.`;
         }
       })
-      .then((csv) => {
+      .then((csv: string) => {
         // open Export dialog
         props.handleOpenExport();
         // create URL representing file

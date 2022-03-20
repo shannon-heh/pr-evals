@@ -62,7 +62,7 @@ export default async function handler(
       }
     )
     .toArray()
-    .then((formResponses: Object[]) => {
+    .then(async (formResponses: Object[]) => {
       const allResponses = formResponses.map((rData: FormResponseData) => {
         // restructure to be {q1: r1, q2: r2...}
         const qToR = {};
@@ -85,7 +85,8 @@ export default async function handler(
 
       // convert array of objects to csv string
       const csv = new objectsToCsv(allResponses);
-      return res.status(200).json(csv.toString());
+      const csvString = await csv.toString();
+      return res.status(200).json(csvString);
     })
     .catch((err) => {
       console.log(`error in exporting responses for form ${formid}`, err);
