@@ -13,7 +13,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import PublishIcon from "@mui/icons-material/Publish";
 import pluralize from "pluralize";
 import NewFormActions from "./NewFormActions";
-import { CourseFormData, FormMetadata } from "../../src/Types";
+import { CourseFormData } from "../../src/Types";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import { useEffect, useRef, useState } from "react";
@@ -23,10 +23,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
+import ConfirmationDialog from "../forms/ConfirmationDialog";
+import { useRouter } from "next/router";
 
 type ExportFormData = {
   title: string;
   csvLink: string;
+};
+type ReleaseFormData = {
+  title: string;
+  formid: string;
+  courseid: string;
 };
 
 // Result is initially true, then remains false after first render
@@ -49,10 +56,20 @@ export default function Forms(props: {
   // store title & CSV download link for exported form
   const [exportForm, setExportForm] = useState({ title: "", csvLink: "" });
 
+  // openRelease is true when Release dialog is open
+  const [openRelease, setOpenRelease] = useState(false);
+  const [releaseForm, setReleaseForm] = useState({
+    title: "",
+    formid: "",
+    courseid: "",
+  });
+
   // store reference to hidden CSV anchor link
   const inputRef = React.useRef(null);
   // flag used to prevent export on mount
   const firstRender = useFirstRender();
+  // page router
+  const router = useRouter();
 
   // to open/close Export Dialog
   const handleOpenExport = () => {
@@ -66,12 +83,12 @@ export default function Forms(props: {
     setOpenExport(false);
   };
 
-  // store new data about exported form
+  // store new data about form to export
   const handleSetExportForm = (form: ExportFormData) => {
     setExportForm(form);
   };
 
-  // when instructor exports repsonses, click hidden anchor link to trigger csv download
+  // when instructor exports responses, click hidden anchor link to trigger csv download
   useEffect(() => {
     // do not download on mount
     if (!firstRender) {
@@ -79,6 +96,30 @@ export default function Forms(props: {
       URL.revokeObjectURL(exportForm.csvLink);
     }
   }, [exportForm]);
+
+  // to open/close Release Dialog
+  const handleOpenRelease = () => {
+    setOpenRelease(true);
+  };
+  const handleCloseRelease = (e, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setOpenRelease(false);
+  };
+  const handleRelease = () => {
+    setOpenRelease(false);
+    fetch(
+      `/api/release-form?formid=${releaseForm.formid}&courseid=${releaseForm.courseid}`
+    ).then((res) => {
+      if (res.status == 200) {
+        router.reload();
+      }
+    });
+  };
+
+  // store data about form to release
+  const handleSetReleaseForm = (form: ReleaseFormData) => {
+    setReleaseForm(form);
+  };
 
   // get current time for csv file name
   const currTime: string = new Date().toUTCString();
@@ -107,6 +148,8 @@ export default function Forms(props: {
                 numStudents={props.numStudents}
                 handleSetExportForm={handleSetExportForm}
                 handleOpenExport={handleOpenExport}
+                handleSetReleaseForm={handleSetReleaseForm}
+                handleOpenRelease={handleOpenRelease}
               />
               <ExportDialog
                 openExport={openExport}
@@ -114,6 +157,20 @@ export default function Forms(props: {
                 handleButtonCloseExport={handleButtonCloseExport}
                 formTitle={exportForm.title}
               />
+              <ConfirmationDialog
+                title="Confirm Form Release"
+                isOpen={openRelease}
+                closeDialog={handleCloseRelease}
+                handleSubmit={handleRelease}
+              >
+                Releasing responses for form: {` ${releaseForm.title}`}.
+                <br />
+                <br />
+                By clicking 'Confirm', you will be making this form's responses
+                available for all members of the Princeton community. You will
+                also be able to export the responses. You will no longer be able
+                to edit this form.
+              </ConfirmationDialog>
             </>
           ) : (
             <StudentForms forms={formsData} />
@@ -141,14 +198,87 @@ export function ExportDialog(props: {
       <DialogTitle>Export Responses to CSV</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Downloading responses for form:{" "}
-          <Typography sx={{ fontWeight: "bold" }}>{props.formTitle}</Typography>
+          Downloading responses for form: {props.formTitle}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleButtonCloseExport}>Done</Button>
       </DialogActions>
     </Dialog>
+  );
+}
+
+// Actions that instructor can perform on a form
+function InstructorActions(props: {
+  handleSetExportForm: (form: ExportFormData) => void;
+  handleOpenExport: () => void;
+  handleSetReleaseForm: (form: ReleaseFormData) => void;
+  handleOpenRelease: () => void;
+  form: CourseFormData;
+  courseID: string;
+}) {
+  const { form, courseID } = props;
+  // handler for when form responses are exported
+  const handleExport = () => {
+    props.handleOpenExport(); // open Export dialog
+    fetch(`/api/export-responses?formid=${form.form_id}&courseid=${courseID}`)
+      .then((res) => {
+        if (res.status == 200) {
+          return res.text();
+        }
+      })
+      .then((csv) => {
+        // create URL representing file
+        const csvFile = new Blob([csv], { type: "text/csv" });
+        const newCsvLink = URL.createObjectURL(csvFile);
+        props.handleSetExportForm({ title: form.title, csvLink: newCsvLink });
+      });
+  };
+
+  const handleRelease = () => {
+    props.handleOpenRelease();
+    props.handleSetReleaseForm({
+      title: form.title,
+      formid: form.form_id,
+      courseid: courseID,
+    });
+  };
+
+  return (
+    <Grid
+      container
+      flexDirection="row"
+      justifyContent="space-evenly"
+      sx={{
+        fontSize: 16,
+        backgroundColor: form.released ? green[300] : red[300],
+        padding: 0.25,
+      }}
+    >
+      {!form.released ? (
+        <Tooltip title="Edit Form" arrow>
+          <IconButton>
+            <EditIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+      ) : null}
+      {!form.released ? (
+        <Tooltip title="Release Responses" arrow>
+          <IconButton onClick={handleRelease}>
+            <PublishIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+      ) : null}
+      {form.released ? (
+        <Tooltip title="Export Responses" arrow>
+          <span>
+            <IconButton disabled={!form.released} onClick={handleExport}>
+              <VisibilityIcon fontSize="large" />
+            </IconButton>
+          </span>
+        </Tooltip>
+      ) : null}
+    </Grid>
   );
 }
 
@@ -159,72 +289,36 @@ function InstructorForms(props: {
   courseID: string;
   handleSetExportForm: (form: ExportFormData) => void;
   handleOpenExport: () => void;
+  handleSetReleaseForm: (form: ReleaseFormData) => void;
+  handleOpenRelease: () => void;
 }) {
   const { forms } = props;
-
-  // handler for when form responses are exported
-  const handleExport = (form: CourseFormData) => {
-    props.handleOpenExport(); // open Export dialog
-    fetch(
-      `/api/export-responses?formid=${form.form_id}&courseid=${props.courseID}`
-    )
-      .then((res) => {
-        return res.text();
-      })
-      .then((csv) => {
-        // create URL representing file
-        const csvFile = new Blob([csv], { type: "text/csv" });
-        const newCsvLink = URL.createObjectURL(csvFile);
-        props.handleSetExportForm({ title: form.title, csvLink: newCsvLink });
-      });
-  };
-
   const formCards = forms.map((form: CourseFormData, i: number) => {
     // text for # and % of responses
     const responseStats = `${form.num_responses} (${
       (form.num_responses / props.numStudents) * 100
     }%) ${pluralize("Responses", form.num_responses)}`;
 
-    // text for form publish date
-    const publishedDate = ` Published ${dateToString(
+    // text for form publish & release date
+    const publishedDate = `Published ${dateToString(
       new Date(form.time_published)
     )}`;
+    const releasedDate = form.time_released
+      ? `Released ${dateToString(new Date(form.time_released))}`
+      : "";
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
         <Card variant="outlined">
           <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
-            <Grid
-              container
-              flexDirection="row"
-              justifyContent="space-evenly"
-              sx={{
-                fontSize: 16,
-                backgroundColor: blue[300],
-                padding: 0.25,
-              }}
-            >
-              <Tooltip title="Edit Form" arrow>
-                <IconButton>
-                  <EditIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Export Responses" arrow>
-                <IconButton
-                  onClick={() => {
-                    // export form responses when button is clicked
-                    handleExport(form);
-                  }}
-                >
-                  <VisibilityIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Release Responses" arrow>
-                <IconButton>
-                  <PublishIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
-            </Grid>
+            <InstructorActions
+              handleSetExportForm={props.handleSetExportForm}
+              handleOpenExport={props.handleOpenExport}
+              handleSetReleaseForm={props.handleSetReleaseForm}
+              handleOpenRelease={props.handleOpenRelease}
+              form={form}
+              courseID={props.courseID}
+            />
             <Typography
               variant="h4"
               component="div"
@@ -252,6 +346,12 @@ function InstructorForms(props: {
             >
               {publishedDate}
             </Typography>
+            <Typography
+              color="text.secondary"
+              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+            >
+              {releasedDate}
+            </Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -265,13 +365,16 @@ function InstructorForms(props: {
 function StudentForms(props: { forms: CourseFormData[] }) {
   const { forms } = props;
   const formCards = forms.map((form: CourseFormData, i: number) => {
-    // text for form submit & publish dates
+    // text for form submit, publish, & release dates
     const submittedDate = form.time_submitted
       ? `Submitted ${dateToString(new Date(form.time_submitted))}`
       : "Not Submitted";
-    const publishedDate = ` Published ${dateToString(
+    const publishedDate = `Published ${dateToString(
       new Date(form.time_published)
     )}`;
+    const releasedDate = form.time_released
+      ? `Released ${dateToString(new Date(form.time_released))}`
+      : "";
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
@@ -322,6 +425,12 @@ function StudentForms(props: { forms: CourseFormData[] }) {
                 sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
               >
                 {publishedDate}
+              </Typography>
+              <Typography
+                color="text.secondary"
+                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+              >
+                {releasedDate}
               </Typography>
             </CardContent>
           </Card>

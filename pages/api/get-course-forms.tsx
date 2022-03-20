@@ -26,6 +26,8 @@ export default async function handler(
           form_id: 1,
           time_published: 1,
           standardized: 1,
+          released: 1,
+          time_released: 1,
         },
       }
     )

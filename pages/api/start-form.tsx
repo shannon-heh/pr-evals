@@ -53,6 +53,7 @@ export default async function handler(
           title: title,
           description: description,
           published: false,
+          released: false,
         },
       },
       { upsert: true }

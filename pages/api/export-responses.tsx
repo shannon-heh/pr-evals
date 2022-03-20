@@ -19,6 +19,17 @@ export default async function handler(
   const isValid: boolean = await validateInstructor(db, netid, courseid);
   if (!isValid) res.status(401).end();
 
+  // validate this form's responses have been released
+  const { released } = await db
+    .collection("forms")
+    .findOne({ form_id: formid }, { projection: { _id: 0, released: 1 } });
+  if (!released)
+    return res
+      .status(401)
+      .json(
+        "Cannot export responses for this form, since responses haven't been released by the instructor."
+      );
+
   // get form metadata
   const form = await db
     .collection("forms")
@@ -70,7 +81,4 @@ export default async function handler(
     });
 
   // convert array of objects to csv string
-  const csv = new objectsToCsv(allResponses);
-  const csvString = await csv.toString();
-  return res.status(200).json(csvString);
 }

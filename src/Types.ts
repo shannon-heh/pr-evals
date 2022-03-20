@@ -83,15 +83,18 @@ export type ResponseData = {
   meta: FormMetadataResponses;
 };
 
+// form metadata stored in DB
 export type FormMetadata = {
   form_id: string;
   title: string;
   description: string;
-  published: boolean;
   questions: QuestionMetadata[];
   course_id: string,
   time_created?: Date;
+  published: boolean;
   time_published?: Date,
+  released: boolean;
+  time_released?: Date,
   standardized?: boolean
 };
 
@@ -172,14 +175,17 @@ export type QuestionMetadata =
   | SingleSelectMetadata
   | MultiSelectMetadata;
 
+// used to construct forms in Forms tab 
 export type CourseFormData = {
   title: string;
   form_id: string;
-  time_published: Date;
-  time_submitted?: Date;
   completed: boolean;
   course_id?: string;
   num_responses: number;
+  released: boolean;
+  time_released?: Date;
+  time_published: Date;
+  time_submitted?: Date;
   standardized?: boolean;
 };
 

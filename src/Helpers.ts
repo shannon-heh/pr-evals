@@ -52,7 +52,7 @@ export async function isStudent(db, netid: string) {
 
 // converts date object to MM/DD/YYYY
 export function dateToString(date: Date) {
-  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+  return `${date.getMonth() + 1}/${date.getDate()}/${String(date.getFullYear()).substring(2)}`;
 }
 
 
