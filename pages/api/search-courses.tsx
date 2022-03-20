@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CourseData } from "../../src/Types";
 import { getDB } from "../../src/mongodb";
+import { getNetID } from "../../src/Helpers";
 
 // API endpoint to search for courses in DB
 // given a user query
@@ -9,6 +10,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (!getNetID()) return res.status(401).end();
+
   const q: string = req.query.q as string;
   const db = await getDB();
 

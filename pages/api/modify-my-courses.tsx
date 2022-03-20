@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
-import { isStudent } from "../../src/Helpers";
+import { isStudent, getNetID } from "../../src/Helpers";
 
 // API endpoint to add or remove course for a student
 // (given their netid)
@@ -11,7 +10,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const courseid = req.query.courseid as string;
   const action = req.query.action as string;
   const db = await getDB();

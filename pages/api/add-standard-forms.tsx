@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { FormMetadata } from "../../src/Types";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 // APi endpoint to add a standard form for each course in DB
 // Only call-able by sheh or ntyp
@@ -10,9 +10,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const netid: string = getNetID();
+  if (!netid || (netid != "sheh" && netid != "ntyp"))
+    return res.status(401).end();
+
   const db = await getDB();
-  const netid = sessionstorage.getItem("netid");
-  if (netid != "sheh" && netid != "ntyp") return res.status(401).end();
 
   // delete any existing standardized forms
   await db.collection("forms").deleteMany({ standardized: true });

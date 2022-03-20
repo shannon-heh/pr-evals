@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateStudent } from "../../src/Helpers";
+import { validateStudent, getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
 
 type Args = {
   formid: string;
@@ -15,8 +14,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const db = await getDB();
-  const netid: string = sessionstorage.getItem("netid");
   const { formid, responses, courseid }: Args = req.body;
 
   const isValid: boolean = await validateStudent(db, netid, courseid);

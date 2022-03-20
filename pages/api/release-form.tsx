@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateInstructor } from "../../src/Helpers";
+import { validateInstructor, getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
 
 // API endpoint for instructors to release responses for form
 // Usage: /api/release-form?formid=FORMID&courseid=COURSEID
@@ -9,8 +8,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const db = await getDB();
-  const netid: string = sessionstorage.getItem("netid");
   const formid = req.query.formid as string;
   const courseid = req.query.courseid as string;
 

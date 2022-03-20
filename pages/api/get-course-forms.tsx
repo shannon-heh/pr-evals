@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { FormMetadata, CourseFormData } from "../../src/Types";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 // API endpoint to get a course's forms given a course ID
 // For students, we also retrieve whether they completed each form
@@ -10,7 +10,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const courseid = req.query.courseid as string;
   const db = await getDB();
 

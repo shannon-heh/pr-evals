@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 type FormStats = { numForms: number; numSubmitted: number };
 
 // API endpoint to retrieve form stats for courses
-// Usage: /api/course-forms-data/courseids=COURSEID1,COURSEID2,COURSEID3
+// Usage: /api/course-forms-data?courseids=COURSEID1,COURSEID2,COURSEID3
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Object>
 ) {
+  if (!getNetID()) return res.status(401).end();
   const db = await getDB();
 
   // courseIDs passed in as comma-separated string
@@ -38,7 +39,8 @@ async function getFormStats(db, courseId: string): Promise<FormStats> {
     console.log(`error in getting # forms in course ${courseId}`, err);
   }
   // get number of completed forms for this student
-  const netid: string = sessionstorage.getItem("netid");
+  const netid = getNetID();
+
   let numSubmitted: number = 0;
   try {
     numSubmitted = await db

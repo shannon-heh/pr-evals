@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { ClassData, CourseData } from "../../src/Types";
+import { getNetID } from "../../src/Helpers";
 
 // API endpoint to retrieve course-related data
 // Usage: /api/course-page-data/courseids=COURSEID1,COURSEID2,COURSEID3
@@ -8,6 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<CourseData[]>
 ) {
+  if (!getNetID()) return res.status(401).end();
   const db = await getDB();
 
   // courseIDs passed in as comma-separated string

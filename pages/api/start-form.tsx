@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateInstructor } from "../../src/Helpers";
+import { validateInstructor, getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
 
 type Args = {
   courseid: string;
@@ -15,7 +14,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const { courseid, title, description }: Args = req.body;
   const db = await getDB();
 
