@@ -96,11 +96,11 @@ export default function SubmitForm() {
       } else if (q.type == Question.MultiSelect) {
         formik.setFieldValue(id, []);
       } else if (q.type == Question.SingleSelect) {
-        formik.setFieldValue(id, null);
+        formik.setFieldValue(id, "");
       } else if (q.type == Question.Rating) {
-        formik.setFieldValue(id, 0);
+        formik.setFieldValue(id, -1);
       } else if (q.type == Question.Slider) {
-        formik.setFieldValue(id, q.min);
+        formik.setFieldValue(id, -1);
       }
     });
   }, [questions]);
