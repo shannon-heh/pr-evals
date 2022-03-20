@@ -18,5 +18,9 @@ export default async function handler(
     .findOne({ form_id: formid }, { projection: { _id: 0 } })
     .then((data: FormMetadata) => {
       return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log(`error in getting metadata for form ${formid}`, err);
+      return res.status(500).end();
     });
 }

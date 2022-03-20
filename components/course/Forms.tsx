@@ -113,8 +113,8 @@ export default function Forms(props: {
       if (res.status == 200) {
         router.reload();
       } else {
-        console.log(
-          `Failed to release responses for form ${releaseForm.formid} `
+        alert(
+          `ERROR in releasing responses for this form. Unable to proceed with requested action.`
         );
       }
     });
@@ -131,7 +131,8 @@ export default function Forms(props: {
   // get data about each course form
   const formsUrl = `/api/get-course-forms?courseid=${props.courseID}&netid=${netID}`;
   let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
-  if (formsError) return <div>Failed to load Forms.</div>;
+  if (formsError)
+    return <Typography my={2}>Failed to load this course's forms.</Typography>;
 
   return (
     <Grid container flexDirection="column" alignItems="center" py={2}>
@@ -229,7 +230,7 @@ function InstructorActions(props: {
         if (res.status == 200) {
           return res.text();
         } else {
-          throw `Failed to export responses for form ${form.form_id}`;
+          throw `ERROR in exporting responses for this form. Unable to proceed with requested action.`;
         }
       })
       .then((csv) => {
@@ -241,7 +242,7 @@ function InstructorActions(props: {
         props.handleSetExportForm({ title: form.title, csvLink: newCsvLink });
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   };
 

@@ -61,5 +61,9 @@ export default async function handler(
     .then(() => {
       // return formid in response
       return res.status(200).json({ formid });
+    })
+    .catch((err) => {
+      console.log(`error in starting form for course ${courseid}`, err);
+      return res.status(500).end();
     });
 }

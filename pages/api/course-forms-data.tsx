@@ -28,15 +28,28 @@ export default async function handler(
 // Retrieves form data for a given courseID
 async function getFormStats(db, courseId: string): Promise<FormStats> {
   // get number of forms for a course
-  const numForms: number = await db
-    .collection("forms")
-    .find({ course_id: courseId, published: true })
-    .count();
+  let numForms: number = 0;
+  try {
+    numForms = await db
+      .collection("forms")
+      .find({ course_id: courseId, published: true })
+      .count();
+  } catch (err) {
+    console.log(`error in getting # forms in course ${courseId}`, err);
+  }
   // get number of completed forms for this student
   const netid: string = sessionstorage.getItem("netid");
-  const numSubmitted: number = await db
-    .collection("responses")
-    .find({ course_id: courseId, netid: netid })
-    .count();
+  let numSubmitted: number = 0;
+  try {
+    numSubmitted = await db
+      .collection("responses")
+      .find({ course_id: courseId, netid: netid })
+      .count();
+  } catch (err) {
+    console.log(
+      `error in getting # forms submitted by ${netid} in course ${courseId}`,
+      err
+    );
+  }
   return { numForms, numSubmitted };
 }

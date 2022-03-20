@@ -69,5 +69,12 @@ export default async function handler(
     .then((forms: CourseFormData[]) => {
       forms.reverse(); // display forms in reverse chron order
       return res.status(200).json(forms);
+    })
+    .catch((err) => {
+      console.log(
+        `error in retrieving course forms for course ${courseid}`,
+        err
+      );
+      return res.status(500).end();
     });
 }

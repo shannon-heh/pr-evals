@@ -43,9 +43,7 @@ export default function SubmitForm() {
     courseid ? `/api/course-page-data?courseids=${courseid}` : null,
     fetcher
   );
-  const courseData: CourseData | null = courseData_
-    ? (courseData_[0] as CourseData)
-    : null;
+  const courseData = courseData_ ? (courseData_[0] as CourseData) : null;
 
   // get form metadata
   const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
@@ -80,6 +78,10 @@ export default function SubmitForm() {
         if (res.status == 200) {
           // redirect to course page when done
           router.push(`/course/${courseid}`);
+        } else {
+          alert(
+            `ERROR in submitting your form response. Unable to proceed with requested action.`
+          );
         }
       });
     },
@@ -109,7 +111,8 @@ export default function SubmitForm() {
     formik.handleSubmit();
   };
 
-  if (formError || courseError) return <Error />;
+  if ((courseData_ && !courseData) || formError || courseError)
+    return <Error text="Failed to load form submission page!" />;
   if (!formData || !courseData_) return <Loading />;
 
   return (

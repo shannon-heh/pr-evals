@@ -43,5 +43,12 @@ export default async function handler(
       return res
         .status(200)
         .json(`updated ${netid}'s response for form ${formid}`);
+    })
+    .catch((err) => {
+      console.log(
+        `error in updating ${netid}'s response for form ${formid}`,
+        err
+      );
+      return res.status(500).end();
     });
 }

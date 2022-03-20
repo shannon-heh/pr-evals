@@ -35,6 +35,13 @@ export default async function handler(
         return res
           .status(200)
           .json(`added course ${courseid} for student ${netid}`);
+      })
+      .catch((err) => {
+        console.log(
+          `error in adding course ${courseid} for student ${netid}`,
+          err
+        );
+        return res.status(500).end();
       });
   } else if (action == "remove") {
     return dbUsers
@@ -48,6 +55,13 @@ export default async function handler(
         return res
           .status(200)
           .json(`removed course ${courseid} for student ${netid}`);
+      })
+      .catch((err) => {
+        console.log(
+          `error in removing course ${courseid} for student ${netid}`,
+          err
+        );
+        return res.status(500).end();
       });
   }
 }

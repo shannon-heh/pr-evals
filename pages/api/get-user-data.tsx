@@ -35,5 +35,9 @@ export default async function handler(
         delete user["instructor_courses"];
       }
       return res.status(200).json(user);
+    })
+    .catch((err) => {
+      console.log(`error in getting data about user ${netid}`, err);
+      return res.status(500).end();
     });
 }

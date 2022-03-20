@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import Tooltip from "@mui/material/Tooltip";
+import Error from "../../components/Error";
 
 // Component to display Course Search on Dashboard
 export default function CourseSearch(props) {
@@ -40,12 +41,11 @@ export default function CourseSearch(props) {
 
   // search for courses
   let { data: courseData, error: courseError } = useSWR(url, fetcher);
-  if (courseError) return <div>Failed to load Dashboard page.</div>;
+  if (courseError) return <Error text="Failed to load Dashboard!" />;
 
   // handler when user clicks add course
   const handleAddCourse = (courseID: string) => {
-    const url = `/api/modify-my-courses?netid=${props.netID}&courseid=${courseID}&action=add`;
-    fetch(url);
+    fetch(`/api/modify-my-courses?courseid=${courseID}&action=add`);
     props.setFlag();
   };
 

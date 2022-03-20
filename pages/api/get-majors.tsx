@@ -14,5 +14,9 @@ export default async function handler(
     .findOne({}, { projection: { _id: 0, majors: 1 } })
     .then((data: AdminData) => {
       return res.status(200).json(data);
+    })
+    .catch((err) => {
+      console.log(`error in getting list of majors`, err);
+      return res.status(500).end();
     });
 }

@@ -37,7 +37,7 @@ export default async function handler(
       return res.status(200).json(`released responses for form ${formid}`);
     })
     .catch((err) => {
-      console.log(`failed to release responses for form ${formid}`, err);
+      console.log(`error in releasing responses for form ${formid}`, err);
       return res.status(500).end();
     });
 }

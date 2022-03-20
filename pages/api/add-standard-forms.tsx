@@ -46,7 +46,7 @@ export default async function handler(
         .json("inserted a standard form into DB for every course");
     })
     .catch((err) => {
-      console.log("error in adding standard forms to DB:", err);
+      console.log("error in inserting standard forms to DB:", err);
       return res.status(500).end();
     });
 }

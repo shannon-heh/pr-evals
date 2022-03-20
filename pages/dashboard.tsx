@@ -20,21 +20,22 @@ export default function Dashboard() {
   }
 
   // get user's courses from DB
-  const url = netID
-    ? `/api/get-user-data?netid=${netID}&flag=${modifyFlag}`
-    : "";
+  const url = netID ? `/api/get-user-data?flag=${modifyFlag}` : "";
   let { data: userData, error: userError } = useSWR(url, fetcher);
 
   // update user's courses
   useEffect(() => {
-    if (userData)
+    if (userData) {
       setMyCourses(
         isInstructor ? userData.instructor_courses : userData.student_courses
       );
+    } else {
+      setMyCourses([]);
+    }
   }, [userData]);
 
-  if (userError) return <Error text={"Error loading dashboard!"} />;
-  if (isLoading || !netID) return <Loading text={"Loading dashboard..."} />;
+  if (userError) return <Error text="Failed to load Dashboard!" />;
+  if (isLoading || !netID) return <Loading text="Loading Dashboard..." />;
 
   return (
     <>

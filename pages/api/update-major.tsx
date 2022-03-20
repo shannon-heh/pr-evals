@@ -25,5 +25,9 @@ export default async function handler(
     .updateOne({ netid: netid }, { $set: { major_code: major } })
     .then(() => {
       res.status(200).json(`updated major ${major} for ${netid}`);
+    })
+    .catch((err) => {
+      console.log(`error in updating major ${major} for ${netid}`, err);
+      return res.status(500).end();
     });
 }

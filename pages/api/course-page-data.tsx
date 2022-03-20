@@ -18,7 +18,7 @@ export default async function handler(
   const res_: CourseData[] = [];
   for (const courseid of courseidsList) {
     const data = await getCourseData(db, courseid);
-    // do not 404 if course data cannot be retrieved
+    // do not error if course data cannot be retrieved
     if (data == null) continue;
     res_.push(data);
   }
@@ -61,7 +61,7 @@ function getCourseData(db, courseId: string): CourseData | null {
       return course;
     })
     .catch((err) => {
-      console.log(err);
+      console.log(`error in getting page data for course ${courseId}`, err);
       return null;
     });
 }

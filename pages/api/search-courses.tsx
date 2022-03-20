@@ -57,5 +57,9 @@ export default async function handler(
         };
       });
       return res.status(200).json(courses);
+    })
+    .catch((err) => {
+      console.log(`error in searching for course with query ${q}`, err);
+      return res.status(500).end();
     });
 }

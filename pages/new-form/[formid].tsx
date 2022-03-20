@@ -68,6 +68,10 @@ export default function NewForm() {
       if (res.status == 200) {
         // redirect to course page when done
         router.push(`/course/${courseid}`);
+      } else {
+        alert(
+          `ERROR in publishing this form. Unable to proceed with requested action.`
+        );
       }
     });
   };
@@ -77,9 +81,7 @@ export default function NewForm() {
     courseid ? `/api/course-page-data?courseids=${courseid}` : null,
     fetcher
   );
-  const courseData: CourseData | null = courseData_
-    ? (courseData_[0] as CourseData)
-    : null;
+  const courseData = courseData_ ? (courseData_[0] as CourseData) : null;
 
   // updates question metadata in DB when instructor adds new question
   const addQuestion = (newQuestion: QuestionMetadata) => {
@@ -92,7 +94,8 @@ export default function NewForm() {
   const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
   const { data: formData, error: formError } = useSWR(url, fetcher);
 
-  if (formError || courseError) return <Error />;
+  if ((courseData_ && !courseData) || formError || courseError)
+    return <Error text="Failed to load form creation page!" />;
   if (!formData || !courseData_) return <Loading />;
 
   return (

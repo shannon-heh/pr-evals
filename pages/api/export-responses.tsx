@@ -84,7 +84,7 @@ export default async function handler(
       return res.status(200).json(csv.toString());
     })
     .catch((err) => {
-      console.log(`failed to export responses for form ${formid}`, err);
+      console.log(`error in exporting responses for form ${formid}`, err);
       return res.status(500).end();
     });
 }
