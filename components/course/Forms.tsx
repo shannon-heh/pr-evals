@@ -172,9 +172,10 @@ export default function Forms(props: {
                 <br />
                 <br />
                 By clicking 'Confirm', you will be making this form's responses
-                available for all members of the Princeton community. You will
-                also be able to export the responses. You will no longer be able
-                to edit this form.
+                available to all members of the Princeton community. Student
+                identities will remain anonymous. You will also be able to
+                export this form's responses, but will no longer be able to edit
+                its questions.
               </ConfirmationDialog>
             </>
           ) : (

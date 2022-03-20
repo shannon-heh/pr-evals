@@ -32,11 +32,12 @@ export default async function handler(
           description: "standard form", // change description
           questions: [], // add questions here
           title: "Standard Form", // change title
-          published: true,
           standardized: true,
+          published: true,
           time_published: new Date(),
+          released: true,
+          time_released: new Date(),
           course_id: course.course_id,
-          released: false,
         };
         return form;
       });
