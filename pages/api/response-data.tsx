@@ -133,7 +133,7 @@ export default async function handler(
     for (let i = 0; i < responses.length; i++) {
       const response: string | number | string[] = responses[i]["response"];
 
-      if (response == "" || response == []) continue;
+      if (response === "" || response === [] || response === -1) continue;
 
       switch (data[i].type) {
         case "SINGLE_SEL":
