@@ -1,5 +1,4 @@
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import CustomHead from "../components/CustomHead";
 import useCAS from "../hooks/useCAS";
 import { useState } from "react";

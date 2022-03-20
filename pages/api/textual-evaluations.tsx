@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { getNetID } from "../../src/Helpers";
 import { EvalsData } from "../../src/Types";
 
 // retrieves textual evaluation data for a course page
@@ -6,6 +7,8 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<EvalsData[]>
 ) {
+  if (!getNetID()) return res.end();
+
   const courseid = req.query.courseid as string;
   const raw = `Solid course, lots of independent learning though. The hardest parts of the course are the written exam, so if you do well on those the rest of the course should be pretty easy. All around great introduction to Java
   I advise students who take this course to attend the extra help sessions and actively watch the lectures. They greatly help in figuring out and completing the weekly assignments and give great insight into material covered on the exams.

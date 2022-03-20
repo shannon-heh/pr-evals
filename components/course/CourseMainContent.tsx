@@ -92,11 +92,10 @@ export default function CourseMainContent(props: {
           <Responses courseID={props.courseID} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {/* TODO: @nicholaspad insert standardized formid here */}
-          <Charts formid="" isStandard={true} />
+          <Charts courseID={props.courseID} isStandard={true} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <Reviews />
+          <Reviews courseID={props.courseID} />
         </TabPanel>
       </Grid>
     </>

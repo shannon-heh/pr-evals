@@ -1,14 +1,27 @@
-import { blue, green, amber, deepOrange, lime } from "@mui/material/colors";
-import { EvalsData } from "../../src/Types";
+import { Box, SxProps, Theme, Tooltip, Typography } from "@mui/material";
+import { EvalsData } from "../../../src/Types";
+import HoverCard from "../HoverCard";
 import Sentiment from "sentiment";
 import removePunctuation from "remove-punctuation";
 import stopwords from "stopwords-iso";
 import sw from "stopword";
-import { Box, Tooltip, Typography } from "@mui/material";
+import { amber, blue, deepOrange, green, lime } from "@mui/material/colors";
+
+export default function Evaluation(props: {
+  evalDoc: EvalsData;
+  sx?: SxProps<Theme>;
+}) {
+  return (
+    <HoverCard sx={{ mt: 2, mb: 4, p: 2.5, ...props.sx }}>
+      <EvaluationBadges evalDoc={props.evalDoc} />
+      <Typography textAlign="left">{props.evalDoc.text}</Typography>
+    </HoverCard>
+  );
+}
 
 const sentiment = new Sentiment();
 
-export default function EvaluationBadges(props: { evalDoc: EvalsData }) {
+function EvaluationBadges(props: { evalDoc: EvalsData }) {
   const difficultyColorMap = {
     4: deepOrange[300],
     3: amber[500],
@@ -48,11 +61,13 @@ export default function EvaluationBadges(props: { evalDoc: EvalsData }) {
 
   return (
     <Box sx={{ mb: 1.5 }}>
-      <Tooltip title="Concentration" placement="top" arrow>
-        <Typography display="inline" sx={badgeStyles}>
-          {props.evalDoc.major}
-        </Typography>
-      </Tooltip>
+      {props.evalDoc.major != "" ? (
+        <Tooltip title="Concentration" placement="top" arrow>
+          <Typography display="inline" sx={badgeStyles}>
+            {props.evalDoc.major}
+          </Typography>
+        </Tooltip>
+      ) : null}
       <Tooltip title="Class" placement="top" arrow>
         <Typography display="inline" sx={badgeStyles}>
           {props.evalDoc.year}

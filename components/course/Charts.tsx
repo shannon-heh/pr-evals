@@ -10,26 +10,37 @@ import SingleChoiceChart from "./charts/SingleChoiceChart";
 import TextChart from "./charts/TextChart";
 import HoverCard from "./HoverCard";
 
-function ChartWrapper(props: { children?: React.ReactNode }) {
-  return (
-    <Grid item container lg={6} direction="column">
-      <Box sx={{ p: 2 }}>{props.children}</Box>
-    </Grid>
-  );
-}
-
 export default function Charts(props: {
-  formid?: string;
+  courseID?: string;
+  formID?: string;
   isStandard: boolean;
 }) {
   const { width } = useWindowDimensions();
   const { data: chartData_, error } = useSWR(
-    `/api/response-data?formid=${props.formid}`,
+    props.courseID
+      ? `/api/response-data?courseid=${props.courseID}`
+      : `/api/response-data?formid=${props.formID}`,
     fetcher
   );
   const chartData = (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
+    if (data.data.length == 0)
+      return (
+        <ChartWrapper>
+          <HoverCard sx={{ mt: 2, p: 2.5 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="medium"
+              color={red[500]}
+            >
+              The question "{data.question}" has been omitted because it has 0
+              responses.
+            </Typography>
+          </HoverCard>
+        </ChartWrapper>
+      );
+
     switch (data.type) {
       case "SINGLE_SEL":
         return (
@@ -75,7 +86,7 @@ export default function Charts(props: {
         );
       case "TEXT":
         return (
-          <ChartWrapper>
+          <ChartWrapper key={i}>
             <TextChart data={data.data} title={data.question} width={width} />
           </ChartWrapper>
         );
@@ -136,8 +147,7 @@ export default function Charts(props: {
           </Typography>
         </HoverCard>
       ) : null}
-      {chartData.length == 0 ||
-      chartData.every((sample) => sample["data"].length == 0) ? (
+      {chartData.length == 0 ? (
         <Typography
           variant="subtitle1"
           fontWeight="medium"
@@ -154,5 +164,13 @@ export default function Charts(props: {
         </Grid>
       )}
     </>
+  );
+}
+
+function ChartWrapper(props: { children?: React.ReactNode }) {
+  return (
+    <Grid item container lg={6} direction="column">
+      <Box sx={{ p: 2 }}>{props.children}</Box>
+    </Grid>
   );
 }
