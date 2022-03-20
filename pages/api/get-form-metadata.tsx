@@ -12,6 +12,8 @@ export default async function handler(
   if (!getNetID()) return res.status(401).end();
 
   const formid = req.query.formid as string;
+  if (!formid) return res.status(404).json("missing query parameters");
+
   const db = await getDB();
 
   return await db

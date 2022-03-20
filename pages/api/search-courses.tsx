@@ -13,6 +13,8 @@ export default async function handler(
   if (!getNetID()) return res.status(401).end();
 
   const q: string = req.query.q as string;
+  if (!q) return res.status(404).json("missing query parameters");
+
   const db = await getDB();
 
   const qMod = q.replace(/\s+/g, ""); // strip whitespaces

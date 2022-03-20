@@ -14,6 +14,8 @@ export default async function handler(
   const db = await getDB();
   const formid = req.query.formid as string;
   const courseid = req.query.courseid as string;
+  if (!courseid || !formid)
+    return res.status(404).json("missing query parameters");
 
   const isValid: boolean = await validateInstructor(db, netid, courseid);
   if (!isValid) {

@@ -13,6 +13,8 @@ export default async function handler(
   if (!netid) return res.status(401).end();
 
   const major = req.query.major as string;
+  if (!major) return res.status(404).json("missing query parameters");
+
   const db = await getDB();
 
   // make sure only students can update major

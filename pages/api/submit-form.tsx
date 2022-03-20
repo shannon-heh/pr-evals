@@ -17,8 +17,11 @@ export default async function handler(
   const netid: string = getNetID();
   if (!netid) return res.status(401).end();
 
+  const { formid, courseid, responses }: Args = req.body;
+  if (!formid || !courseid || !responses)
+    return res.status(404).json("missing query parameters");
+
   const db = await getDB();
-  const { formid, responses, courseid }: Args = req.body;
 
   const isValid: boolean = await validateStudent(db, netid, courseid);
   if (!isValid) {

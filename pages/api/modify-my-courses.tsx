@@ -15,6 +15,11 @@ export default async function handler(
 
   const courseid = req.query.courseid as string;
   const action = req.query.action as string;
+  if (!courseid || !action)
+    return res.status(404).json("missing query parameters");
+  if (action != "add" && action != "remove")
+    return res.status(404).end("invalid action");
+
   const db = await getDB();
 
   // make sure only students can modify courses

@@ -5,7 +5,7 @@ import { getNetID } from "../../src/Helpers";
 
 // API endpoint to get a course's forms given a course ID
 // For students, we also retrieve whether they completed each form
-// Usage: /api/get-course-forms?courseid=COURSEID&netid=NETID
+// Usage: /api/get-course-forms?courseid=COURSEID
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -14,6 +14,8 @@ export default async function handler(
   if (!netid) return res.status(401).end();
 
   const courseid = req.query.courseid as string;
+  if (!courseid) return res.status(404).json("missing query parameters");
+
   const db = await getDB();
 
   // get all published forms for a course

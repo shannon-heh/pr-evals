@@ -18,6 +18,9 @@ export default async function handler(
   if (!netid) return res.status(401).end();
 
   const { courseid, title, description }: Args = req.body;
+  if (!courseid || !title)
+    return res.status(404).json("missing query parameters");
+
   const db = await getDB();
 
   const isValid: boolean = await validateInstructor(db, netid, courseid);
