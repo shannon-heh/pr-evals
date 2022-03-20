@@ -226,7 +226,6 @@ function InstructorActions(props: {
   const handleExport = () => {
     fetch(`/api/export-responses?formid=${form.form_id}&courseid=${courseID}`)
       .then((res) => {
-        return res.status == 200 ? res.text() : null;
         if (res.status == 200) {
           return res.text();
         } else {
