@@ -4,7 +4,7 @@ import sessionstorage from "sessionstorage";
 import { getDB } from "../../src/mongodb";
 import { ReqLib } from "../../src/reqLib";
 
-const BASE_URL = "https://api.princeton.edu:443/active-directory/1.0.4";
+const BASE_URL = "https://api.princeton.edu:443/active-directory/1.0.5";
 const USERS = "/users";
 
 type Data = {
