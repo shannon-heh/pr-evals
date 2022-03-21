@@ -45,7 +45,7 @@ export default function SubmitForm() {
     formid ? `/api/get-form-response?formid=${formid}` : null,
     fetcher
   );
-  const formSubmitted = responseData != null;
+  const formSubmitted = responseData == {};
 
   // get course data to display
   const courseid: string = formid ? formid.split("-")[0].slice(4) : "";

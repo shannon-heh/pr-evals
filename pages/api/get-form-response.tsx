@@ -21,6 +21,7 @@ export default async function handler(
     .collection("responses")
     .findOne({ form_id: formid, netid: netid }, { projection: { _id: 0 } })
     .then((data: FormResponseData) => {
+      if (data == null) return res.status(200).json({});
       return res.status(200).json(data);
     })
     .catch((err) => {
