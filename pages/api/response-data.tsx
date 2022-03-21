@@ -36,13 +36,17 @@ export default async function handler(
 
   // if courseid is provided, we assume that the client wants the course's standardized form, so
   // set formid to the course's standardized formid
-  // TODO @nicholaspad
+  const dbForms = (await getDB()).collection("forms") as Collection;
+
   if (courseid) {
-    formid = "x";
-    return res.end(); // remove later
+    let _: Object = await dbForms.findOne({
+      course_id: courseid,
+      form_id: /-std$/,
+    });
+    if (!_) return res.end();
+    formid = _["form_id"];
   }
 
-  const dbForms = (await getDB()).collection("forms") as Collection;
   const dbResponses = (await getDB()).collection("responses") as Collection;
   const dbUsers = (await getDB()).collection("users") as Collection;
 
@@ -163,14 +167,37 @@ export default async function handler(
             let userData = await dbUsers.findOne({
               netid: allResponses[_]["netid"],
             });
-            userDataCache[netID] = userData;
+
+            const difficultyQuestionIdx = 2;
+            let userStdFormData: Object[] = await dbResponses
+              .find({
+                form_id: formid.split("-")[0] + "-std",
+                netid: netID,
+              })
+              .toArray();
+
+            userDataCache[netID] = {
+              data: userData,
+              difficulty:
+                userStdFormData.length > 0
+                  ? userStdFormData[0]["responses"][difficultyQuestionIdx][
+                      "response"
+                    ]
+                  : 0,
+            };
+
+            if (
+              userDataCache[netID].difficulty < 1 ||
+              userDataCache[netID].difficulty > 5
+            )
+              userDataCache[netID].difficulty = 0;
           }
 
           data[i].data.push({
             text: response as string,
-            major: userDataCache[netID]["major_code"],
-            year: gradeMap[userDataCache[netID]["class_year"]],
-            difficulty: 2, // TODO: @nicholaspad extract from standardized form
+            major: userDataCache[netID]["data"]["major_code"],
+            year: gradeMap[userDataCache[netID]["data"]["class_year"]],
+            difficulty: userDataCache[netID].difficulty,
           });
           break;
       }

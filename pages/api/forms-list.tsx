@@ -16,6 +16,7 @@ export default async function handler(
     .find({
       course_id: courseid,
       published: true,
+      form_id: /-\d*$/,
     })
     .project({ title: 1, form_id: 1, _id: 0 })
     .toArray();

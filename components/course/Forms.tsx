@@ -322,7 +322,11 @@ function InstructorForms(props: {
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
         <Card variant="outlined">
-          <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+          <CardContent sx={{
+              backgroundColor: form.standardized ? blue[100] : grey[200],
+              padding: 0,
+            }}
+          >
             <InstructorActions
               handleSetExportForm={props.handleSetExportForm}
               handleOpenExport={props.handleOpenExport}
@@ -405,7 +409,12 @@ function StudentForms(props: { forms: CourseFormData[] }) {
               },
             }}
           >
-            <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+            <CardContent
+              sx={{
+                backgroundColor: form.standardized ? blue[100] : grey[200],
+                padding: 0,
+              }}
+            >
               <Typography
                 color="text.secondary"
                 sx={{

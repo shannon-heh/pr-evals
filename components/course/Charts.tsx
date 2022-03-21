@@ -85,6 +85,7 @@ export default function Charts(props: {
           </ChartWrapper>
         );
       case "TEXT":
+        if (props.isStandard) return null;
         return (
           <ChartWrapper key={i}>
             <TextChart data={data.data} title={data.question} width={width} />
