@@ -22,6 +22,7 @@ import useCAS from "../../hooks/useCAS";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SvgIcon from "@mui/icons-material/CheckCircle";
 import Container from "@mui/material/Container";
+import BlockAction from "../../components/BlockAction";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
@@ -115,28 +116,13 @@ export default function SubmitForm() {
     return <Error text="Failed to load form submission page!" />;
   if (!formData || !courseData_ || !responseData) return <Loading />;
 
+  // student can only submit 1 form response
   if (formSubmitted) {
     return (
-      <>
-        <CustomHead pageTitle="Submit Form" />
-        <Container maxWidth={false}>
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            style={{ minHeight: "100vh" }}
-          >
-            <Grid item xs={3} sx={{ textAlign: "center" }}>
-              <SvgIcon color="success" fontSize="large">
-                <CheckCircleIcon />
-              </SvgIcon>
-              <h2>You have already submitted this form.</h2>
-            </Grid>
-          </Grid>
-        </Container>
-      </>
+      <BlockAction
+        pageTitle="Submit Form"
+        text="You have already submitted this form. You can only submit one response per form."
+      />
     );
   }
 
