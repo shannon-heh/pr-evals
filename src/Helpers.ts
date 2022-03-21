@@ -51,6 +51,11 @@ export async function isStudent(db, netid: string) {
   return person_type !== "instructor"
 }
 
+// converts date object to MM/DD/YYYY
+export function dateToString(date: Date) {
+  return `${date.getMonth() + 1}/${date.getDate()}/${String(date.getFullYear()).substring(2)}`;
+}
+
 
 // Functions used for preparing data in charts on course pages
 export const prepText = (evalText: string): string[] => {

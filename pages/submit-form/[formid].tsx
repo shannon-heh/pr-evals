@@ -43,9 +43,7 @@ export default function SubmitForm() {
     courseid ? `/api/course-page-data?courseids=${courseid}` : null,
     fetcher
   );
-  const courseData: CourseData | null = courseData_
-    ? (courseData_[0] as CourseData)
-    : null;
+  const courseData = courseData_ ? (courseData_[0] as CourseData) : null;
 
   // get form metadata
   const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
@@ -80,26 +78,20 @@ export default function SubmitForm() {
         if (res.status == 200) {
           // redirect to course page when done
           router.push(`/course/${courseid}`);
+        } else {
+          alert(
+            `ERROR in submitting your form response. Unable to proceed with requested action.`
+          );
         }
       });
     },
   });
 
-  // set default field values
+  // set default field values to null
   useEffect(() => {
     questions?.forEach((q: QuestionMetadata) => {
       const id = String(q.q_id);
-      if (q.type == Question.ShortText || q.type == Question.LongText) {
-        formik.setFieldValue(id, "");
-      } else if (q.type == Question.MultiSelect) {
-        formik.setFieldValue(id, []);
-      } else if (q.type == Question.SingleSelect) {
-        formik.setFieldValue(id, null);
-      } else if (q.type == Question.Rating) {
-        formik.setFieldValue(id, 0);
-      } else if (q.type == Question.Slider) {
-        formik.setFieldValue(id, q.min);
-      }
+      formik.setFieldValue(id, null);
     });
   }, [questions]);
 
@@ -109,7 +101,8 @@ export default function SubmitForm() {
     formik.handleSubmit();
   };
 
-  if (formError || courseError) return <Error />;
+  if ((courseData_ && !courseData) || formError || courseError)
+    return <Error text="Failed to load form submission page!" />;
   if (!formData || !courseData_) return <Loading />;
 
   return (
@@ -157,11 +150,12 @@ export default function SubmitForm() {
             </Button>
             <ConfirmationDialog
               title={"Are you ready to submit your form?"}
-              description={"Click Cancel to continue editing your response."}
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
               handleSubmit={handleSubmit}
-            />
+            >
+              Click Cancel to continue editing your response.
+            </ConfirmationDialog>
           </Grid>
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {

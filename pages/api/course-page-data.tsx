@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { ClassData, CourseData } from "../../src/Types";
+import { getNetID } from "../../src/Helpers";
 
 // API endpoint to retrieve course-related data
 // Usage: /api/course-page-data/courseids=COURSEID1,COURSEID2,COURSEID3
@@ -8,6 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<CourseData[]>
 ) {
+  if (!getNetID()) return res.status(401).end();
   const db = await getDB();
 
   // courseIDs passed in as comma-separated string
@@ -18,7 +20,7 @@ export default async function handler(
   const res_: CourseData[] = [];
   for (const courseid of courseidsList) {
     const data = await getCourseData(db, courseid);
-    // do not 404 if course data cannot be retrieved
+    // do not error if course data cannot be retrieved
     if (data == null) continue;
     res_.push(data);
   }
@@ -61,7 +63,7 @@ function getCourseData(db, courseId: string): CourseData | null {
       return course;
     })
     .catch((err) => {
-      console.log(err);
+      console.log(`error in getting page data for course ${courseId}`, err);
       return null;
     });
 }

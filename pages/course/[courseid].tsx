@@ -21,14 +21,14 @@ export default function Course() {
   );
   const courseData = data ? (data[0] as CourseData) : null;
 
-  if (error) return <Error text={"Error fetching course!"} />;
-  if (isLoading || !data || !netID)
-    return <Loading text={"Loading course..."} />;
+  if ((data && !courseData) || error)
+    return <Error text="Error in fetching course!" />;
+  if (isLoading || !data || !netID) return <Loading text="Loading course..." />;
 
   return (
     <>
       <CustomHead
-        pageTitle={`${courseData?.catalog_title}: ${courseData?.course_title}`}
+        pageTitle={`${courseData.catalog_title}: ${courseData.course_title}`}
       />
       <Container maxWidth="lg">
         <Grid container spacing={1} sx={{ textAlign: "center" }}>

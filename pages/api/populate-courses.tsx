@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ReqLib } from "../../src/reqLib";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 const BASE_URL = "https://api.princeton.edu:443/student-app/1.0.0";
 const COURSE_COURSES = "/courses/courses";
@@ -15,8 +15,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid = sessionstorage.getItem("netid");
-  if (netid != "sheh" && netid != "ntyp") return res.status(401).end();
+  const netid = getNetID();
+  if (!netid || (netid != "sheh" && netid != "ntyp"))
+    return res.status(401).end();
 
   const reqLib = new ReqLib();
 

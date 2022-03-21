@@ -23,7 +23,7 @@ export default function AddMultiSelect(props: {
     option: yup
       .string()
       .trim()
-      .min(1, "Enter a non-whitespace character")
+      .required("Must enter a non-whitespace character")
       .max(500, "Max 500 characters"),
   });
 

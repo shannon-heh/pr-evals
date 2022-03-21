@@ -1,17 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { FormMetadata, CourseFormData } from "../../src/Types";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 // API endpoint to get a course's forms given a course ID
 // For students, we also retrieve whether they completed each form
-// Usage: /api/get-course-forms?courseid=COURSEID&netid=NETID
+// Usage: /api/get-course-forms?courseid=COURSEID
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const courseid = req.query.courseid as string;
+  if (!courseid) return res.status(404).json("missing query parameters");
+
   const db = await getDB();
 
   // get all published forms for a course
@@ -26,6 +30,8 @@ export default async function handler(
           form_id: 1,
           time_published: 1,
           standardized: 1,
+          released: 1,
+          time_released: 1,
         },
       }
     )
@@ -65,6 +71,14 @@ export default async function handler(
       );
     })
     .then((forms: CourseFormData[]) => {
+      forms.reverse(); // display forms in reverse chron order
       return res.status(200).json(forms);
+    })
+    .catch((err) => {
+      console.log(
+        `error in retrieving course forms for course ${courseid}`,
+        err
+      );
+      return res.status(500).end();
     });
 }
