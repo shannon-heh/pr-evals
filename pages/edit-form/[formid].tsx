@@ -1,13 +1,13 @@
-import { fetcher } from "../../src/Helpers";
+import { fetcher, isStudent } from "../../src/Helpers";
 import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InstructorForm from "../../components/forms/InstructorForm";
 import BlockAction from "../../components/BlockAction";
 import Link from "next/link";
 
-// Page for instructor to create a new form
-export default function NewForm() {
+// Page for instructor to edit a form
+export default function EditForm() {
   // stores list of questions & their metadata
   const [questions, setQuestions] = useState([]);
   // keep track of question ID
@@ -19,19 +19,25 @@ export default function NewForm() {
   const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
   const { data: formData, error: formError } = useSWR(url, fetcher);
 
+  // set state to existing questions
+  useEffect(() => {
+    setQuestions(formData?.questions ?? []);
+    setQid(formData?.questions.length ?? 0);
+  }, [formData]);
+
   if (formData?.released) {
     return (
-      <BlockAction pageTitle="Publish Form">
+      <BlockAction pageTitle="Edit Form">
         You have already released this form. You can no longer edit its
         questions.
       </BlockAction>
     );
-  } else if (formData?.published) {
-    const editForm = `/edit-form/${formid}`;
+  } else if (!formData?.published) {
+    const newForm = `/new-form/${formid}`;
     return (
-      <BlockAction pageTitle="Publish Form">
-        You have already published this form. You can edit your form{" "}
-        <Link href={editForm}>here</Link>.
+      <BlockAction pageTitle="Edit Form" error={true}>
+        You must publish this form first to enter Edit mode. You can publish
+        your form <Link href={newForm}>here</Link>.
       </BlockAction>
     );
   }
@@ -46,7 +52,7 @@ export default function NewForm() {
       setQid={setQid}
       formData={formData}
       formError={formError}
-      editMode={false}
+      editMode={true}
     />
   );
 }
