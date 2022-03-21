@@ -19,6 +19,9 @@ import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import SvgIcon from "@mui/icons-material/CheckCircle";
+import Container from "@mui/material/Container";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
@@ -36,6 +39,13 @@ export default function SubmitForm() {
   const { netID } = useCAS();
   const router: NextRouter = useRouter();
   const formid: string = router.query.formid as string;
+
+  // get response data to display
+  const { data: responseData, error: responseError } = useSWR(
+    formid ? `/api/get-form-response?formid=${formid}` : null,
+    fetcher
+  );
+  const formSubmitted = responseData != null;
 
   // get course data to display
   const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
@@ -101,13 +111,38 @@ export default function SubmitForm() {
     formik.handleSubmit();
   };
 
-  if ((courseData_ && !courseData) || formError || courseError)
+  if ((courseData_ && !courseData) || formError || courseError || responseError)
     return <Error text="Failed to load form submission page!" />;
-  if (!formData || !courseData_) return <Loading />;
+  if (!formData || !courseData_ || !responseData) return <Loading />;
+
+  if (formSubmitted) {
+    return (
+      <>
+        <CustomHead pageTitle="Submit Form" />
+        <Container maxWidth={false}>
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            style={{ minHeight: "100vh" }}
+          >
+            <Grid item xs={3} sx={{ textAlign: "center" }}>
+              <SvgIcon color="success" fontSize="large">
+                <CheckCircleIcon />
+              </SvgIcon>
+              <h2>You have already submitted this form.</h2>
+            </Grid>
+          </Grid>
+        </Container>
+      </>
+    );
+  }
 
   return (
     <>
-      <CustomHead pageTitle="Create Form" />
+      <CustomHead pageTitle="Submit Form" />
       <Grid
         container
         flexDirection="row"

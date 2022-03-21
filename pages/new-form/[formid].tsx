@@ -100,7 +100,7 @@ export default function NewForm() {
 
   return (
     <>
-      <CustomHead pageTitle="Create Form" />
+      <CustomHead pageTitle="Publish Form" />
       <Grid
         container
         flexDirection="row"
