@@ -87,21 +87,11 @@ export default function SubmitForm() {
     },
   });
 
-  // set default field values
+  // set default field values to null
   useEffect(() => {
     questions?.forEach((q: QuestionMetadata) => {
       const id = String(q.q_id);
-      if (q.type == Question.ShortText || q.type == Question.LongText) {
-        formik.setFieldValue(id, "");
-      } else if (q.type == Question.MultiSelect) {
-        formik.setFieldValue(id, []);
-      } else if (q.type == Question.SingleSelect) {
-        formik.setFieldValue(id, "");
-      } else if (q.type == Question.Rating) {
-        formik.setFieldValue(id, -1);
-      } else if (q.type == Question.Slider) {
-        formik.setFieldValue(id, -1);
-      }
+      formik.setFieldValue(id, null);
     });
   }, [questions]);
 

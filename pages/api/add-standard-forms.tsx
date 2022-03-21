@@ -35,8 +35,7 @@ export default async function handler(
           standardized: true,
           published: true,
           time_published: new Date(),
-          released: true,
-          time_released: new Date(),
+          released: false,
           course_id: course.course_id,
         };
         return form;
