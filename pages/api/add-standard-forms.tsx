@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { FormMetadata, Question, QuestionMetadata } from "../../src/Types";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 // APi endpoint to add a standard form for each course in DB
 // Only call-able by sheh or ntyp
@@ -10,9 +10,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const netid: string = getNetID();
+  if (!netid || (netid != "sheh" && netid != "ntyp"))
+    return res.status(401).end();
+
   const db = await getDB();
-  const netid = sessionstorage.getItem("netid");
-  if (netid != "sheh" && netid != "ntyp") return res.status(401).end();
 
   const likertScales: Object[][] = [
     [
@@ -175,9 +177,10 @@ export default async function handler(
             .concat(breadthQuestions)
             .concat(overallQuestion),
           title: "Standardized Evaluations Form",
-          published: true,
           standardized: true,
+          published: true,
           time_published: new Date(),
+          released: false,
           course_id: course.course_id,
         };
         return form;
@@ -190,7 +193,7 @@ export default async function handler(
         .json("inserted a standard form into DB for every course");
     })
     .catch((err) => {
-      console.log("error in adding standard forms to DB:", err);
+      console.log("error in inserting standard forms to DB:", err);
       return res.status(500).end();
     });
 }

@@ -1,16 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { validateInstructor, getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import { QuestionMetadata } from "../../src/Types";
 
-type Args = {
-  formid: string;
-  questions: QuestionMetadata[];
-  courseid: string;
-};
-
-// API endpoint for instructors to finish creating new form
-// Usage: call using POST request
+// API endpoint for instructors to release responses for form
+// Usage: /api/release-form?formid=FORMID&courseid=COURSEID
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -19,8 +12,9 @@ export default async function handler(
   if (!netid) return res.status(401).end();
 
   const db = await getDB();
-  const { formid, questions, courseid }: Args = req.body;
-  if (!formid || !questions || !courseid)
+  const formid = req.query.formid as string;
+  const courseid = req.query.courseid as string;
+  if (!courseid || !formid)
     return res.status(404).json("missing query parameters");
 
   const isValid: boolean = await validateInstructor(db, netid, courseid);
@@ -36,18 +30,17 @@ export default async function handler(
       { form_id: formid },
       {
         $set: {
-          published: true,
-          time_published: new Date(),
-          questions: questions,
+          released: true,
+          time_released: new Date(),
         },
       },
       { upsert: true }
     )
     .then(() => {
-      return res.status(200).json(`updated questions for form ${formid}`);
+      return res.status(200).json(`released responses for form ${formid}`);
     })
     .catch((err) => {
-      console.log(`error in creating form for ${courseid}`, err);
+      console.log(`error in releasing responses for form ${formid}`, err);
       return res.status(500).end();
     });
 }

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateStudent } from "../../src/Helpers";
+import { validateStudent, getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
 
 type Args = {
   formid: string;
@@ -15,9 +14,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
+  const { formid, courseid, responses }: Args = req.body;
+  if (!formid || !courseid || !responses)
+    return res.status(404).json("missing query parameters");
+
   const db = await getDB();
-  const netid: string = sessionstorage.getItem("netid");
-  const { formid, responses, courseid }: Args = req.body;
 
   const isValid: boolean = await validateStudent(db, netid, courseid);
   if (!isValid) {
@@ -43,5 +47,12 @@ export default async function handler(
       return res
         .status(200)
         .json(`updated ${netid}'s response for form ${formid}`);
+    })
+    .catch((err) => {
+      console.log(
+        `error in updating ${netid}'s response for form ${formid}`,
+        err
+      );
+      return res.status(500).end();
     });
 }

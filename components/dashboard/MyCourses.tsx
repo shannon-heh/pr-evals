@@ -30,12 +30,12 @@ export default function MyCourses(props) {
       : null;
   let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
 
-  if (courseError || formsError) return <div>Failed to load My Courses.</div>;
+  if (courseError || formsError)
+    return <Typography>Failed to retrieve your courses!</Typography>;
 
   // handler when user clicks remove course
   const handleRemoveCourse = (courseID: string) => {
-    const url: string = `/api/modify-my-courses?netid=${props.netID}&courseid=${courseID}&action=remove`;
-    fetch(url);
+    fetch(`/api/modify-my-courses?courseid=${courseID}&action=remove`);
     props.setFlag();
   };
 

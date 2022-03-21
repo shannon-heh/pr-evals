@@ -11,6 +11,8 @@ import useCAS from "../hooks/useCAS";
 import CustomHead from "../components/CustomHead";
 import { StudentDataDB } from "../src/Types";
 import { fetcher } from "../src/Helpers";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
 
 // capitalize first letter of string
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -20,15 +22,13 @@ export default function Profile() {
 
   // get user's profile data
   const url: string = netID ? `/api/get-user-data?netid=${netID}` : "";
-  let { data: userData, error: userError } = useSWR(url, fetcher);
-  if (userError) return <div>Failed to load profile page.</div>;
+  const { data: userData, error: userError } = useSWR(url, fetcher);
 
   // construct list of departments for major selection
   const { data: deptData, error: deptError } = useSWR(
     "/api/get-majors",
     fetcher
   );
-  if (deptError) return <div>Failed to load profile page.</div>;
   const deptItems = deptData?.majors.map((dept: string) => {
     return (
       <MenuItem key={dept} value={dept}>
@@ -44,13 +44,20 @@ export default function Profile() {
     enableReinitialize: true,
     onSubmit: (values) => {
       // save selected major when button is clicked
-      const url = `/api/update-major?netid=${netID}&major=${values.major}`;
-      fetch(url);
-      alert(`Updated concentration to ${values.major}!`);
+      fetch(`/api/update-major?major=${values.major}`).then((res) => {
+        if (res.status == 200) {
+          alert(`Updated concentration to ${values.major}!`);
+        } else {
+          alert(
+            `ERROR in updating concentration to ${values.major}. Unable to proceed with requested action.`
+          );
+        }
+      });
     },
   });
 
-  if (!userData || !deptData) return <h1>Loading...</h1>;
+  if (userError || deptError) return <Error text="Failed to load Profile!" />;
+  if (!userData || !deptData) return <Loading text="Loading Profile..." />;
 
   const user = userData as StudentDataDB;
   return (

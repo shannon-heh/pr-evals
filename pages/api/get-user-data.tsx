@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { UserDataDB } from "../../src/Types";
-import sessionstorage from "sessionstorage";
+import { getNetID } from "../../src/Helpers";
 
 // API endpoint to return data about an instructor or student
 // (given their netid)
@@ -10,7 +10,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const dbUsers = (await getDB()).collection("users");
   return dbUsers
     .findOne(
@@ -35,5 +37,9 @@ export default async function handler(
         delete user["instructor_courses"];
       }
       return res.status(200).json(user);
+    })
+    .catch((err) => {
+      console.log(`error in getting data about user ${netid}`, err);
+      return res.status(500).end();
     });
 }

@@ -68,6 +68,10 @@ export default function NewFormActions(props: { courseid: string }) {
 
           // route to new form page
           router.push(`/new-form/${formid}`);
+        } else {
+          alert(
+            `ERROR in starting a new form. Unable to proceed with requested action.`
+          );
         }
       });
     },

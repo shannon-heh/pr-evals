@@ -14,7 +14,7 @@ export default function Logout() {
       router.reload();
     });
   }
-  if (error) return <Error text={"Error fetching course!"} />;
+  if (error) return <Error text="Error in logging out!" />;
 
   return <Loading text={"Logging out..."} />;
 }

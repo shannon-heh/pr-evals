@@ -23,10 +23,14 @@ export default function MultiSelectInput(
                     // must manually set checkbox field value
                     if (e.target.checked) {
                       // add checked option
-                      formik.setFieldValue(
-                        name,
-                        formik.values[name].concat([option])
-                      );
+                      if (!formik.values[name]) {
+                        formik.setFieldValue(name, [option]);
+                      } else {
+                        formik.setFieldValue(
+                          name,
+                          formik.values[name].concat([option])
+                        );
+                      }
                     } else {
                       // remove unchecked option
                       formik.setFieldValue(

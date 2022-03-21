@@ -8,8 +8,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function ConfirmationDialog(props: {
   title: string;
-  description: string;
   isOpen: boolean;
+  children?: React.ReactNode;
   closeDialog;
   handleSubmit;
 }) {
@@ -23,7 +23,7 @@ export default function ConfirmationDialog(props: {
         <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {props.description}
+            {props.children}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

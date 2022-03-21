@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import sessionstorage from "sessionstorage";
-import { isStudent } from "../../src/Helpers";
+import { isStudent, getNetID } from "../../src/Helpers";
 
 // API endpoint to add or remove course for a student
 // (given their netid)
@@ -11,9 +10,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const netid: string = sessionstorage.getItem("netid");
+  const netid: string = getNetID();
+  if (!netid) return res.status(401).end();
+
   const courseid = req.query.courseid as string;
   const action = req.query.action as string;
+  if (!courseid || !action)
+    return res.status(404).json("missing query parameters");
+  if (action != "add" && action != "remove")
+    return res.status(404).end("invalid action");
+
   const db = await getDB();
 
   // make sure only students can modify courses
@@ -35,6 +41,13 @@ export default async function handler(
         return res
           .status(200)
           .json(`added course ${courseid} for student ${netid}`);
+      })
+      .catch((err) => {
+        console.log(
+          `error in adding course ${courseid} for student ${netid}`,
+          err
+        );
+        return res.status(500).end();
       });
   } else if (action == "remove") {
     return dbUsers
@@ -48,6 +61,13 @@ export default async function handler(
         return res
           .status(200)
           .json(`removed course ${courseid} for student ${netid}`);
+      })
+      .catch((err) => {
+        console.log(
+          `error in removing course ${courseid} for student ${netid}`,
+          err
+        );
+        return res.status(500).end();
       });
   }
 }
