@@ -19,6 +19,7 @@ import SliderInput from "../../components/forms/question-types/SliderInput";
 import RatingInput from "../../components/forms/question-types/RatingInput";
 import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
+import useCAS from "../../hooks/useCAS";
 
 // Page for instructor to edit a form
 export default function EditForm() {
@@ -59,6 +60,7 @@ export default function EditForm() {
   const router: NextRouter = useRouter();
   const formid: string = router.query.formid as string;
   const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
+  const { isInstructor } = useCAS();
 
   // updates form metadata in DB
   const handleSubmit = () => {
@@ -128,6 +130,7 @@ export default function EditForm() {
   }, [formData]);
 
   // handle error & loading
+  if (!isInstructor) return <Error text="Students cannot access this page." />;
   if ((courseData_ && !courseData) || formError || courseError)
     return <Error text="Failed to load form editing page!" />;
   if (!formData || !courseData_) return <Loading />;

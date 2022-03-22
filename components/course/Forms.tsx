@@ -274,14 +274,25 @@ function InstructorActions(props: {
       {form.released ? (
         <Tooltip title="Export Responses" arrow>
           <span>
-            <IconButton disabled={!form.released} onClick={handleExport}>
+            <IconButton
+              disabled={!form.released}
+              onClick={(e) => {
+                e.preventDefault();
+                handleExport();
+              }}
+            >
               <VisibilityIcon fontSize="large" />
             </IconButton>
           </span>
         </Tooltip>
       ) : form.published ? (
         <Tooltip title="Release Responses" arrow>
-          <IconButton onClick={handleRelease}>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              handleRelease();
+            }}
+          >
             <PublishIcon fontSize="large" />
           </IconButton>
         </Tooltip>
@@ -332,61 +343,76 @@ function InstructorForms(props: {
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
-        <Card variant="outlined">
-          <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
-            <InstructorActions
-              handleSetExportForm={props.handleSetExportForm}
-              handleOpenExport={props.handleOpenExport}
-              handleSetReleaseForm={props.handleSetReleaseForm}
-              handleOpenRelease={props.handleOpenRelease}
-              form={form}
-              courseID={props.courseID}
-            />
-            <Typography
-              variant="h4"
-              component="div"
-              sx={{
-                padding: 1.5,
-                lineHeight: "1.25em",
-                maxHeight: "3.5em",
-                overflowY: "hidden",
-                overflowX: "hidden",
-                textOverflow: "ellipsis",
-                marginBottom: 1,
-              }}
-            >
-              {form.title}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-            >
-              {responseStats}
-            </Typography>
-            {form.released ? (
+        <Link
+          href={`/submit-form/${form.form_id}`}
+          underline="none"
+          target="_blank"
+        >
+          <Card
+            variant="outlined"
+            sx={{
+              transition: "transform .25s",
+              "&:hover": {
+                transform: "scale3d(1.05, 1.05, 1)",
+                cursor: "pointer",
+              },
+            }}
+          >
+            <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+              <InstructorActions
+                handleSetExportForm={props.handleSetExportForm}
+                handleOpenExport={props.handleOpenExport}
+                handleSetReleaseForm={props.handleSetReleaseForm}
+                handleOpenRelease={props.handleOpenRelease}
+                form={form}
+                courseID={props.courseID}
+              />
+              <Typography
+                variant="h4"
+                component="div"
+                sx={{
+                  padding: 1.5,
+                  lineHeight: "1.25em",
+                  maxHeight: "3.5em",
+                  overflowY: "hidden",
+                  overflowX: "hidden",
+                  textOverflow: "ellipsis",
+                  marginBottom: 1,
+                }}
+              >
+                {form.title}
+              </Typography>
               <Typography
                 color="text.secondary"
                 sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
               >
-                {releasedDate}
+                {responseStats}
               </Typography>
-            ) : form.published ? (
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
-                {publishedDate}
-              </Typography>
-            ) : (
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
-                {createdDate}
-              </Typography>
-            )}
-          </CardContent>
-        </Card>
+              {form.released ? (
+                <Typography
+                  color="text.secondary"
+                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+                >
+                  {releasedDate}
+                </Typography>
+              ) : form.published ? (
+                <Typography
+                  color="text.secondary"
+                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+                >
+                  {publishedDate}
+                </Typography>
+              ) : (
+                <Typography
+                  color="text.secondary"
+                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+                >
+                  {createdDate}
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Link>
       </Grid>
     );
   });

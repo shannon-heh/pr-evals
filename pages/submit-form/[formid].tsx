@@ -19,9 +19,6 @@ import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import SvgIcon from "@mui/icons-material/CheckCircle";
-import Container from "@mui/material/Container";
 import BlockAction from "../../components/BlockAction";
 
 // Page for student to submit a form response
@@ -40,6 +37,7 @@ export default function SubmitForm() {
   const { netID } = useCAS();
   const router: NextRouter = useRouter();
   const formid: string = router.query.formid as string;
+  const { isInstructor } = useCAS();
 
   // get response data to display
   const { data: responseData, error: responseError } = useSWR(
@@ -116,14 +114,13 @@ export default function SubmitForm() {
     return <Error text="Failed to load form submission page!" />;
   if (!formData || !courseData_ || !responseData) return <Loading />;
 
-  console.log(responseData);
-
   if (formData.released) {
     // student cannot submit form once released
     return (
       <BlockAction pageTitle="Submit Form">
-        This form has already been released. It is no longer accepting
-        responses.
+        {isInstructor
+          ? "This form has already been released. Return to the Course page to see the responses."
+          : "This form has already been released. It is no longer accepting responses. Return to the Course page to see the responses."}
       </BlockAction>
     );
   } else if (responseData?.time_submitted) {
@@ -164,30 +161,32 @@ export default function SubmitForm() {
             <Typography variant="h2">{formData.title}</Typography>
             <Typography>{formData.description}</Typography>
           </Grid>
-          <Grid
-            item
-            container
-            flexDirection="row"
-            sx={{ py: 2 }}
-            justifyContent="center"
-          >
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={openConfirmDialog}
-              sx={{ px: 4, width: "100%" }}
+          {!isInstructor ? (
+            <Grid
+              item
+              container
+              flexDirection="row"
+              sx={{ py: 2 }}
+              justifyContent="center"
             >
-              Submit Form
-            </Button>
-            <ConfirmationDialog
-              title={"Are you ready to submit your form?"}
-              isOpen={openConfirm}
-              closeDialog={closeConfirmDialog}
-              handleSubmit={handleSubmit}
-            >
-              Click Cancel to continue editing your response.
-            </ConfirmationDialog>
-          </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={openConfirmDialog}
+                sx={{ px: 4, width: "100%" }}
+              >
+                Submit Form
+              </Button>
+              <ConfirmationDialog
+                title={"Are you ready to submit your form?"}
+                isOpen={openConfirm}
+                closeDialog={closeConfirmDialog}
+                handleSubmit={handleSubmit}
+              >
+                Click Cancel to continue editing your response.
+              </ConfirmationDialog>
+            </Grid>
+          ) : null}
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
