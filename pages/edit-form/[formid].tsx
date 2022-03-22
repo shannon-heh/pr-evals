@@ -91,18 +91,28 @@ export default function EditForm() {
   // sets form as published
   const handlePublish = () => {
     closePublishDialog();
-    fetch(`/api/publish-form?formid=${formid}&courseid=${courseid}`).then(
-      (res: Response) => {
-        if (res.status == 200) {
-          // redirect to course page when done
-          router.push(`/course/${courseid}`);
-        } else {
-          alert(
-            `ERROR in publishing this form. Unable to proceed with requested action.`
-          );
-        }
+    fetch("/api/edit-form", {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        formid: formid,
+        questions: questions,
+        courseid: courseid,
+        publish: true,
+      }),
+    }).then((res: Response) => {
+      if (res.status == 200) {
+        // redirect to course page when done
+        router.push(`/course/${courseid}`);
+      } else {
+        alert(
+          `ERROR in publishing this form. Unable to proceed with requested action.`
+        );
       }
-    );
+    });
   };
 
   // get existing form metadata

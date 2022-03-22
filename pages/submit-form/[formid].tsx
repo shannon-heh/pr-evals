@@ -130,6 +130,13 @@ export default function SubmitForm() {
         per form.
       </BlockAction>
     );
+  } else if (!formData.published) {
+    // student cannot access un-published form
+    return (
+      <BlockAction error={true} pageTitle="Submit Form">
+        This form has not been published by your instructor yet.
+      </BlockAction>
+    );
   }
 
   return (
