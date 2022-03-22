@@ -6,9 +6,9 @@ import Grid from "@mui/material/Grid";
 import ErrorIcon from "@mui/icons-material/Error";
 import SvgIconError from "@mui/icons-material/Error";
 
-// A friendlier way to block certain actions
+// A friendlier way to block certain user actions
 export default function BlockAction(props: {
-  pageTitle?: string;
+  pageTitle: string;
   children: React.ReactNode;
 }) {
   return (

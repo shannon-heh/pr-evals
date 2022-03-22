@@ -106,8 +106,10 @@ export default function EditForm() {
   };
 
   // get existing form metadata
-  const url: string = formid ? `/api/get-form-metadata?formid=${formid}` : null;
-  const { data: formData, error: formError } = useSWR(url, fetcher);
+  const { data: formData, error: formError } = useSWR(
+    formid ? `/api/get-form-metadata?formid=${formid}` : null,
+    fetcher
+  );
 
   // get course data to display
   const { data: courseData_, error: courseError } = useSWR(
@@ -123,7 +125,7 @@ export default function EditForm() {
     setQuestions([...questions, newQuestion]);
   };
 
-  // set state to existing questions
+  // set state to existing questions from DB, if any
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
     setQid(formData?.questions.length ?? 0);
@@ -158,7 +160,9 @@ export default function EditForm() {
           item
           container
           flexDirection="column"
-          sx={{ width: "60%", py: 3, px: 5, backgroundColor: blue[100] }}
+          lg={6}
+          md={8}
+          sx={{ py: 3, px: 5, backgroundColor: blue[100] }}
         >
           <Grid>
             <Typography variant="h5" fontWeight="500">
@@ -178,31 +182,38 @@ export default function EditForm() {
             container
             flexDirection="row"
             sx={{ py: 2 }}
-            justifyContent="space-evenly"
+            justifyContent="center"
+            spacing={1}
           >
-            <Button
-              variant="contained"
-              onClick={openAddDialog}
-              sx={{ px: 4, width: "30%" }}
-            >
-              Add Question
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={openEditDialog}
-              sx={{ px: 4, width: "30%" }}
-            >
-              Done Editing
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={openPublishDialog}
-              sx={{ px: 4, width: "30%" }}
-            >
-              Publish Form
-            </Button>
+            <Grid item container sm={4} justifyContent="center">
+              <Button
+                variant="contained"
+                onClick={openAddDialog}
+                sx={{ px: 4, width: "90%" }}
+              >
+                Add Question
+              </Button>
+            </Grid>
+            <Grid item container sm={4} justifyContent="center">
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={openEditDialog}
+                sx={{ px: 4, width: "90%" }}
+              >
+                Done Editing
+              </Button>
+            </Grid>
+            <Grid item container sm={4} justifyContent="center">
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={openPublishDialog}
+                sx={{ px: 4, width: "90%" }}
+              >
+                Publish Form
+              </Button>
+            </Grid>
             <AddQuestionDialog
               addQuestion={addQuestion}
               isOpen={openAdd}
@@ -214,7 +225,7 @@ export default function EditForm() {
               closeDialog={closeEditDialog}
               handleSubmit={handleSubmit}
             >
-              Click Cancel to continue editing.
+              Click 'Cancel' to continue editing.
             </ConfirmationDialog>
             <ConfirmationDialog
               title={"Are you ready to publish your form?"}
@@ -226,7 +237,7 @@ export default function EditForm() {
               it for submission from students in your course. You will no longer
               be able to edit the form. <br />
               <br />
-              Click Cancel to continue editing.
+              Click 'Cancel' to continue editing.
             </ConfirmationDialog>
           </Grid>
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>

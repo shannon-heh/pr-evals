@@ -36,8 +36,6 @@ export default async function handler(
       { form_id: formid },
       {
         $set: {
-          // published: true,
-          // time_published: new Date(),
           questions: questions,
         },
       },

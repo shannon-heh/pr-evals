@@ -273,17 +273,14 @@ function InstructorActions(props: {
     >
       {form.released ? (
         <Tooltip title="Export Responses" arrow>
-          <span>
-            <IconButton
-              disabled={!form.released}
-              onClick={(e) => {
-                e.preventDefault();
-                handleExport();
-              }}
-            >
-              <VisibilityIcon fontSize="large" />
-            </IconButton>
-          </span>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              handleExport();
+            }}
+          >
+            <VisibilityIcon fontSize="large" />
+          </IconButton>
         </Tooltip>
       ) : form.published ? (
         <Tooltip title="Release Responses" arrow>
@@ -341,6 +338,9 @@ function InstructorForms(props: {
       ? `Released ${dateToString(new Date(form.time_released))}`
       : "";
 
+    // for subtext below title name
+    const subtextStyles = { fontSize: 16, width: "100%", fontStyle: "italic" };
+
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
         <Link
@@ -382,31 +382,19 @@ function InstructorForms(props: {
               >
                 {form.title}
               </Typography>
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
+              <Typography color="text.secondary" sx={subtextStyles}>
                 {responseStats}
               </Typography>
               {form.released ? (
-                <Typography
-                  color="text.secondary"
-                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-                >
+                <Typography color="text.secondary" sx={subtextStyles}>
                   {releasedDate}
                 </Typography>
               ) : form.published ? (
-                <Typography
-                  color="text.secondary"
-                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-                >
+                <Typography color="text.secondary" sx={subtextStyles}>
                   {publishedDate}
                 </Typography>
               ) : (
-                <Typography
-                  color="text.secondary"
-                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-                >
+                <Typography color="text.secondary" sx={subtextStyles}>
                   {createdDate}
                 </Typography>
               )}
@@ -436,6 +424,9 @@ function StudentForms(props: { forms: CourseFormData[] }) {
     const releasedDate = form.released
       ? `Released ${dateToString(new Date(form.time_released))}`
       : "";
+
+    // for subtext below title name
+    const subtextStyles = { fontSize: 16, width: "100%", fontStyle: "italic" };
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
@@ -486,17 +477,11 @@ function StudentForms(props: { forms: CourseFormData[] }) {
                 {form.title}
               </Typography>
               {form.released ? (
-                <Typography
-                  color="text.secondary"
-                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-                >
+                <Typography color="text.secondary" sx={subtextStyles}>
                   {releasedDate}
                 </Typography>
               ) : (
-                <Typography
-                  color="text.secondary"
-                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-                >
+                <Typography color="text.secondary" sx={subtextStyles}>
                   {publishedDate}
                 </Typography>
               )}

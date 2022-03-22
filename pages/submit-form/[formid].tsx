@@ -118,9 +118,8 @@ export default function SubmitForm() {
     // student cannot submit form once released
     return (
       <BlockAction pageTitle="Submit Form">
-        {isInstructor
-          ? "This form has already been released. Return to the Course page to see the responses."
-          : "This form has already been released. It is no longer accepting responses. Return to the Course page to see the responses."}
+        This form has already been released. It is no longer accepting
+        responses. Return to the Course page to see the responses.
       </BlockAction>
     );
   } else if (responseData?.time_submitted) {
@@ -183,7 +182,10 @@ export default function SubmitForm() {
                 closeDialog={closeConfirmDialog}
                 handleSubmit={handleSubmit}
               >
-                Click Cancel to continue editing your response.
+                Upon clicking 'Confirm', you will not be able to edit your
+                current response or submit a new one. <br />
+                <br />
+                Click 'Cancel' to continue editing your response.
               </ConfirmationDialog>
             </Grid>
           ) : null}

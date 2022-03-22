@@ -3,7 +3,7 @@ import { validateInstructor, getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
 // API endpoint for instructors to publish a form
-// Usage: call using POST request
+// Usage: /api/publish-form?formid=FORMID&courseid=COURSEID
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

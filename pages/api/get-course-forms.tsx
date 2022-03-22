@@ -29,11 +29,11 @@ export default async function handler(
           title: 1,
           form_id: 1,
           time_created: 1,
-          time_published: 1,
-          standardized: 1,
-          released: 1,
           published: 1,
+          time_published: 1,
+          released: 1,
           time_released: 1,
+          standardized: 1,
         },
       }
     )

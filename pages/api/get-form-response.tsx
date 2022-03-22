@@ -26,7 +26,7 @@ export default async function handler(
     })
     .catch((err) => {
       console.log(
-        `error in getting reesponse for form ${formid} and student ${netid}`,
+        `error in getting response for form ${formid} and student ${netid}`,
         err
       );
       return res.status(500).end();
