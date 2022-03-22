@@ -3,12 +3,25 @@ import sw from "stopword";
 import stopwords from "stopwords-iso";
 import sessionstorage from "sessionstorage";
 import { EvalsData } from "./Types";
+import { blue, green, orange, purple, red } from "@mui/material/colors";
 
 // fetcher for useSWR calls
 export const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
+// color for charts
+export const COLORS = [
+  blue[400],
+  orange[400],
+  green[400],
+  red[400],
+  purple[400],
+];
+
 // get course title with crosslistings
-export function getFullTitle(catalogTitle: string, crosslistingCatalogTitles: string[]): string {
+export function getFullTitle(
+  catalogTitle: string,
+  crosslistingCatalogTitles: string[]
+): string {
   const titles = [catalogTitle, ...crosslistingCatalogTitles];
   return titles.join(" / ");
 }
@@ -44,18 +57,17 @@ export async function validateStudent(db, netid: string, courseid: string) {
 // validate that netid is a student
 export async function isStudent(db, netid: string) {
   const { person_type } = await db
-  .collection("users").findOne(
-    { netid: netid },
-    { _id: 0, person_type: 1 }
-  );
-  return person_type !== "instructor"
+    .collection("users")
+    .findOne({ netid: netid }, { _id: 0, person_type: 1 });
+  return person_type !== "instructor";
 }
 
 // converts date object to MM/DD/YYYY
 export function dateToString(date: Date) {
-  return `${date.getMonth() + 1}/${date.getDate()}/${String(date.getFullYear()).substring(2)}`;
+  return `${date.getMonth() + 1}/${date.getDate()}/${String(
+    date.getFullYear()
+  ).substring(2)}`;
 }
-
 
 // Functions used for preparing data in charts on course pages
 export const prepText = (evalText: string): string[] => {

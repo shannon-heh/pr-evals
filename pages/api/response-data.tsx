@@ -141,6 +141,8 @@ export default async function handler(
       )
         continue;
 
+      if (!data[i]) continue;
+
       switch (data[i].type) {
         case "SINGLE_SEL":
           data[i].data.forEach((sample, j) => {

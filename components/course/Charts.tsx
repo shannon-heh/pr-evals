@@ -2,7 +2,7 @@ import { Box, Grid, Skeleton, Typography } from "@mui/material";
 import { blue, red } from "@mui/material/colors";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
-import { fetcher } from "../../src/Helpers";
+import { COLORS, fetcher } from "../../src/Helpers";
 import { ChartData, ResponseData } from "../../src/Types";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
 import ScaleChart from "./charts/ScaleChart";
@@ -41,6 +41,11 @@ export default function Charts(props: {
         </ChartWrapper>
       );
 
+    let numResponses = 0;
+    data.data.forEach((sample) => {
+      numResponses += sample["value"];
+    });
+
     switch (data.type) {
       case "SINGLE_SEL":
         return (
@@ -49,6 +54,7 @@ export default function Charts(props: {
               data={data.data}
               title={data.question}
               width={width}
+              numResponses={numResponses}
             />
           </ChartWrapper>
         );
@@ -59,6 +65,8 @@ export default function Charts(props: {
               data={data.data}
               title={data.question}
               width={width}
+              color={COLORS[i % COLORS.length]}
+              numResponses={numResponses}
             />
           </ChartWrapper>
         );
@@ -70,6 +78,8 @@ export default function Charts(props: {
               data={data.data}
               title={data.question}
               width={width}
+              color={COLORS[i % COLORS.length]}
+              numResponses={numResponses}
             />
           </ChartWrapper>
         );
@@ -81,6 +91,8 @@ export default function Charts(props: {
               data={data.data}
               title={data.question}
               width={width}
+              color={COLORS[i % COLORS.length]}
+              numResponses={numResponses}
             />
           </ChartWrapper>
         );

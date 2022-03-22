@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import { blue } from "@mui/material/colors";
 import {
   Bar,
   BarChart,
@@ -10,11 +9,14 @@ import {
   YAxis,
 } from "recharts";
 import HoverCard from "../HoverCard";
+import pluralize from "pluralize";
 
 export default function MultiChoiceChart(props: {
   data: Object[];
   title: string;
   width: number;
+  color?: string;
+  numResponses: number;
 }) {
   return (
     <Box sx={{ m: 0, p: 0 }}>
@@ -22,7 +24,10 @@ export default function MultiChoiceChart(props: {
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
           <br />
-          <i>Question type: Multi Choice</i>
+          <i>
+            Question type: Multi Choice ({props.numResponses}{" "}
+            {pluralize("response", props.numResponses)})
+          </i>
         </Typography>
         <ResponsiveContainer width="99%" aspect={1.78}>
           <BarChart data={props.data} layout="vertical" margin={{ left: 50 }}>
@@ -32,7 +37,7 @@ export default function MultiChoiceChart(props: {
             <Tooltip />
             <Bar
               dataKey="value"
-              fill={blue[400]}
+              fill={props.color}
               fillOpacity={0.6}
               animationDuration={1000}
             />

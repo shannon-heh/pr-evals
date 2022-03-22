@@ -8,7 +8,6 @@ import {
   Typography,
   Tooltip as HoverTooltip,
 } from "@mui/material";
-import { green, purple } from "@mui/material/colors";
 import { useState } from "react";
 import {
   Bar,
@@ -32,6 +31,8 @@ export default function ScaleChart(props: {
   title: string;
   width: number;
   type: "Slider" | "Rating";
+  color?: string;
+  numResponses: number;
 }) {
   const [chartType, setChartType] = useState("Bar");
 
@@ -53,7 +54,10 @@ export default function ScaleChart(props: {
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
           <br />
-          <i>Question type: {props.type}</i>
+          <i>
+            Question type: {props.type} ({props.numResponses}{" "}
+            {pluralize("response", props.numResponses)})
+          </i>
         </Typography>
         {props.type == "Rating" ? (
           <HoverTooltip
@@ -102,7 +106,7 @@ export default function ScaleChart(props: {
               <Tooltip />
               <Bar
                 dataKey="value"
-                fill={props.type == "Slider" ? green[400] : purple[300]}
+                fill={props.color}
                 fillOpacity={0.6}
                 animationDuration={1000}
               />
@@ -124,7 +128,7 @@ export default function ScaleChart(props: {
               <Radar
                 animationDuration={1000}
                 dataKey="value"
-                fill={props.type == "Slider" ? green[400] : purple[300]}
+                fill={props.color}
                 fillOpacity={0.6}
               />
               <Tooltip />
