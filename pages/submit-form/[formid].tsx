@@ -99,6 +99,10 @@ export default function SubmitForm() {
   useEffect(() => {
     questions?.forEach((q: QuestionMetadata) => {
       const id = String(q.q_id);
+      if (q.type == Question.Slider) {
+        formik.setFieldValue(id, formData?.standardized ? 3 : null);
+        return;
+      }
       formik.setFieldValue(id, null);
     });
   }, [questions]);
