@@ -80,7 +80,7 @@ export type FormMetadataResponses = {
 
 export type ResponseData = {
   responses: ChartData[];
-  meta: FormMetadataResponses;
+  meta?: FormMetadataResponses;
 };
 
 // form metadata stored in DB

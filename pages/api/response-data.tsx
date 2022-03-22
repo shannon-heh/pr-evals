@@ -34,6 +34,12 @@ export default async function handler(
   const courseid = req.query.courseid as string;
   if (!formid && !courseid) return res.end();
 
+  if (courseid && req.query.demographics !== undefined) {
+    const data = await getStudentDemographicsData(courseid);
+    if (data.responses === []) return res.end();
+    return res.status(200).json(data);
+  }
+
   // if courseid is provided, we assume that the client wants the course's standardized form, so
   // set formid to the course's standardized formid
   const dbForms = (await getDB()).collection("forms") as Collection;
@@ -230,4 +236,90 @@ export default async function handler(
   return res
     .status(200)
     .json({ responses: data, meta: form[0] as FormMetadataResponses });
+}
+
+async function getStudentDemographicsData(
+  courseid: string
+): Promise<ResponseData> {
+  const numConcentrations = 10;
+
+  const dbForms = (await getDB()).collection("forms") as Collection;
+  const dbResponses = (await getDB()).collection("responses") as Collection;
+  const dbUsers = (await getDB()).collection("users") as Collection;
+
+  let _: Object = await dbForms.findOne({
+    course_id: courseid,
+    form_id: /-std$/,
+  });
+  if (!_) return { responses: [] };
+  const formid = _["form_id"];
+
+  const responsesRes: Object[] = await dbResponses
+    .find({ form_id: formid })
+    .project({ netid: 1 })
+    .toArray();
+  const netids: string[] = responsesRes.map((response) => {
+    return response["netid"];
+  });
+  const uniqueNetids = netids.filter((netid, i) => {
+    return netids.indexOf(netid) == i;
+  });
+
+  const usersRes: Object[] = await dbUsers
+    .find({ netid: { $in: uniqueNetids } })
+    .project({ major_code: 1, class_year: 1 })
+    .toArray();
+  const majors = usersRes.map((user) => {
+    return user["major_code"];
+  });
+  const years = usersRes.map((user) => {
+    return user["class_year"];
+  });
+
+  const majorCounts = {};
+  const yearCounts = {};
+  majors.forEach((major) => {
+    if (!major) return;
+    majorCounts[major] = majorCounts[major] ? majorCounts[major] + 1 : 1;
+  });
+  years.forEach((year) => {
+    if (!year) return;
+    yearCounts[year] = yearCounts[year] ? yearCounts[year] + 1 : 1;
+  });
+
+  let majorCountsData: Object[] = [];
+  for (let major in majorCounts)
+    majorCountsData.push({ name: major, value: majorCounts[major] });
+  majorCountsData.sort((a, b) => b["value"] - a["value"]);
+  majorCountsData = majorCountsData.slice(0, numConcentrations);
+
+  let yearCountsData: Object[] = [];
+  for (let year in yearCounts)
+    yearCountsData.push({ name: year, value: yearCounts[year] });
+  yearCountsData.sort((a, b) => b["value"] - a["value"]);
+
+  return {
+    responses: [
+      {
+        question: `Top ${numConcentrations} Student Concentrations`,
+        type: "SINGLE_SEL",
+        data: majorCountsData,
+      },
+      {
+        question: "Student Class Years",
+        type: "SINGLE_SEL",
+        data: yearCountsData,
+      },
+      {
+        question: `Top ${numConcentrations} Student Concentrations`,
+        type: "MULTI_SEL",
+        data: majorCountsData,
+      },
+      {
+        question: "Student Class Years",
+        type: "MULTI_SEL",
+        data: yearCountsData,
+      },
+    ],
+  };
 }

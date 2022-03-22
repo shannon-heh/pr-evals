@@ -14,11 +14,14 @@ export default function Charts(props: {
   courseID?: string;
   formID?: string;
   isStandard: boolean;
+  isDemographics?: boolean;
 }) {
   const { width } = useWindowDimensions();
   const { data: chartData_, error } = useSWR(
     props.courseID
-      ? `/api/response-data?courseid=${props.courseID}`
+      ? `/api/response-data?courseid=${props.courseID}${
+          props.isDemographics ? "&demographics" : ""
+        }`
       : `/api/response-data?formid=${props.formID}`,
     fetcher
   );
@@ -55,6 +58,7 @@ export default function Charts(props: {
               title={data.question}
               width={width}
               numResponses={numResponses}
+              omitQuestionType={props.isDemographics}
             />
           </ChartWrapper>
         );
@@ -67,6 +71,7 @@ export default function Charts(props: {
               width={width}
               color={COLORS[i % COLORS.length]}
               numResponses={numResponses}
+              omitQuestionType={props.isDemographics}
             />
           </ChartWrapper>
         );
@@ -160,6 +165,14 @@ export default function Charts(props: {
           </Typography>
         </HoverCard>
       ) : null}
+      {props.isDemographics ? (
+        <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
+          <Typography variant="subtitle1" fontWeight="medium" color="white">
+            These charts visualize demographics about the students who completed
+            this course's standardized evaluations form.
+          </Typography>
+        </HoverCard>
+      ) : null}
       {chartData.length == 0 ? (
         <Typography
           variant="subtitle1"
@@ -169,6 +182,8 @@ export default function Charts(props: {
         >
           {props.isStandard
             ? "This course doesn't have any responses to its standardized form (yet)!"
+            : props.isDemographics
+            ? "This course's student demographics will become available as students fill out its standardized form!"
             : "No responses (yet)!"}
         </Typography>
       ) : (

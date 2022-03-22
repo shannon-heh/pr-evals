@@ -47,12 +47,17 @@ export default async function handler(
     majorCounts[major] = majorCounts[major] ? majorCounts[major]++ : 1;
   });
 
-  console.log(majorCounts);
+  const majorCountsData: Object[] = [];
+  for (let major in majorCounts)
+    majorCountsData.push({ name: major, value: majorCounts[major] });
 
-  /*
-    TODO: class year counts
-    return all data in correct format for a bar chart (?)
-  */
-
-  return res.status(200).json(formid);
+  return res.status(200).json({
+    responses: [
+      {
+        question: "Student Concentrations",
+        type: "SINGLE_SEL",
+        data: majorCountsData,
+      },
+    ],
+  });
 }

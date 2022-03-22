@@ -17,17 +17,22 @@ export default function SingleChoiceChart(props: {
   title: string;
   width: number;
   numResponses: number;
+  omitQuestionType?: boolean;
 }) {
   return (
     <Box sx={{ m: 0, p: 0 }}>
       <HoverCard sx={{ mt: 2, p: 2.5 }}>
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
-          <br />
-          <i>
-            Question type: Single Choice ({props.numResponses}{" "}
-            {pluralize("response", props.numResponses)})
-          </i>
+          {props.omitQuestionType ? null : (
+            <>
+              <br />
+              <i>
+                Question type: Single Choice ({props.numResponses}{" "}
+                {pluralize("response", props.numResponses)})
+              </i>
+            </>
+          )}
         </Typography>
         <ResponsiveContainer width="99%" aspect={1.78}>
           <PieChart>
