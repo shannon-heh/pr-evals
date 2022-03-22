@@ -3,7 +3,7 @@ import { blue, red } from "@mui/material/colors";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher } from "../../src/Helpers";
-import { EvalsData } from "../../src/Types";
+import { EvalsData, ResponseData } from "../../src/Types";
 import WordCloudChart from "./charts/WordCloudChart";
 import WordDonutChart from "./charts/WordDonutChart";
 import WordSentimentChart from "./charts/WordSentimentChart";
@@ -11,10 +11,13 @@ import Evaluation from "./charts/Evaluation";
 import HoverCard from "./HoverCard";
 
 export default function Reviews(props: { courseID?: string }) {
-  const { data: evalsData, error: evalsError } = useSWR(
+  const { data: evalsData_, error: evalsError } = useSWR(
     `/api/response-data?courseid=${props.courseID}`,
     fetcher
   );
+  const evalsData = (evalsData_ as ResponseData)?.responses.filter(
+    (response) => response.type === "TEXT"
+  )[0].data;
 
   const { width } = useWindowDimensions();
 
