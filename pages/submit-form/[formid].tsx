@@ -182,8 +182,8 @@ export default function SubmitForm() {
                 closeDialog={closeConfirmDialog}
                 handleSubmit={handleSubmit}
               >
-                Upon clicking 'Confirm', you will not be able to edit your
-                current response or submit a new one. <br />
+                Once you click 'Confirm', you will no longer be able to edit
+                your response or submit a new one. <br />
                 <br />
                 Click 'Cancel' to continue editing your response.
               </ConfirmationDialog>
