@@ -6,7 +6,7 @@ import useSWR from "swr";
 import useCAS from "../../hooks/useCAS";
 import { dateToString, fetcher } from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
-import { red, green, blue, grey } from "@mui/material/colors";
+import { red, green, amber, grey } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -263,24 +263,14 @@ function InstructorActions(props: {
       justifyContent="space-evenly"
       sx={{
         fontSize: 16,
-        backgroundColor: form.released ? green[300] : red[300],
+        backgroundColor: form.released
+          ? green[300]
+          : form.published
+          ? amber[300]
+          : red[300],
         padding: 0.25,
       }}
     >
-      {!form.released ? (
-        <Tooltip title="Edit Form" arrow>
-          <IconButton>
-            <EditIcon fontSize="large" />
-          </IconButton>
-        </Tooltip>
-      ) : null}
-      {!form.released ? (
-        <Tooltip title="Release Responses" arrow>
-          <IconButton onClick={handleRelease}>
-            <PublishIcon fontSize="large" />
-          </IconButton>
-        </Tooltip>
-      ) : null}
       {form.released ? (
         <Tooltip title="Export Responses" arrow>
           <span>
@@ -289,7 +279,25 @@ function InstructorActions(props: {
             </IconButton>
           </span>
         </Tooltip>
-      ) : null}
+      ) : form.published ? (
+        <Tooltip title="Release Responses" arrow>
+          <IconButton onClick={handleRelease}>
+            <PublishIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Edit Form" arrow>
+          <IconButton>
+            <Link
+              href={`/edit-form/${form.form_id}`}
+              target="_blank"
+              color="inherit"
+            >
+              <EditIcon fontSize="large" />
+            </Link>
+          </IconButton>
+        </Tooltip>
+      )}
     </Grid>
   );
 }
@@ -307,15 +315,18 @@ function InstructorForms(props: {
   const { forms } = props;
   const formCards = forms.map((form: CourseFormData, i: number) => {
     // text for # and % of responses
-    const responseStats = `${form.num_responses} (${
-      (form.num_responses / props.numStudents) * 100
-    }%) ${pluralize("Responses", form.num_responses)}`;
+    const responseStats = form.published
+      ? `${form.num_responses} (${
+          (form.num_responses / props.numStudents) * 100
+        }%) ${pluralize("Responses", form.num_responses)}`
+      : "";
 
-    // text for form publish & release date
-    const publishedDate = `Published ${dateToString(
-      new Date(form.time_published)
-    )}`;
-    const releasedDate = form.time_released
+    // text for form created, publish, and released date
+    const createdDate = `Created ${dateToString(new Date(form.time_created))}`;
+    const publishedDate = form.published
+      ? `Published ${dateToString(new Date(form.time_published))}`
+      : "";
+    const releasedDate = form.released
       ? `Released ${dateToString(new Date(form.time_released))}`
       : "";
 
@@ -352,18 +363,28 @@ function InstructorForms(props: {
             >
               {responseStats}
             </Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-            >
-              {publishedDate}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-            >
-              {releasedDate}
-            </Typography>
+            {form.released ? (
+              <Typography
+                color="text.secondary"
+                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+              >
+                {releasedDate}
+              </Typography>
+            ) : form.published ? (
+              <Typography
+                color="text.secondary"
+                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+              >
+                {publishedDate}
+              </Typography>
+            ) : (
+              <Typography
+                color="text.secondary"
+                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+              >
+                {createdDate}
+              </Typography>
+            )}
           </CardContent>
         </Card>
       </Grid>
@@ -377,14 +398,16 @@ function InstructorForms(props: {
 function StudentForms(props: { forms: CourseFormData[] }) {
   const { forms } = props;
   const formCards = forms.map((form: CourseFormData, i: number) => {
+    if (!form.published) return;
+
     // text for form submit, publish, & release dates
     const submittedDate = form.time_submitted
       ? `Submitted ${dateToString(new Date(form.time_submitted))}`
       : "Not Submitted";
-    const publishedDate = `Published ${dateToString(
-      new Date(form.time_published)
-    )}`;
-    const releasedDate = form.time_released
+    const publishedDate = form.published
+      ? `Published ${dateToString(new Date(form.time_published))}`
+      : "";
+    const releasedDate = form.released
       ? `Released ${dateToString(new Date(form.time_released))}`
       : "";
 
@@ -410,7 +433,11 @@ function StudentForms(props: { forms: CourseFormData[] }) {
                 color="text.secondary"
                 sx={{
                   fontSize: 16,
-                  backgroundColor: form.completed ? green[300] : red[300],
+                  backgroundColor: form.completed
+                    ? green[300]
+                    : form.released
+                    ? grey[500]
+                    : red[300],
                   padding: 1,
                 }}
                 gutterBottom
@@ -432,18 +459,21 @@ function StudentForms(props: { forms: CourseFormData[] }) {
               >
                 {form.title}
               </Typography>
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
-                {publishedDate}
-              </Typography>
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
-                {releasedDate}
-              </Typography>
+              {form.released ? (
+                <Typography
+                  color="text.secondary"
+                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+                >
+                  {releasedDate}
+                </Typography>
+              ) : (
+                <Typography
+                  color="text.secondary"
+                  sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
+                >
+                  {publishedDate}
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Link>

@@ -10,7 +10,6 @@ import SvgIconError from "@mui/icons-material/Error";
 export default function BlockAction(props: {
   pageTitle?: string;
   children: React.ReactNode;
-  error?: boolean;
 }) {
   return (
     <>
@@ -25,15 +24,9 @@ export default function BlockAction(props: {
           style={{ minHeight: "100vh" }}
         >
           <Grid item xs={3} sx={{ textAlign: "center" }}>
-            {props.error ? (
-              <SvgIconError color="error" fontSize="large">
-                <ErrorIcon />
-              </SvgIconError>
-            ) : (
-              <SvgIconCheck color="success" fontSize="large">
-                <CheckCircleIcon />
-              </SvgIconCheck>
-            )}
+            <SvgIconCheck color="success" fontSize="large">
+              <CheckCircleIcon />
+            </SvgIconCheck>
             <h2>{props.children}</h2>
           </Grid>
         </Grid>

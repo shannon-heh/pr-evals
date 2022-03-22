@@ -36,7 +36,8 @@ export default function InstructorForm(props) {
   // open is true when Add/Confirm dialog is open
   const [openAdd, setOpenAdd] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  ("");
+  const [openPublish, setOpenPublish] = useState(false);
+
   // open / close Add Question dialog
   const openAddDialog = () => {
     setOpenAdd(true);
@@ -45,7 +46,7 @@ export default function InstructorForm(props) {
     setOpenAdd(false);
   };
 
-  // open / close Confirmation dialog
+  // open / close Edit Confirmation dialog
   const openConfirmDialog = () => {
     setOpenConfirm(true);
   };
@@ -53,12 +54,20 @@ export default function InstructorForm(props) {
     setOpenConfirm(false);
   };
 
+  // open / close Publish Confirmation dialog
+  const openPublishDialog = () => {
+    setOpenPublish(true);
+  };
+  const closePublishDialog = () => {
+    setOpenPublish(false);
+  };
+
   const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
 
   // updates form metadata in DB when instructor publishes form
   const handleSubmit = () => {
     closeConfirmDialog();
-    fetch("/api/create-form", {
+    fetch("/api/edit-form", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -70,6 +79,21 @@ export default function InstructorForm(props) {
         courseid: courseid,
       }),
     }).then((res: Response) => {
+      if (res.status == 200) {
+        // redirect to course page when done
+        router.push(`/course/${courseid}`);
+      } else {
+        alert(
+          `ERROR in editing this form. Unable to proceed with requested action.`
+        );
+      }
+    });
+  };
+
+  // updates form metadata in DB when instructor publishes form
+  const handlePublish = () => {
+    closeConfirmDialog();
+    fetch("/api/publish-form").then((res: Response) => {
       if (res.status == 200) {
         // redirect to course page when done
         router.push(`/course/${courseid}`);
@@ -137,7 +161,7 @@ export default function InstructorForm(props) {
             <Button
               variant="contained"
               onClick={openAddDialog}
-              sx={{ px: 4, width: "40%" }}
+              sx={{ px: 4, width: "30%" }}
             >
               Add Question
             </Button>
@@ -145,9 +169,17 @@ export default function InstructorForm(props) {
               type="submit"
               variant="contained"
               onClick={openConfirmDialog}
-              sx={{ px: 4, width: "40%" }}
+              sx={{ px: 4, width: "30%" }}
             >
-              {editMode ? "Done Editing" : "Publish Form"}
+              Done Editing
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={openPublishDialog}
+              sx={{ px: 4, width: "30%" }}
+            >
+              Publish Form
             </Button>
             <AddQuestionDialog
               addQuestion={addQuestion}
@@ -155,12 +187,22 @@ export default function InstructorForm(props) {
               closeDialog={closeAddDialog}
             />
             <ConfirmationDialog
-              title={"Are you ready to publish your form?"}
+              title={"Are you done editing your form?"}
               isOpen={openConfirm}
               closeDialog={closeConfirmDialog}
               handleSubmit={handleSubmit}
             >
-              Click Cancel to continue editing your form.
+              Click Cancel to continue editing.
+            </ConfirmationDialog>
+            <ConfirmationDialog
+              title={"Are you ready to publish your form?"}
+              isOpen={openPublish}
+              closeDialog={closePublishDialog}
+              handleSubmit={handlePublish}
+            >
+              By clicking 'Confirm', you will be making this form available to
+              students in your course to complete. You will no longer be able to
+              edit the form. Click Cancel to continue editing.
             </ConfirmationDialog>
           </Grid>
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>

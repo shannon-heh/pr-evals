@@ -9,7 +9,7 @@ type Args = {
   courseid: string;
 };
 
-// API endpoint for instructors to finish creating new form
+// API endpoint for instructors to edit their form
 // Usage: call using POST request
 export default async function handler(
   req: NextApiRequest,
@@ -36,8 +36,8 @@ export default async function handler(
       { form_id: formid },
       {
         $set: {
-          published: true,
-          time_published: new Date(),
+          // published: true,
+          // time_published: new Date(),
           questions: questions,
         },
       },
@@ -47,7 +47,7 @@ export default async function handler(
       return res.status(200).json(`updated questions for form ${formid}`);
     })
     .catch((err) => {
-      console.log(`error in creating form for ${courseid}`, err);
+      console.log(`error in updating questions for form ${formid}`, err);
       return res.status(500).end();
     });
 }

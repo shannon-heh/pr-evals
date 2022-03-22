@@ -46,7 +46,6 @@ export default function SubmitForm() {
     formid ? `/api/get-form-response?formid=${formid}` : null,
     fetcher
   );
-  const formSubmitted = responseData == {};
 
   // get course data to display
   const courseid: string = formid ? formid.split("-")[0].slice(4) : "";
@@ -112,17 +111,28 @@ export default function SubmitForm() {
     formik.handleSubmit();
   };
 
+  // handle error / loading pages
   if ((courseData_ && !courseData) || formError || courseError || responseError)
     return <Error text="Failed to load form submission page!" />;
   if (!formData || !courseData_ || !responseData) return <Loading />;
 
-  // student can only submit 1 form response
-  if (formSubmitted) {
+  console.log(responseData);
+
+  if (formData.released) {
+    // student cannot submit form once released
     return (
-      <BlockAction
-        pageTitle="Submit Form"
-        text="You have already submitted this form. You can only submit one response per form."
-      />
+      <BlockAction pageTitle="Submit Form">
+        This form has already been released. It is no longer accepting
+        responses.
+      </BlockAction>
+    );
+  } else if (responseData?.time_submitted) {
+    // student can only submit 1 form response
+    return (
+      <BlockAction pageTitle="Submit Form">
+        You have already submitted this form. You can only submit one response
+        per form.
+      </BlockAction>
     );
   }
 

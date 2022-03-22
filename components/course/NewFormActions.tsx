@@ -67,7 +67,7 @@ export default function NewFormActions(props: { courseid: string }) {
           const formid: string = data.formid;
 
           // route to new form page
-          router.push(`/new-form/${formid}`);
+          router.push(`/edit-form/${formid}`);
         } else {
           alert(
             `ERROR in starting a new form. Unable to proceed with requested action.`
