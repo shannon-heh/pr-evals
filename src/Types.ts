@@ -182,7 +182,9 @@ export type CourseFormData = {
   completed: boolean;
   course_id?: string;
   num_responses: number;
+  published: boolean;
   released: boolean;
+  time_created: Date;
   time_released?: Date;
   time_published: Date;
   time_submitted?: Date;

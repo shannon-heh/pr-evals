@@ -6,7 +6,7 @@ import useSWR from "swr";
 import useCAS from "../../hooks/useCAS";
 import { dateToString, fetcher } from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
-import { red, green, blue, grey } from "@mui/material/colors";
+import { red, green, amber, grey } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -263,33 +263,49 @@ function InstructorActions(props: {
       justifyContent="space-evenly"
       sx={{
         fontSize: 16,
-        backgroundColor: form.released ? green[300] : red[300],
+        backgroundColor: form.released
+          ? green[300]
+          : form.published
+          ? amber[300]
+          : red[300],
         padding: 0.25,
       }}
     >
-      {!form.released ? (
-        <Tooltip title="Edit Form" arrow>
-          <IconButton>
-            <EditIcon fontSize="large" />
+      {form.released ? (
+        <Tooltip title="Export Responses" arrow>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              handleExport();
+            }}
+          >
+            <VisibilityIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-      ) : null}
-      {!form.released ? (
+      ) : form.published ? (
         <Tooltip title="Release Responses" arrow>
-          <IconButton onClick={handleRelease}>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              handleRelease();
+            }}
+          >
             <PublishIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-      ) : null}
-      {form.released ? (
-        <Tooltip title="Export Responses" arrow>
-          <span>
-            <IconButton disabled={!form.released} onClick={handleExport}>
-              <VisibilityIcon fontSize="large" />
-            </IconButton>
-          </span>
+      ) : (
+        <Tooltip title="Edit Form" arrow>
+          <IconButton>
+            <Link
+              href={`/edit-form/${form.form_id}`}
+              target="_blank"
+              color="inherit"
+            >
+              <EditIcon fontSize="large" />
+            </Link>
+          </IconButton>
         </Tooltip>
-      ) : null}
+      )}
     </Grid>
   );
 }
@@ -307,69 +323,84 @@ function InstructorForms(props: {
   const { forms } = props;
   const formCards = forms.map((form: CourseFormData, i: number) => {
     // text for # and % of responses
-    const responseStats = `${form.num_responses} (${
-      (form.num_responses / props.numStudents) * 100
-    }%) ${pluralize("Responses", form.num_responses)}`;
+    const responseStats = form.published
+      ? `${form.num_responses} (${
+          (form.num_responses / props.numStudents) * 100
+        }%) ${pluralize("Responses", form.num_responses)}`
+      : "";
 
-    // text for form publish & release date
-    const publishedDate = `Published ${dateToString(
-      new Date(form.time_published)
-    )}`;
-    const releasedDate = form.time_released
+    // text for form created, publish, and released date
+    const createdDate = `Created ${dateToString(new Date(form.time_created))}`;
+    const publishedDate = form.published
+      ? `Published ${dateToString(new Date(form.time_published))}`
+      : "";
+    const releasedDate = form.released
       ? `Released ${dateToString(new Date(form.time_released))}`
       : "";
 
+    // for subtext below title name
+    const subtextStyles = { fontSize: 16, width: "100%", fontStyle: "italic" };
+
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
-        <Card variant="outlined">
-          <CardContent sx={{
-              backgroundColor: form.standardized ? blue[100] : grey[200],
-              padding: 0,
+        <Link
+          href={`/submit-form/${form.form_id}`}
+          underline="none"
+          target="_blank"
+        >
+          <Card
+            variant="outlined"
+            sx={{
+              transition: "transform .25s",
+              "&:hover": {
+                transform: "scale3d(1.05, 1.05, 1)",
+                cursor: "pointer",
+              },
             }}
           >
-            <InstructorActions
-              handleSetExportForm={props.handleSetExportForm}
-              handleOpenExport={props.handleOpenExport}
-              handleSetReleaseForm={props.handleSetReleaseForm}
-              handleOpenRelease={props.handleOpenRelease}
-              form={form}
-              courseID={props.courseID}
-            />
-            <Typography
-              variant="h4"
-              component="div"
-              sx={{
-                padding: 1.5,
-                lineHeight: "1.25em",
-                maxHeight: "3.5em",
-                overflowY: "hidden",
-                overflowX: "hidden",
-                textOverflow: "ellipsis",
-                marginBottom: 1,
-              }}
-            >
-              {form.title}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-            >
-              {responseStats}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-            >
-              {publishedDate}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-            >
-              {releasedDate}
-            </Typography>
-          </CardContent>
-        </Card>
+            <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+              <InstructorActions
+                handleSetExportForm={props.handleSetExportForm}
+                handleOpenExport={props.handleOpenExport}
+                handleSetReleaseForm={props.handleSetReleaseForm}
+                handleOpenRelease={props.handleOpenRelease}
+                form={form}
+                courseID={props.courseID}
+              />
+              <Typography
+                variant="h4"
+                component="div"
+                sx={{
+                  padding: 1.5,
+                  lineHeight: "1.25em",
+                  maxHeight: "3.5em",
+                  overflowY: "hidden",
+                  overflowX: "hidden",
+                  textOverflow: "ellipsis",
+                  marginBottom: 1,
+                }}
+              >
+                {form.title}
+              </Typography>
+              <Typography color="text.secondary" sx={subtextStyles}>
+                {responseStats}
+              </Typography>
+              {form.released ? (
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {releasedDate}
+                </Typography>
+              ) : form.published ? (
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {publishedDate}
+                </Typography>
+              ) : (
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {createdDate}
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Link>
       </Grid>
     );
   });
@@ -381,16 +412,21 @@ function InstructorForms(props: {
 function StudentForms(props: { forms: CourseFormData[] }) {
   const { forms } = props;
   const formCards = forms.map((form: CourseFormData, i: number) => {
+    if (!form.published) return;
+
     // text for form submit, publish, & release dates
     const submittedDate = form.time_submitted
       ? `Submitted ${dateToString(new Date(form.time_submitted))}`
       : "Not Submitted";
-    const publishedDate = `Published ${dateToString(
-      new Date(form.time_published)
-    )}`;
-    const releasedDate = form.time_released
+    const publishedDate = form.published
+      ? `Published ${dateToString(new Date(form.time_published))}`
+      : "";
+    const releasedDate = form.released
       ? `Released ${dateToString(new Date(form.time_released))}`
       : "";
+
+    // for subtext below title name
+    const subtextStyles = { fontSize: 16, width: "100%", fontStyle: "italic" };
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
@@ -419,7 +455,11 @@ function StudentForms(props: { forms: CourseFormData[] }) {
                 color="text.secondary"
                 sx={{
                   fontSize: 16,
-                  backgroundColor: form.completed ? green[300] : red[300],
+                  backgroundColor: form.completed
+                    ? green[300]
+                    : form.released
+                    ? grey[500]
+                    : red[300],
                   padding: 1,
                 }}
                 gutterBottom
@@ -441,18 +481,15 @@ function StudentForms(props: { forms: CourseFormData[] }) {
               >
                 {form.title}
               </Typography>
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
-                {publishedDate}
-              </Typography>
-              <Typography
-                color="text.secondary"
-                sx={{ fontSize: 16, width: "100%", fontStyle: "italic" }}
-              >
-                {releasedDate}
-              </Typography>
+              {form.released ? (
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {releasedDate}
+                </Typography>
+              ) : (
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {publishedDate}
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Link>

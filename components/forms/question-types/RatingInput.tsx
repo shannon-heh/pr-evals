@@ -16,7 +16,9 @@ export default function RatingInput(
         name={name}
         onChange={(e, value) => {
           // manually set rating value
-          formik.setFieldValue(name, Number(value));
+          if (formik && name && value != undefined) {
+            formik.setFieldValue(name, Number(value));
+          }
         }}
         value={value}
       />
