@@ -20,6 +20,9 @@ import RatingInput from "../../components/forms/question-types/RatingInput";
 import Button from "@mui/material/Button";
 import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import useCAS from "../../hooks/useCAS";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 // Page for instructor to edit a form
 export default function EditForm() {
@@ -128,17 +131,34 @@ export default function EditForm() {
   );
   const courseData = courseData_ ? (courseData_[0] as CourseData) : null;
 
-  // updates question metadata in DB when instructor adds new question
+  // when instructor adds a new question
   const addQuestion = (newQuestion: QuestionMetadata) => {
     newQuestion["q_id"] = qid;
     setQid(qid + 1);
     setQuestions([...questions, newQuestion]);
   };
 
+  // when instructor deletes a question
+  const deleteQuestion = (qId: number) => {
+    const newQuestions = questions.filter((q) => {
+      return q.q_id != qId;
+    });
+    setQuestions(newQuestions);
+  };
+
   // set state to existing questions from DB, if any
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
-    setQid(formData?.questions.length ?? 0);
+    let maxId: number = 0;
+    if (formData?.questions) {
+      maxId = Math.max.apply(
+        Math,
+        formData.questions.map(function (q) {
+          return q.q_id;
+        })
+      );
+    }
+    setQid(maxId + 1);
   }, [formData]);
 
   // handle error & loading
@@ -287,8 +307,36 @@ export default function EditForm() {
                     pb: q.type == Question.Slider ? 4.5 : 1.5,
                   }}
                 >
-                  <Typography variant="body1">{q.question}</Typography>
-                  <Typography variant="caption">{q.description}</Typography>
+                  <Grid
+                    container
+                    item
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ flexWrap: "nowrap" }}
+                  >
+                    <Typography variant="body1" sx={{ overflow: "auto" }}>
+                      {q.question}
+                    </Typography>
+                    <Tooltip title="Delete Question" arrow>
+                      <IconButton
+                        onClick={() => {
+                          deleteQuestion(q.q_id);
+                        }}
+                      >
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  {q.description != "" ? (
+                    <Typography
+                      variant="caption"
+                      mb={1}
+                      sx={{ width: "100%", overflow: "auto" }}
+                    >
+                      {q.description}
+                    </Typography>
+                  ) : null}
                   {input}
                 </Grid>
               );

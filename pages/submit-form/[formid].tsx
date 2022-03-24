@@ -118,29 +118,31 @@ export default function SubmitForm() {
     return <Error text="Failed to load form submission page!" />;
   if (!formData || !courseData_ || !responseData) return <Loading />;
 
-  if (formData.released) {
-    // student cannot submit form once released
-    return (
-      <BlockAction pageTitle="Submit Form">
-        This form has already been released. It is no longer accepting
-        responses. Return to the Course page to see the responses.
-      </BlockAction>
-    );
-  } else if (responseData?.time_submitted) {
-    // student can only submit 1 form response
-    return (
-      <BlockAction pageTitle="Submit Form">
-        You have already submitted this form. You can only submit one response
-        per form.
-      </BlockAction>
-    );
-  } else if (!formData.published) {
-    // student cannot access un-published form
-    return (
-      <BlockAction error={true} pageTitle="Submit Form">
-        This form has not been published by your instructor yet.
-      </BlockAction>
-    );
+  if (!isInstructor) {
+    if (formData.released) {
+      // student cannot submit form once released
+      return (
+        <BlockAction pageTitle="Submit Form">
+          This form has already been released. It is no longer accepting
+          responses. Return to the Course page to see the responses.
+        </BlockAction>
+      );
+    } else if (responseData?.time_submitted) {
+      // student can only submit 1 form response
+      return (
+        <BlockAction pageTitle="Submit Form">
+          You have already submitted this form. You can only submit one response
+          per form.
+        </BlockAction>
+      );
+    } else if (!formData.published) {
+      // student cannot access un-published form
+      return (
+        <BlockAction error={true} pageTitle="Submit Form">
+          This form has not been published by your instructor yet.
+        </BlockAction>
+      );
+    }
   }
 
   return (
