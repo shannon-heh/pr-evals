@@ -6,7 +6,7 @@ import useSWR from "swr";
 import useCAS from "../../hooks/useCAS";
 import { dateToString, fetcher } from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
-import { red, green, amber, grey } from "@mui/material/colors";
+import { red, green, amber, grey, blue } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -275,7 +275,7 @@ function InstructorActions(props: {
         <Tooltip title="Export Responses" arrow>
           <IconButton
             onClick={(e) => {
-              e.preventDefault();
+              e.stopPropagation();
               handleExport();
             }}
           >
@@ -286,7 +286,7 @@ function InstructorActions(props: {
         <Tooltip title="Release Responses" arrow>
           <IconButton
             onClick={(e) => {
-              e.preventDefault();
+              e.stopPropagation();
               handleRelease();
             }}
           >
@@ -295,14 +295,13 @@ function InstructorActions(props: {
         </Tooltip>
       ) : (
         <Tooltip title="Edit Form" arrow>
-          <IconButton>
-            <Link
-              href={`/edit-form/${form.form_id}`}
-              target="_blank"
-              color="inherit"
-            >
-              <EditIcon fontSize="large" />
-            </Link>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(`/edit-form/${form.form_id}`, "_blank");
+            }}
+          >
+            <EditIcon fontSize="large" />
           </IconButton>
         </Tooltip>
       )}
@@ -343,64 +342,61 @@ function InstructorForms(props: {
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
-        <Link
-          href={`/submit-form/${form.form_id}`}
-          underline="none"
-          target="_blank"
+        <Card
+          variant="outlined"
+          onClick={() => {
+            window.open(`/submit-form/${form.form_id}`, "_blank");
+          }}
+          sx={{
+            transition: "transform .25s",
+            "&:hover": {
+              transform: "scale3d(1.05, 1.05, 1)",
+              cursor: "pointer",
+            },
+          }}
         >
-          <Card
-            variant="outlined"
-            sx={{
-              transition: "transform .25s",
-              "&:hover": {
-                transform: "scale3d(1.05, 1.05, 1)",
-                cursor: "pointer",
-              },
-            }}
-          >
-            <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
-              <InstructorActions
-                handleSetExportForm={props.handleSetExportForm}
-                handleOpenExport={props.handleOpenExport}
-                handleSetReleaseForm={props.handleSetReleaseForm}
-                handleOpenRelease={props.handleOpenRelease}
-                form={form}
-                courseID={props.courseID}
-              />
-              <Typography
-                variant="h4"
-                component="div"
-                sx={{
-                  padding: 1.5,
-                  lineHeight: "1.25em",
-                  maxHeight: "3.5em",
-                  overflowY: "hidden",
-                  overflowX: "hidden",
-                  textOverflow: "ellipsis",
-                  marginBottom: 1,
-                }}
-              >
-                {form.title}
-              </Typography>
+          <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+            <InstructorActions
+              handleSetExportForm={props.handleSetExportForm}
+              handleOpenExport={props.handleOpenExport}
+              handleSetReleaseForm={props.handleSetReleaseForm}
+              handleOpenRelease={props.handleOpenRelease}
+              form={form}
+              courseID={props.courseID}
+            />
+            <Typography
+              variant="h4"
+              component="div"
+              sx={{
+                padding: 1.5,
+                lineHeight: "1.25em",
+                maxHeight: "3.5em",
+                overflowY: "hidden",
+                overflowX: "hidden",
+                textOverflow: "ellipsis",
+                marginBottom: 1,
+              }}
+            >
+              {form.title}
+            </Typography>
+            <Typography color="text.secondary" sx={subtextStyles}>
+              {responseStats}
+            </Typography>
+            {form.released ? (
               <Typography color="text.secondary" sx={subtextStyles}>
-                {responseStats}
+                {releasedDate}
               </Typography>
-              {form.released ? (
-                <Typography color="text.secondary" sx={subtextStyles}>
-                  {releasedDate}
-                </Typography>
-              ) : form.published ? (
-                <Typography color="text.secondary" sx={subtextStyles}>
-                  {publishedDate}
-                </Typography>
-              ) : (
-                <Typography color="text.secondary" sx={subtextStyles}>
-                  {createdDate}
-                </Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Link>
+            ) : form.published ? (
+              <Typography color="text.secondary" sx={subtextStyles}>
+                {publishedDate}
+              </Typography>
+            ) : (
+              <Typography color="text.secondary" sx={subtextStyles}>
+                {createdDate}
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
       </Grid>
     );
   });
