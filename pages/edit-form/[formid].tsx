@@ -149,7 +149,16 @@ export default function EditForm() {
   // set state to existing questions from DB, if any
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
-    setQid(formData?.questions.length ?? 0);
+    let maxId: number = 0;
+    if (formData?.questions) {
+      maxId = Math.max.apply(
+        Math,
+        formData.questions.map(function (q) {
+          return q.q_id;
+        })
+      );
+    }
+    setQid(maxId + 1);
   }, [formData]);
 
   // handle error & loading
