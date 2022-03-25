@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   Grid,
   InputLabel,
@@ -14,7 +15,8 @@ import { useState } from "react";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { COLORS, fetcher } from "../../src/Helpers";
-import { AdminData, ChartData, ResponseData } from "../../src/Types";
+import { ChartData, ResponseData } from "../../src/Types";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
 import ScaleChart from "./charts/ScaleChart";
 import SingleChoiceChart from "./charts/SingleChoiceChart";
@@ -222,13 +224,24 @@ function Filters(props: {
   setYearFilter: Function;
   yearFilter: string;
 }) {
-  const { data, error } = useSWR("/api/get-majors", fetcher);
+  const { data: dataMajors, error: errorMajors } = useSWR(
+    "/api/get-majors",
+    fetcher
+  );
+  const { data: dataYears, error: errorYears } = useSWR(
+    "/api/get-class-years",
+    fetcher
+  );
 
   const handleConcentrationChange = (event: SelectChangeEvent) => {
     props.setConcentrationFilter(event.target.value as string);
   };
   const handleYearChange = (event: SelectChangeEvent) => {
     props.setYearFilter(event.target.value as string);
+  };
+  const handleFilterReset = () => {
+    props.setYearFilter("");
+    props.setConcentrationFilter("");
   };
 
   return (
@@ -242,37 +255,45 @@ function Filters(props: {
     >
       <FormControl sx={{ width: 200 }}>
         <InputLabel>Select Concentration</InputLabel>
-        {(data as AdminData) ? (
-          <Select
-            value={props.concentrationFilter}
-            label="Select Concentration"
-            onChange={handleConcentrationChange}
-          >
-            {data.majors.map((major: string) => (
-              <MenuItem key={major} value={major}>
-                {major}
-              </MenuItem>
-            ))}
-          </Select>
-        ) : (
-          <>
-            <Select
-              label="Select Form Disabled"
-              variant="filled"
-              disabled
-            ></Select>
-            <Typography
-              variant="subtitle1"
-              fontWeight="medium"
-              mt={2}
-              color={red[500]}
-            >
-              This course doesn't have any published forms (yet)!
-            </Typography>
-          </>
-        )}
+        <Select
+          value={props.concentrationFilter}
+          label="Select Concentration"
+          onChange={handleConcentrationChange}
+        >
+          {dataMajors?.majors.map((major: string) => (
+            <MenuItem key={major} value={major}>
+              {major}
+            </MenuItem>
+          ))}
+        </Select>
       </FormControl>
-      <div>Y filter</div>
+      <FormControl sx={{ ml: 2, width: 200 }}>
+        <InputLabel>Select Year</InputLabel>
+        <Select
+          value={props.yearFilter}
+          label="Select Year"
+          onChange={handleYearChange}
+        >
+          {dataYears?.map((year: string) => (
+            <MenuItem key={year} value={year}>
+              {year}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl sx={{ ml: 2, width: 100 }}>
+        <Button
+          startIcon={<DeleteIcon />}
+          variant="outlined"
+          size="large"
+          color="error"
+          onClick={() => {
+            handleFilterReset();
+          }}
+        >
+          Reset
+        </Button>
+      </FormControl>
     </Box>
   );
 }
