@@ -1,9 +1,20 @@
-import { Box, Grid, Skeleton, Typography } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import { blue, red } from "@mui/material/colors";
+import { useState } from "react";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { COLORS, fetcher } from "../../src/Helpers";
-import { ChartData, ResponseData } from "../../src/Types";
+import { AdminData, ChartData, ResponseData } from "../../src/Types";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
 import ScaleChart from "./charts/ScaleChart";
 import SingleChoiceChart from "./charts/SingleChoiceChart";
@@ -26,6 +37,8 @@ export default function Charts(props: {
     fetcher
   );
   const chartData = (chartData_ as ResponseData)?.responses;
+  const [concentrationFilter, setConcentrationFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
 
   const makeChart = (data: ChartData, i: number) => {
     if (data.data.length == 0)
@@ -173,6 +186,14 @@ export default function Charts(props: {
           </Typography>
         </HoverCard>
       ) : null}
+      {props.formID || props.courseID ? (
+        <Filters
+          setConcentrationFilter={setConcentrationFilter}
+          concentrationFilter={concentrationFilter}
+          setYearFilter={setYearFilter}
+          yearFilter={yearFilter}
+        />
+      ) : null}
       {chartData.length == 0 ? (
         <Typography
           variant="subtitle1"
@@ -192,6 +213,67 @@ export default function Charts(props: {
         </Grid>
       )}
     </>
+  );
+}
+
+function Filters(props: {
+  setConcentrationFilter: Function;
+  concentrationFilter: string;
+  setYearFilter: Function;
+  yearFilter: string;
+}) {
+  const { data, error } = useSWR("/api/get-majors", fetcher);
+
+  const handleConcentrationChange = (event: SelectChangeEvent) => {
+    props.setConcentrationFilter(event.target.value as string);
+  };
+  const handleYearChange = (event: SelectChangeEvent) => {
+    props.setYearFilter(event.target.value as string);
+  };
+
+  return (
+    <Box
+      sx={{
+        mt: 2,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <FormControl sx={{ width: 200 }}>
+        <InputLabel>Select Concentration</InputLabel>
+        {(data as AdminData) ? (
+          <Select
+            value={props.concentrationFilter}
+            label="Select Concentration"
+            onChange={handleConcentrationChange}
+          >
+            {data.majors.map((major: string) => (
+              <MenuItem key={major} value={major}>
+                {major}
+              </MenuItem>
+            ))}
+          </Select>
+        ) : (
+          <>
+            <Select
+              label="Select Form Disabled"
+              variant="filled"
+              disabled
+            ></Select>
+            <Typography
+              variant="subtitle1"
+              fontWeight="medium"
+              mt={2}
+              color={red[500]}
+            >
+              This course doesn't have any published forms (yet)!
+            </Typography>
+          </>
+        )}
+      </FormControl>
+      <div>Y filter</div>
+    </Box>
   );
 }
 
