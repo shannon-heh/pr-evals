@@ -9,10 +9,17 @@ import WordDonutChart from "./charts/WordDonutChart";
 import WordSentimentChart from "./charts/WordSentimentChart";
 import Evaluation from "./charts/Evaluation";
 import HoverCard from "./HoverCard";
+import { useState } from "react";
+import Filters from "./Filters";
 
 export default function Reviews(props: { courseID?: string }) {
+  const [concentrationFilter, setConcentrationFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
+
   const { data: evalsData_, error: evalsError } = useSWR(
-    `/api/response-data?courseid=${props.courseID}`,
+    `/api/response-data?courseid=${props.courseID}${
+      concentrationFilter !== "" ? `&concentration=${concentrationFilter}` : ""
+    }${yearFilter !== "" ? `&year=${yearFilter}` : ""}`,
     fetcher
   );
   const evalsData = (evalsData_ as ResponseData)?.responses.filter(
@@ -20,15 +27,6 @@ export default function Reviews(props: { courseID?: string }) {
   )[0].data;
 
   const { width } = useWindowDimensions();
-
-  if (evalsData && (evalsData as EvalsData[]).length == 0)
-    return (
-      <Box sx={{ mt: 2 }}>
-        <Typography variant="subtitle1" fontWeight="medium" color={red[500]}>
-          This course has no written reviews yet. Check back later!
-        </Typography>
-      </Box>
-    );
 
   return (
     <>
@@ -38,34 +36,48 @@ export default function Reviews(props: { courseID?: string }) {
           form.
         </Typography>
       </HoverCard>
-      <Grid container sx={{ textAlign: "center" }}>
-        <Grid item container lg={6} direction="column">
-          <Box sx={{ p: 2 }}>
-            <WordVisualizations
-              evalsData={evalsData as EvalsData[]}
-              isLoading={!evalsData || evalsError}
-            />
-          </Box>
+      <Filters
+        setConcentrationFilter={setConcentrationFilter}
+        concentrationFilter={concentrationFilter}
+        setYearFilter={setYearFilter}
+        yearFilter={yearFilter}
+      />
+      {evalsData && (evalsData as EvalsData[]).length == 0 ? (
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="subtitle1" fontWeight="medium" color={red[500]}>
+            This course has no written reviews yet. Check back later!
+          </Typography>
+        </Box>
+      ) : (
+        <Grid container sx={{ textAlign: "center" }}>
+          <Grid item container lg={6} direction="column">
+            <Box sx={{ p: 2 }}>
+              <WordVisualizations
+                evalsData={evalsData as EvalsData[]}
+                isLoading={!evalsData || evalsError}
+              />
+            </Box>
+          </Grid>
+          <Grid item container lg={6} direction="column">
+            <Box
+              sx={{
+                p: 2,
+                mb: 2,
+                height: width <= 900 ? 600 : 1000,
+                overflowX: "auto",
+                overflowY: "scroll",
+                flexDirection: "column",
+                flexGrow: 1,
+              }}
+            >
+              <TextualEvaluations
+                evalsData={evalsData as EvalsData[]}
+                isLoading={!evalsData || evalsError}
+              />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item container lg={6} direction="column">
-          <Box
-            sx={{
-              p: 2,
-              mb: 2,
-              height: width <= 900 ? 600 : 1000,
-              overflowX: "auto",
-              overflowY: "scroll",
-              flexDirection: "column",
-              flexGrow: 1,
-            }}
-          >
-            <TextualEvaluations
-              evalsData={evalsData as EvalsData[]}
-              isLoading={!evalsData || evalsError}
-            />
-          </Box>
-        </Grid>
-      </Grid>
+      )}
     </>
   );
 }
