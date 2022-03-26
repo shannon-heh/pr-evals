@@ -40,6 +40,9 @@ export default async function handler(
     return res.status(200).json(data);
   }
 
+  const concentrationFilter = req.query.concentration as string;
+  const yearFilter = req.query.year as string;
+
   // if courseid is provided, we assume that the client wants the course's standardized form, so
   // set formid to the course's standardized formid
   const dbForms = (await getDB()).collection("forms") as Collection;
@@ -149,6 +152,51 @@ export default async function handler(
 
       if (!data[i]) continue;
 
+      const netID = allResponses[_]["netid"];
+      if (!(netID in userDataCache)) {
+        let userData = await dbUsers.findOne({
+          netid: allResponses[_]["netid"],
+        });
+
+        const difficultyQuestionIdx = 2;
+        let userStdFormData: Object[] = await dbResponses
+          .find({
+            form_id: formid.split("-")[0] + "-std",
+            netid: netID,
+          })
+          .toArray();
+
+        userDataCache[netID] = {
+          data: userData,
+          difficulty:
+            userStdFormData.length > 0
+              ? userStdFormData[0]["responses"][difficultyQuestionIdx][
+                  "response"
+                ]
+              : 0,
+        };
+
+        if (
+          userDataCache[netID].difficulty < 1 ||
+          userDataCache[netID].difficulty > 5
+        )
+          userDataCache[netID].difficulty = 0;
+      }
+
+      // concentration filter
+      if (
+        concentrationFilter !== undefined &&
+        userDataCache[netID]["data"]["major_code"] !== concentrationFilter
+      )
+        continue;
+
+      // class year filter
+      if (
+        yearFilter !== undefined &&
+        userDataCache[netID]["data"]["class_year"] !== yearFilter
+      )
+        continue;
+
       switch (data[i].type) {
         case "SINGLE_SEL":
           data[i].data.forEach((sample, j) => {
@@ -176,37 +224,6 @@ export default async function handler(
           });
           break;
         case "TEXT":
-          const netID = allResponses[_]["netid"];
-          if (!(netID in userDataCache)) {
-            let userData = await dbUsers.findOne({
-              netid: allResponses[_]["netid"],
-            });
-
-            const difficultyQuestionIdx = 2;
-            let userStdFormData: Object[] = await dbResponses
-              .find({
-                form_id: formid.split("-")[0] + "-std",
-                netid: netID,
-              })
-              .toArray();
-
-            userDataCache[netID] = {
-              data: userData,
-              difficulty:
-                userStdFormData.length > 0
-                  ? userStdFormData[0]["responses"][difficultyQuestionIdx][
-                      "response"
-                    ]
-                  : 0,
-            };
-
-            if (
-              userDataCache[netID].difficulty < 1 ||
-              userDataCache[netID].difficulty > 5
-            )
-              userDataCache[netID].difficulty = 0;
-          }
-
           data[i].data.push({
             text: response as string,
             major: userDataCache[netID]["data"]["major_code"],

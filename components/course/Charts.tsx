@@ -18,18 +18,27 @@ export default function Charts(props: {
   isStandard: boolean;
   isDemographics?: boolean;
 }) {
+  const [concentrationFilter, setConcentrationFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
+
   const { width } = useWindowDimensions();
   const { data: chartData_, error } = useSWR(
     props.courseID
       ? `/api/response-data?courseid=${props.courseID}${
           props.isDemographics ? "&demographics" : ""
-        }`
-      : `/api/response-data?formid=${props.formID}`,
+        }${
+          concentrationFilter !== ""
+            ? `&concentration=${concentrationFilter}`
+            : ""
+        }${yearFilter !== "" ? `&year=${yearFilter}` : ""}`
+      : `/api/response-data?formid=${props.formID}${
+          concentrationFilter !== ""
+            ? `&concentration=${concentrationFilter}`
+            : ""
+        }${yearFilter !== "" ? `&year=${yearFilter}` : ""}`,
     fetcher
   );
   const chartData = (chartData_ as ResponseData)?.responses;
-  const [concentrationFilter, setConcentrationFilter] = useState("");
-  const [yearFilter, setYearFilter] = useState("");
 
   const makeChart = (data: ChartData, i: number) => {
     if (data.data.length == 0)
