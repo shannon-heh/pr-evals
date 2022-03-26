@@ -11,6 +11,7 @@ import SingleChoiceChart from "./charts/SingleChoiceChart";
 import TextChart from "./charts/TextChart";
 import HoverCard from "./HoverCard";
 import Filters from "./Filters";
+import WordCloudChart from "./charts/WordCloudChart";
 
 export default function Charts(props: {
   courseID?: string;
@@ -128,6 +129,24 @@ export default function Charts(props: {
     return allData.map((data, i) => makeChart(data, i));
   };
 
+  const convertToWordCloudData = (chartData: ChartData[]) => {
+    return chartData
+      .map((sample: ChartData) => {
+        return { data: sample.data };
+      })
+      .map((sample: Object) => {
+        return sample["data"];
+      })
+      .flat()
+      .map((sample: Object) => {
+        const res = [];
+        for (let i = 0; i < sample["value"]; i++)
+          res.push({ text: sample["name"] });
+        return res;
+      })
+      .flat();
+  };
+
   if (!chartData || error)
     return (
       <Grid container sx={{ textAlign: "center", mt: 2 }}>
@@ -210,6 +229,22 @@ export default function Charts(props: {
       ) : (
         <Grid container sx={{ textAlign: "center", mb: 2 }}>
           {processChartData(chartData)}
+          {props.isDemographics ? (
+            <>
+              <ChartWrapper key={-1}>
+                <WordCloudChart
+                  width={width}
+                  evalsData={convertToWordCloudData(chartData.slice(0, 1))}
+                />
+              </ChartWrapper>
+              <ChartWrapper key={-2}>
+                <WordCloudChart
+                  width={width}
+                  evalsData={convertToWordCloudData(chartData.slice(1, 2))}
+                />
+              </ChartWrapper>
+            </>
+          ) : null}
         </Grid>
       )}
     </>

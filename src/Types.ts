@@ -46,9 +46,9 @@ export type AdminData = {
 
 export type EvalsData = {
   text: string;
-  major: string;
-  year: string;
-  difficulty: number;
+  major?: string;
+  year?: string;
+  difficulty?: number;
 };
 
 export type ChartData = {
