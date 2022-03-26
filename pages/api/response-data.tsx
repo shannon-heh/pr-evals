@@ -2,7 +2,7 @@ import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import {
+import gradeMap, {
   ChartData,
   FormMetadataResponses,
   ResponseData,
@@ -15,13 +15,6 @@ const questionTypeMap = {
   3: "MULTI_SEL",
   4: "SLIDER",
   5: "RATING",
-};
-
-const gradeMap = {
-  "2022": "Senior",
-  "2023": "Junior",
-  "2024": "Sophomore",
-  "2025": "First-year",
 };
 
 export default async function handler(

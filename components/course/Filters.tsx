@@ -12,6 +12,7 @@ import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { red } from "@mui/material/colors";
+import gradeMap from "../../src/Types";
 
 export default function Filters(props: {
   setConcentrationFilter: Function;
@@ -90,7 +91,7 @@ export default function Filters(props: {
         >
           {dataYears?.map((year: string) => (
             <MenuItem key={year} value={year}>
-              {year}
+              {gradeMap[year]}
             </MenuItem>
           ))}
         </Select>

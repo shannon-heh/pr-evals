@@ -196,3 +196,12 @@ export type FormResponseData = {
   time_submitted: Date;
   course_id: string;
 };
+
+const gradeMap = {
+  "2022": "Senior",
+  "2023": "Junior",
+  "2024": "Sophomore",
+  "2025": "First-year",
+};
+
+export default gradeMap;
