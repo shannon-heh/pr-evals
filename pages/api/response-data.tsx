@@ -305,7 +305,7 @@ async function getStudentDemographicsData(
 
   let yearCountsData: Object[] = [];
   for (let year in yearCounts)
-    yearCountsData.push({ name: year, value: yearCounts[year] });
+    yearCountsData.push({ name: gradeMap[year], value: yearCounts[year] });
   yearCountsData.sort((a, b) => b["value"] - a["value"]);
 
   return {
