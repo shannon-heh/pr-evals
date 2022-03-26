@@ -41,7 +41,7 @@ export default function Charts(props: {
   const chartData = (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
-    if (data.data.length == 0)
+    if (data.data.length == 0 && !props.isStandard)
       return (
         <ChartWrapper>
           <HoverCard sx={{ mt: 2, p: 2.5 }}>
@@ -186,7 +186,7 @@ export default function Charts(props: {
           </Typography>
         </HoverCard>
       ) : null}
-      {props.formID || props.courseID ? (
+      {!props.isDemographics && (props.formID || props.courseID) ? (
         <Filters
           setConcentrationFilter={setConcentrationFilter}
           concentrationFilter={concentrationFilter}
