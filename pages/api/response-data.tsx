@@ -119,7 +119,7 @@ export default async function handler(
   });
 
   const allResponses = (await dbResponses
-    .find({ form_id: formid })
+    .find({ form_id: { $in: [formid] } })
     .project({ netid: 1, responses: 1, _id: 0 })
     .toArray()) as Object[];
 

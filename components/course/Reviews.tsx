@@ -24,7 +24,7 @@ export default function Reviews(props: { courseID?: string }) {
   );
   const evalsData = (evalsData_ as ResponseData)?.responses.filter(
     (response) => response.type === "TEXT"
-  )[0].data;
+  )[0]?.data;
 
   const { width } = useWindowDimensions();
 
@@ -42,7 +42,7 @@ export default function Reviews(props: { courseID?: string }) {
         setYearFilter={setYearFilter}
         yearFilter={yearFilter}
       />
-      {evalsData && (evalsData as EvalsData[]).length == 0 ? (
+      {!evalsData || (evalsData as EvalsData[]).length == 0 ? (
         <Box sx={{ mt: 2 }}>
           <Typography variant="subtitle1" fontWeight="medium" color={red[500]}>
             This course has no written reviews yet. Check back later!
