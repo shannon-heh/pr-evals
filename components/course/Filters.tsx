@@ -6,10 +6,12 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material";
 import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { red } from "@mui/material/colors";
 
 export default function Filters(props: {
   setConcentrationFilter: Function;
@@ -36,6 +38,25 @@ export default function Filters(props: {
     props.setYearFilter("");
     props.setConcentrationFilter("");
   };
+
+  if (errorMajors || errorYears)
+    return (
+      <Typography
+        variant="subtitle1"
+        fontWeight="medium"
+        mt={2}
+        color={red[500]}
+      >
+        Filters failed to load!
+      </Typography>
+    );
+
+  if (!dataMajors || !dataYears)
+    return (
+      <Typography variant="subtitle1" fontWeight="medium" mt={2}>
+        Loading filters...
+      </Typography>
+    );
 
   return (
     <Box
