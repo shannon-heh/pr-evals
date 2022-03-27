@@ -16,6 +16,7 @@ export default function SingleChoiceChart(props: {
   data: Object[];
   title: string;
   width: number;
+  totalResponses: number;
   numResponses: number;
   omitQuestionType?: boolean;
 }) {
@@ -29,7 +30,9 @@ export default function SingleChoiceChart(props: {
               <br />
               <i>
                 Question type: Single Choice ({props.numResponses}{" "}
-                {pluralize("response", props.numResponses)})
+                {pluralize("response", props.numResponses)} • 
+                {(100 * props.numResponses) / props.totalResponses}% response
+                rate)
               </i>
             </>
           )}

@@ -18,6 +18,7 @@ export default function Charts(props: {
   formID?: string;
   isStandard: boolean;
   isDemographics?: boolean;
+  hideResponseRate?: boolean;
 }) {
   const [concentrationFilter, setConcentrationFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
@@ -60,7 +61,8 @@ export default function Charts(props: {
 
     let numResponses = 0;
     data.data.forEach((sample) => {
-      numResponses += sample["value"];
+      if (data.type === "TEXT") numResponses++;
+      else numResponses += sample["value"];
     });
 
     switch (data.type) {
@@ -71,7 +73,12 @@ export default function Charts(props: {
               data={data.data}
               title={data.question}
               width={width}
-              numResponses={numResponses}
+              totalResponses={
+                props.hideResponseRate
+                  ? null
+                  : chartData_["meta"]["num_responses"]
+              }
+              numResponses={props.hideResponseRate ? null : numResponses}
               omitQuestionType={props.isDemographics}
             />
           </ChartWrapper>
@@ -84,7 +91,12 @@ export default function Charts(props: {
               title={data.question}
               width={width}
               color={COLORS[i % COLORS.length]}
-              numResponses={numResponses}
+              totalResponses={
+                props.hideResponseRate
+                  ? null
+                  : chartData_["meta"]["num_responses"]
+              }
+              numResponses={props.hideResponseRate ? null : numResponses}
               omitQuestionType={props.isDemographics}
             />
           </ChartWrapper>
@@ -98,7 +110,12 @@ export default function Charts(props: {
               title={data.question}
               width={width}
               color={COLORS[i % COLORS.length]}
-              numResponses={numResponses}
+              totalResponses={
+                props.hideResponseRate
+                  ? null
+                  : chartData_["meta"]["num_responses"]
+              }
+              numResponses={props.hideResponseRate ? null : numResponses}
             />
           </ChartWrapper>
         );
@@ -111,7 +128,12 @@ export default function Charts(props: {
               title={data.question}
               width={width}
               color={COLORS[i % COLORS.length]}
-              numResponses={numResponses}
+              totalResponses={
+                props.hideResponseRate
+                  ? null
+                  : chartData_["meta"]["num_responses"]
+              }
+              numResponses={props.hideResponseRate ? null : numResponses}
             />
           </ChartWrapper>
         );
@@ -119,7 +141,17 @@ export default function Charts(props: {
         if (props.isStandard) return null;
         return (
           <ChartWrapper key={i}>
-            <TextChart data={data.data} title={data.question} width={width} />
+            <TextChart
+              data={data.data}
+              title={data.question}
+              width={width}
+              totalResponses={
+                props.hideResponseRate
+                  ? null
+                  : chartData_["meta"]["num_responses"]
+              }
+              numResponses={props.hideResponseRate ? null : numResponses}
+            />
           </ChartWrapper>
         );
     }

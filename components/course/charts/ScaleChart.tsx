@@ -33,6 +33,7 @@ export default function ScaleChart(props: {
   type: "Slider" | "Rating";
   color?: string;
   numResponses: number;
+  totalResponses: number;
 }) {
   const [chartType, setChartType] = useState("Bar");
 
@@ -56,7 +57,8 @@ export default function ScaleChart(props: {
           <br />
           <i>
             Question type: {props.type} ({props.numResponses}{" "}
-            {pluralize("response", props.numResponses)})
+            {pluralize("response", props.numResponses)} • 
+            {(100 * props.numResponses) / props.totalResponses}% response rate)
           </i>
         </Typography>
         {props.type == "Rating" ? (

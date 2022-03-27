@@ -6,6 +6,7 @@ export default function Students(props: { courseID?: string }) {
       courseID={props.courseID}
       isStandard={false}
       isDemographics={true}
+      hideResponseRate={true}
     />
   );
 }

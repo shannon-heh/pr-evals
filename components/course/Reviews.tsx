@@ -28,14 +28,30 @@ export default function Reviews(props: { courseID?: string }) {
 
   const { width } = useWindowDimensions();
 
-  return (
-    <>
+  function Header() {
+    return (
       <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
         <Typography variant="subtitle1" fontWeight="medium" color="white">
           These written responses were submitted to the standardized evaluations
           form.
         </Typography>
       </HoverCard>
+    );
+  }
+
+  if (!evalsData_)
+    return (
+      <>
+        <Header />
+        <Typography variant="subtitle1" fontWeight="medium" mt={2}>
+          Loading reviews...
+        </Typography>
+      </>
+    );
+
+  return (
+    <>
+      <Header />
       <Filters
         setConcentrationFilter={setConcentrationFilter}
         concentrationFilter={concentrationFilter}

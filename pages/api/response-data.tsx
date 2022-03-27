@@ -243,9 +243,10 @@ export default async function handler(
     }
   });
 
-  return res
-    .status(200)
-    .json({ responses: data, meta: form[0] as FormMetadataResponses });
+  const formMeta = form[0] as FormMetadataResponses;
+  formMeta.num_responses = allResponses.length;
+
+  return res.status(200).json({ responses: data, meta: formMeta });
 }
 
 async function getStudentDemographicsData(
