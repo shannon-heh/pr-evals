@@ -211,7 +211,7 @@ export default function EditForm() {
           item
           container
           flexDirection="column"
-          lg={6}
+          lg={7}
           md={8}
           sx={{ py: 3, px: 5, backgroundColor: blue[100] }}
         >

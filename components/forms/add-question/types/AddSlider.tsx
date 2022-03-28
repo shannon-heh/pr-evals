@@ -251,7 +251,13 @@ export default function AddSlider(props: {
       <Grid container item flexDirection="column">
         <Divider sx={{ my: 2 }} />
         <FormLabel>Preview</FormLabel>
-        <SliderInput min={min} max={max} step={step} marks={marks} />
+        <SliderInput
+          min={min}
+          max={max}
+          step={step}
+          marks={marks}
+          lgSlider={true}
+        />
       </Grid>
     </>
   );
