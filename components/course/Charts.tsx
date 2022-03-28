@@ -245,7 +245,7 @@ export default function Charts(props: {
           yearFilter={yearFilter}
         />
       ) : null}
-      {chartData.length == 0 ? (
+      {chartData.length == 0 || chartData[0].data.length == 0 ? (
         <Typography
           variant="subtitle1"
           fontWeight="medium"
