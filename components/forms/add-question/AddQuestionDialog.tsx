@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Select from "@mui/material/Select";
@@ -52,6 +52,8 @@ export default function AddQuestionDialog(props) {
     setOptions({});
   };
 
+  const { sampleQ } = props;
+
   // input validation
   const validationSchema = yup.object({
     question: yup
@@ -61,6 +63,16 @@ export default function AddQuestionDialog(props) {
       .max(500, "Max 500 characters"),
     description: yup.string().max(2000, "Max 2000 characters"),
   });
+
+  useEffect(() => {
+    if (Object.keys(sampleQ).length != 0) {
+      formik.setFieldValue("question", sampleQ.question);
+      formik.setFieldValue("description", sampleQ.description);
+      formik.setFieldValue("type", sampleQ.type);
+      setType(sampleQ.type);
+      setOptions({ options: sampleQ.options });
+    }
+  }, [props.sampleQ]);
 
   const formik = useFormik({
     initialValues: {
@@ -155,7 +167,11 @@ export default function AddQuestionDialog(props) {
               </Select>
             </Grid>
             <Grid container item flexDirection="column">
-              <AddQuestionInput type={type} setOptions={handleSetOptions} />
+              <AddQuestionInput
+                type={type}
+                setOptions={handleSetOptions}
+                options={options}
+              />
             </Grid>
           </Grid>
         </DialogContent>

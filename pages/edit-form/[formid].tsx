@@ -41,11 +41,15 @@ export default function EditForm() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openPublish, setOpenPublish] = useState(false);
 
+  // stores current sample question being processed
+  const [sampleQ, setSampleQ] = useState({});
+
   // open / close Add Question dialog
   const openAddDialog = () => {
     setOpenAdd(true);
   };
   const closeAddDialog = () => {
+    setSampleQ({});
     setOpenAdd(false);
   };
 
@@ -55,6 +59,12 @@ export default function EditForm() {
   };
   const closeEditDialog = () => {
     setOpenEdit(false);
+  };
+
+  // open Edit Confirmation dialog while setting current sample question
+  const openEditSampleDialog = (question: QuestionMetadata) => {
+    setSampleQ(question);
+    openAddDialog();
   };
 
   // open / close Publish Confirmation dialog
@@ -253,6 +263,7 @@ export default function EditForm() {
               addQuestion={addQuestion}
               isOpen={openAdd}
               closeDialog={closeAddDialog}
+              sampleQ={sampleQ}
             />
             <ConfirmationDialog
               title={"Are you done editing your form?"}
@@ -275,7 +286,7 @@ export default function EditForm() {
               Click 'Cancel' to continue editing.
             </ConfirmationDialog>
           </Grid>
-          <SampleQuestions />
+          <SampleQuestions openEditSampleDialog={openEditSampleDialog} />
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
@@ -354,7 +365,7 @@ export default function EditForm() {
   );
 }
 
-function SampleQuestions() {
+function SampleQuestions(props) {
   // open is true when sample questions are shown
   const [openQuestions, setOpen] = useState(false);
 
@@ -453,6 +464,14 @@ function SampleQuestions() {
                             >
                               {q.question}
                             </Typography>
+                            <Button
+                              variant="contained"
+                              onClick={() => {
+                                props.openEditSampleDialog(q);
+                              }}
+                            >
+                              Add
+                            </Button>
                           </Grid>
                           {q.description != "" ? (
                             <Typography

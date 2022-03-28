@@ -14,9 +14,10 @@ import { Dispatch, SetStateAction } from "react";
 // Allow customization & render preview of SingleSelect in Add Question Dialog
 export default function AddSingleSelect(props: {
   setOptions: Dispatch<SetStateAction<{}>>;
+  options;
 }) {
   // customization options
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(props.options ?? []);
 
   // input validation
   const validationSchema = yup.object({

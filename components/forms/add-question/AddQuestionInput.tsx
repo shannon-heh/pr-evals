@@ -13,13 +13,19 @@ import { Dispatch, SetStateAction } from "react";
 export default function AddQuestionInput(props: {
   type: number;
   setOptions: Dispatch<SetStateAction<{}>>;
+  options;
 }) {
   if (props.type == Question.ShortText) {
     return <AddShortText setOptions={props.setOptions} />;
   } else if (props.type == Question.LongText) {
     return <AddLongText setOptions={props.setOptions} />;
   } else if (props.type == Question.SingleSelect) {
-    return <AddSingleSelect setOptions={props.setOptions} />;
+    return (
+      <AddSingleSelect
+        setOptions={props.setOptions}
+        options={props.options.options}
+      />
+    );
   } else if (props.type == Question.MultiSelect) {
     return <AddMultiSelect setOptions={props.setOptions} />;
   } else if (props.type == Question.Slider) {
