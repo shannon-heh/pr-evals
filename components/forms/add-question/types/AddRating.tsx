@@ -9,14 +9,16 @@ import RatingInput from "../../question-types/RatingInput";
 import * as yup from "yup";
 import Typography from "@mui/material/Typography";
 import { Dispatch, SetStateAction } from "react";
+import { RatingProps } from "../../../../src/Types";
 
 // Allow customization & render Rating in Add Question Dialog
 export default function AddRating(props: {
   setOptions: Dispatch<SetStateAction<{}>>;
+  options?: RatingProps;
 }) {
   // customization options
-  const [max, setMax] = useState(5);
-  const [precision, setPrecision] = useState(0.5);
+  const [max, setMax] = useState(props.options.max ?? 5);
+  const [precision, setPrecision] = useState(props.options.precision ?? 0.5);
 
   // input validation
   const validationSchema = yup.object({
@@ -36,8 +38,8 @@ export default function AddRating(props: {
 
   const formik = useFormik({
     initialValues: {
-      max: 5,
-      precision: 0.5,
+      max: max,
+      precision: precision,
     },
     validationSchema,
     onSubmit: (values) => {

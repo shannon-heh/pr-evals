@@ -64,13 +64,30 @@ export default function AddQuestionDialog(props) {
     description: yup.string().max(2000, "Max 2000 characters"),
   });
 
+  // set field values & options when sample question is chosen
   useEffect(() => {
     if (Object.keys(sampleQ).length != 0) {
       formik.setFieldValue("question", sampleQ.question);
       formik.setFieldValue("description", sampleQ.description);
-      formik.setFieldValue("type", sampleQ.type);
-      setType(sampleQ.type);
-      setOptions({ options: sampleQ.options });
+
+      const type = sampleQ.type;
+      formik.setFieldValue("type", type);
+      setType(type);
+
+      let newOptions = {};
+      if (type == Question.MultiSelect || type == Question.SingleSelect) {
+        newOptions = { options: sampleQ.options };
+      } else if (type == Question.Slider) {
+        newOptions = {
+          max: sampleQ.max,
+          min: sampleQ.min,
+          step: sampleQ.step,
+          marks: sampleQ.marks,
+        };
+      } else if (type == Question.Rating) {
+        newOptions = { max: sampleQ.max, precision: sampleQ.precision };
+      }
+      setOptions(newOptions);
     }
   }, [props.sampleQ]);
 

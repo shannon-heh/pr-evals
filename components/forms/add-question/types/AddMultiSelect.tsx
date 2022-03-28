@@ -10,13 +10,15 @@ import Grid from "@mui/material/Grid";
 import MultiSelectInput from "../../question-types/MultiSelectInput";
 import * as yup from "yup";
 import { Dispatch, SetStateAction } from "react";
+import { SelectProps } from "../../../../src/Types";
 
 // Allow customization & render preview of MultiSelect in Add Question Dialog
 export default function AddMultiSelect(props: {
   setOptions: Dispatch<SetStateAction<{}>>;
+  options?: SelectProps;
 }) {
   // customization options
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(props.options.options ?? []);
 
   // input validation
   const validationSchema = yup.object({
