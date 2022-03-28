@@ -150,7 +150,7 @@ export default function EditForm() {
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
     let maxId: number = 0;
-    if (formData?.questions) {
+    if (formData?.questions && formData.questions.length > 0) {
       maxId = Math.max.apply(
         Math,
         formData.questions.map(function (q) {
