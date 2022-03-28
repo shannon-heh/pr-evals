@@ -150,6 +150,19 @@ export default async function handler(
 
   const overallQuestion: QuestionMetadata[] = [
     {
+      question: "Why did you decide to take this course?",
+      description: "Category: Overall",
+      q_id: id++,
+      type: Question.MultiSelect,
+      options: [
+        "General interest",
+        "Pre-requisite",
+        "Distribution requirement",
+        "Departmental requirement",
+        "To fill my schedule",
+      ],
+    },
+    {
       question:
         "Would you recommend this course to a student considering taking it? Why or why not?",
       description: "Category: Overall",
