@@ -150,6 +150,18 @@ export default async function handler(
 
   const overallQuestion: QuestionMetadata[] = [
     {
+      question:
+        "My background prepared me well for this course's requirements.",
+      description: "Category: Overall",
+      q_id: id++,
+      type: Question.Slider,
+      min: 1,
+      max: 5,
+      step: 1,
+      // @ts-expect-error
+      marks: likertScales[0],
+    },
+    {
       question: "Why did you decide to take this course?",
       description: "Category: Overall",
       q_id: id++,
