@@ -32,14 +32,16 @@ export default function Home() {
               Princeton.
             </Typography>
             <Typography
-              variant="h6"
-              fontStyle="italic"
+              fontSize={18}
+              lineHeight={2}
               fontWeight={400}
               mt={4}
               mb={10}
             >
               A COS Independent Work project by Shannon Heh '23 and Nicholas
               Padmanabhan '23.
+              <br />
+              Advised by Professor David Walker.
             </Typography>
             <Box>
               <Button
