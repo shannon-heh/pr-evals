@@ -10,7 +10,7 @@ import Menu from "@mui/material/Menu";
 import Link from "@mui/material/Link";
 import { useState } from "react";
 import useCAS from "../hooks/useCAS";
-import { Tooltip } from "@mui/material";
+import { SvgIcon, Tooltip } from "@mui/material";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -29,13 +29,15 @@ export default function MenuAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* TO-DO: app icon goes here */}
+          <SvgIcon sx={{ mr: 2, mt: 0.4, height: 20 }}>
+            <Logo />
+          </SvgIcon>
           <Link
             href={isLoggedIn ? "/dashboard" : ""}
             underline="none"
             sx={{ color: "white", flexGrow: 1 }}
           >
-            <Typography variant="h6" component="div">
+            <Typography fontSize={22} fontWeight={500} component="div">
               pr.evals
             </Typography>
           </Link>
@@ -87,5 +89,24 @@ export default function MenuAppBar() {
         </Toolbar>
       </AppBar>
     </Box>
+  );
+}
+
+function Logo() {
+  return (
+    <>
+      <path
+        xmlns="http://www.w3.org/2000/svg"
+        d="M21,11.5V15H18a3,3,0,0,0-3,3v3H4.5A1.5,1.5,0,0,1,3,19.5V4.5A1.5,1.5,0,0,1,4.5,3h9A1.5,1.5,0,0,0,15,1.5h0A1.5,1.5,0,0,0,13.5,0h-9A4.5,4.5,0,0,0,0,4.5v15A4.5,4.5,0,0,0,4.5,24H16.484a4.5,4.5,0,0,0,3.181-1.317l3.017-3.017A4.5,4.5,0,0,0,24,16.485V11.5A1.5,1.5,0,0,0,22.5,10h0A1.5,1.5,0,0,0,21,11.5Z"
+        fill="#ffffff"
+        data-original="#000000"
+      />
+      <path
+        xmlns="http://www.w3.org/2000/svg"
+        d="M17.793,1.793l-12.5,12.5A1,1,0,0,0,5,15v3a1,1,0,0,0,1,1H9a1,1,0,0,0,.707-.293L22.038,6.376a3.379,3.379,0,0,0,.952-3.17A3.118,3.118,0,0,0,17.793,1.793Z"
+        fill="#ffffff"
+        data-original="#000000"
+      />
+    </>
   );
 }
