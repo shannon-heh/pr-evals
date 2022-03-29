@@ -3,7 +3,7 @@ import CustomHead from "../components/CustomHead";
 import useCAS from "../hooks/useCAS";
 import { useState } from "react";
 import Loading from "../components/Loading";
-import { Box, Button, Container, Grid, Link } from "@mui/material";
+import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
 
 export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <CustomHead pageTitle="Login" />
-      <Container maxWidth={false}>
+      <Container maxWidth="md">
         <Grid
           container
           spacing={0}
@@ -24,11 +24,24 @@ export default function Home() {
           sx={{ mt: 10 }}
         >
           <Grid item xs={3} sx={{ textAlign: "center" }}>
-            <h1>Course Evaluations IW</h1>
-            <i>
-              An app to facilitate and publish course evaluations at Princeton.
-            </i>
-            <Box sx={{ mt: 4 }}>
+            <Typography variant="h2" fontWeight={600} color="primary">
+              pr.evals
+            </Typography>
+            <Typography variant="h5" fontWeight={500} my={4}>
+              An app to preview, provide, and prepare course evaluations at
+              Princeton.
+            </Typography>
+            <Typography
+              variant="h6"
+              fontStyle="italic"
+              fontWeight={400}
+              mt={4}
+              mb={10}
+            >
+              A COS Independent Work project by Shannon Heh '23 and Nicholas
+              Padmanabhan '23.
+            </Typography>
+            <Box>
               <Button
                 variant="contained"
                 size="large"

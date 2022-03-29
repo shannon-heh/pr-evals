@@ -36,7 +36,7 @@ export default function MenuAppBar() {
             sx={{ color: "white", flexGrow: 1 }}
           >
             <Typography variant="h6" component="div">
-              App Name
+              pr.evals
             </Typography>
           </Link>
           {isLoggedIn && (
