@@ -34,6 +34,7 @@ export default function ScaleChart(props: {
   color?: string;
   numResponses: number;
   totalResponses: number;
+  omitQuestionType?: boolean;
 }) {
   const [chartType, setChartType] = useState("Bar");
 
@@ -54,12 +55,17 @@ export default function ScaleChart(props: {
       <HoverCard sx={{ mt: 2, p: 2.5 }}>
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
-          <br />
-          <i>
-            Question type: {props.type} ({props.numResponses}{" "}
-            {pluralize("response", props.numResponses)} • 
-            {(100 * props.numResponses) / props.totalResponses}% response rate)
-          </i>
+          {props.omitQuestionType ? null : (
+            <>
+              <br />
+              <i>
+                Question type: {props.type} ({props.numResponses}{" "}
+                {pluralize("response", props.numResponses)} • 
+                {(100 * props.numResponses) / props.totalResponses}% response
+                rate)
+              </i>
+            </>
+          )}
         </Typography>
         {props.type == "Rating" ? (
           <HoverTooltip

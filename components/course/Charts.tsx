@@ -40,7 +40,17 @@ export default function Charts(props: {
         }${yearFilter !== "" ? `&year=${yearFilter}` : ""}`,
     fetcher
   );
-  const chartData = (chartData_ as ResponseData)?.responses;
+  const { data: extraDemographicsData_, error: extraDemographicsError } =
+    useSWR(
+      props.isDemographics
+        ? `/api/response-data?courseid=${props.courseID}`
+        : null
+    );
+  const chartData = props.isDemographics
+    ? (chartData_ as ResponseData)?.responses.concat(
+        (extraDemographicsData_ as ResponseData)?.responses.slice(-3, -1)
+      )
+    : (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
     if (data.data.length == 0 && !props.isStandard)
@@ -116,6 +126,7 @@ export default function Charts(props: {
                   : chartData_["meta"]["num_responses"]
               }
               numResponses={props.hideResponseRate ? null : numResponses}
+              omitQuestionType={props.isDemographics}
             />
           </ChartWrapper>
         );
@@ -179,7 +190,7 @@ export default function Charts(props: {
       .flat();
   };
 
-  if (!chartData || error)
+  if (!chartData || error || extraDemographicsError)
     return (
       <Grid container sx={{ textAlign: "center", mt: 2 }}>
         <Grid item container lg={6} direction="column">
@@ -260,6 +271,7 @@ export default function Charts(props: {
         </Typography>
       ) : (
         <Grid container sx={{ textAlign: "center", mb: 2 }}>
+          {/* Move the last two standardized form questions to the Demographics tab */}
           {processChartData(chartData)}
           {props.isDemographics ? (
             <>
