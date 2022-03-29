@@ -16,8 +16,6 @@ export default function MultiChoiceChart(props: {
   title: string;
   width: number;
   color?: string;
-  totalResponses: number;
-  numResponses: number;
   omitQuestionType?: boolean;
 }) {
   return (
@@ -28,12 +26,7 @@ export default function MultiChoiceChart(props: {
           {props.omitQuestionType ? null : (
             <>
               <br />
-              <i>
-                Question type: Multi Choice ({props.numResponses}{" "}
-                {pluralize("response", props.numResponses)} • 
-                {(100 * props.numResponses) / props.totalResponses}% response
-                rate)
-              </i>
+              <i>Question type: Multi Choice</i>
             </>
           )}
         </Typography>

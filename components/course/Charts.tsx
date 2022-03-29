@@ -101,12 +101,6 @@ export default function Charts(props: {
               title={data.question}
               width={width}
               color={COLORS[i % COLORS.length]}
-              totalResponses={
-                props.hideResponseRate
-                  ? null
-                  : chartData_["meta"]["num_responses"]
-              }
-              numResponses={props.hideResponseRate ? null : numResponses}
               omitQuestionType={props.isDemographics}
             />
           </ChartWrapper>
