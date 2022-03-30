@@ -23,9 +23,11 @@ export default function NewFormActions(props: { courseid: string }) {
   };
   const handleClose = (e, reason) => {
     if (reason && reason == "backdropClick") return;
+    formik.resetForm();
     setOpen(false);
   };
   const handleButtonClose = () => {
+    formik.resetForm();
     setOpen(false);
   };
 
@@ -36,7 +38,11 @@ export default function NewFormActions(props: { courseid: string }) {
       .trim()
       .required("Required field")
       .max(100, "Max 100 characters"),
-    description: yup.string().max(1000, "Max 1000 characters"),
+    description: yup
+      .string()
+      .trim()
+      .required("Required field")
+      .max(2000, "Max 2000 characters"),
   });
 
   const formik = useFormik({
@@ -124,17 +130,27 @@ export default function NewFormActions(props: { courseid: string }) {
             onChange={formik.handleChange}
             type="text"
             multiline
+            minRows="2"
+            maxRows="6"
             fullWidth
             variant="standard"
             autoComplete="off"
             helperText={
               formik.touched.description && formik.errors.description
                 ? formik.errors.description
-                : null
+                : "Please specify the purpose of this form & how student feedback will be used. Studies have shown that clarifying this will increase response rates and encourage students to provide more constructive feedback."
             }
             FormHelperTextProps={{
-              style: { color: "red" },
+              style: {
+                color:
+                  formik.touched.description && formik.errors.description
+                    ? "red"
+                    : "black",
+                marginTop: "0.5em",
+                lineHeight: "1.25em",
+              },
             }}
+            required
           />
         </DialogContent>
         <DialogActions>
