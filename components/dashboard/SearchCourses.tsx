@@ -132,13 +132,17 @@ export default function CourseSearch(props) {
 
   return (
     <Grid
-      container
       item
       xs={6}
-      direction="column"
+      direction="row"
       sx={{
-        backgroundColor: blue[100],
-        padding: 2,
+        p: 2,
+        pt: 2.8,
+        height: "90vh",
+        overflow: "scroll",
+        borderRight: 1,
+        borderWidth: 3,
+        borderColor: blue[600],
       }}
     >
       <TextField
@@ -149,11 +153,11 @@ export default function CourseSearch(props) {
         onChange={formik.handleChange}
         value={formik.values.search}
         sx={{
-          mb: 1,
+          width: "100%",
           color: "black",
         }}
       />
-      {searchRes}
+      <Box sx={{ overflow: "scroll", pt: 1, height: "90%" }}>{searchRes}</Box>
     </Grid>
   );
 }

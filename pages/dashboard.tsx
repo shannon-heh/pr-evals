@@ -8,6 +8,7 @@ import MyCourses from "../components/dashboard/MyCourses";
 import { fetcher } from "../src/Helpers";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import Container from "@mui/material/Container";
 
 export default function Dashboard() {
   const { isLoading, netID, isInstructor } = useCAS();
@@ -40,20 +41,22 @@ export default function Dashboard() {
   return (
     <>
       <CustomHead pageTitle="Dashboard" />
-      <Grid container sx={{ height: "100vh" }}>
-        <CourseSearch
-          netID={netID}
-          setFlag={flagHandler}
-          myCourses={myCourses}
-          isInstructor={isInstructor}
-        />
-        <MyCourses
-          netID={netID}
-          setFlag={flagHandler}
-          myCourses={myCourses}
-          isInstructor={isInstructor}
-        />
-      </Grid>
+      <Container maxWidth="xl">
+        <Grid container>
+          <CourseSearch
+            netID={netID}
+            setFlag={flagHandler}
+            myCourses={myCourses}
+            isInstructor={isInstructor}
+          />
+          <MyCourses
+            netID={netID}
+            setFlag={flagHandler}
+            myCourses={myCourses}
+            isInstructor={isInstructor}
+          />
+        </Grid>
+      </Container>
     </>
   );
 }

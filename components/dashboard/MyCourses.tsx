@@ -106,13 +106,15 @@ export default function MyCourses(props) {
       xs={6}
       direction="column"
       sx={{
-        padding: 2,
+        height: "90vh",
+        p: 2,
+        overflow: "scroll",
       }}
     >
-      <Typography variant="h5" sx={{ px: 1.25, mb: 0.25, color: "black" }}>
+      <Typography variant="h5" sx={{ px: 1.25, color: "black" }}>
         My Courses
       </Typography>
-      {courseRes}
+      <Box sx={{ overflow: "scroll", pt: 1, height: "85%" }}>{courseRes}</Box>
     </Grid>
   );
 }
