@@ -29,15 +29,15 @@ export default function CourseSearch(props) {
   });
 
   // get user's inputted query
-  const query: string = formik.values.search;
+  const query: string = formik.values.search?.trim();
 
-  // wait 1.5s for user to finish typing before making request
-  // search was previously slow due to too many requeests
+  // wait for user to enter 3 characters before querying
   useEffect(() => {
-    const timerId: NodeJS.Timeout = setTimeout(() => {
+    if (query.length >= 3) {
       setUrl(`/api/search-courses?q=${query}`);
-    }, 1500);
-    return () => clearTimeout(timerId);
+    } else {
+      setUrl(null);
+    }
   }, [query]);
 
   // search for courses
@@ -157,7 +157,17 @@ export default function CourseSearch(props) {
           color: "black",
         }}
       />
-      <Box sx={{ overflow: "scroll", pt: 1, height: "90%" }}>{searchRes}</Box>
+      <Box sx={{ overflow: "scroll", pt: 1, height: "90%" }}>
+        {url != null ? (
+          searchRes && searchRes.length == 0 ? (
+            <Typography>No courses found.</Typography>
+          ) : (
+            searchRes
+          )
+        ) : (
+          <Typography>Enter 3+ characters to start finding courses.</Typography>
+        )}
+      </Box>
     </Grid>
   );
 }
