@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Grid";
 import { blue } from "@mui/material/colors";
-import Link from "@mui/material/Link";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
 import useSWR from "swr";
@@ -10,6 +9,8 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
 import useCAS from "../../hooks/useCAS";
+import Link from "next/link";
+import Box from "@mui/material/Box";
 
 // Component to display "My Courses" on Dashboard
 export default function MyCourses(props) {
@@ -53,50 +54,47 @@ export default function MyCourses(props) {
     }
 
     return (
-      <Link
-        href={`/course/${courseID}`}
-        target="_blank"
-        id={`search-${courseID}`}
-        key={`search-${courseID}`}
-        underline="none"
-        sx={{ m: 0.75, color: "black" }}
-      >
-        <HoverCard sx={{ p: 1.25, borderColor: blue[200] }}>
-          <Grid
-            container
-            item
-            direction="row"
-            xs={12}
-            sx={{ justifyContent: "space-between", flexWrap: "nowrap" }}
-          >
-            <Grid item>
-              <Typography fontWeight="bold">{catalogTitle}</Typography>
-              <Typography>{course.course_title}</Typography>
-              <Typography fontStyle="italic">
-                {isInstructor
-                  ? `${stats.numForms} Forms Published`
-                  : `${stats.numSubmitted}/${stats.numForms} Forms Submitted`}
-              </Typography>
-            </Grid>
-            {!props.isInstructor ? (
-              <Grid item>
-                <Tooltip title="Remove Course" arrow>
-                  <Button
-                    color="error"
-                    variant="contained"
-                    sx={{ borderRadius: 8 }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRemoveCourse(courseID);
-                    }}
-                  >
-                    <CloseIcon sx={{ fontSize: 24 }} />
-                  </Button>
-                </Tooltip>
+      <Link href={`/course/${courseID}`} key={`search-${courseID}`}>
+        <a id={`search-${courseID}`} style={{ textDecoration: "none" }}>
+          <Box sx={{ m: 0.75, color: "black" }}>
+            <HoverCard sx={{ p: 1.25, borderColor: blue[200] }}>
+              <Grid
+                container
+                item
+                direction="row"
+                xs={12}
+                sx={{ justifyContent: "space-between", flexWrap: "nowrap" }}
+              >
+                <Grid item>
+                  <Typography fontWeight="bold">{catalogTitle}</Typography>
+                  <Typography>{course.course_title}</Typography>
+                  <Typography fontStyle="italic">
+                    {isInstructor
+                      ? `${stats.numForms} Forms Published`
+                      : `${stats.numSubmitted}/${stats.numForms} Forms Submitted`}
+                  </Typography>
+                </Grid>
+                {!props.isInstructor ? (
+                  <Grid item>
+                    <Tooltip title="Remove Course" arrow>
+                      <Button
+                        color="error"
+                        variant="contained"
+                        sx={{ borderRadius: 8 }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleRemoveCourse(courseID);
+                        }}
+                      >
+                        <CloseIcon sx={{ fontSize: 24 }} />
+                      </Button>
+                    </Tooltip>
+                  </Grid>
+                ) : null}
               </Grid>
-            ) : null}
-          </Grid>
-        </HoverCard>
+            </HoverCard>
+          </Box>
+        </a>
       </Link>
     );
   });
