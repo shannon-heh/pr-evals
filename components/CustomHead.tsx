@@ -5,9 +5,7 @@ export default function CustomHead(props: { pageTitle?: string }) {
   return (
     <>
       <Head>
-        <title>
-          Course Evals IW {props.pageTitle ? "| " + props.pageTitle : ""}
-        </title>
+        <title>pr.evals {props.pageTitle ? "| " + props.pageTitle : ""}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <NavBar />
