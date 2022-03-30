@@ -238,16 +238,18 @@ export default function EditForm() {
             justifyContent="center"
             spacing={1}
           >
-            <Grid item container sm={6} justifyContent="center">
-              <Button
-                type="submit"
-                variant="contained"
-                onClick={openEditDialog}
-                sx={{ px: 4, width: "90%" }}
-              >
-                Done Editing
-              </Button>
-            </Grid>
+            {!formData?.standardized ? (
+              <Grid item container sm={6} justifyContent="center">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  onClick={openEditDialog}
+                  sx={{ px: 4, width: "90%" }}
+                >
+                  Done Editing
+                </Button>
+              </Grid>
+            ) : null}
             <Grid item container sm={6} justifyContent="center">
               <Button
                 type="submit"
@@ -288,34 +290,38 @@ export default function EditForm() {
             justifyContent="center"
             spacing={1}
           >
-            <Grid item container sm={6} justifyContent="center">
-              <Button
-                variant="contained"
-                onClick={openAddDialog}
-                sx={{ px: 4, width: "90%" }}
-              >
-                Add Question
-              </Button>
-            </Grid>
+            {!formData?.standardized ? (
+              <Grid item container sm={6} justifyContent="center">
+                <Button
+                  variant="contained"
+                  onClick={openAddDialog}
+                  sx={{ px: 4, width: "90%" }}
+                >
+                  Add Question
+                </Button>
+              </Grid>
+            ) : null}
             <AddQuestionDialog
               addQuestion={addQuestion}
               isOpen={openAdd}
               closeDialog={closeAddDialog}
               sampleQ={sampleQ}
             />
-            <Grid item container sm={6} justifyContent="center">
-              <Button
-                variant="contained"
-                onClick={
-                  openSampleQs ? closeSampleAccordion : openSampleAccordion
-                }
-                sx={{ px: 4, width: "90%" }}
-              >
-                {openSampleQs
-                  ? "Hide Sample Questions"
-                  : "View Sample Questions"}
-              </Button>
-            </Grid>
+            {!formData?.standardized ? (
+              <Grid item container sm={6} justifyContent="center">
+                <Button
+                  variant="contained"
+                  onClick={
+                    openSampleQs ? closeSampleAccordion : openSampleAccordion
+                  }
+                  sx={{ px: 4, width: "90%" }}
+                >
+                  {openSampleQs
+                    ? "Hide Sample Questions"
+                    : "View Sample Questions"}
+                </Button>
+              </Grid>
+            ) : null}
           </Grid>
           {openSampleQs ? (
             <SampleQuestions openEditSampleDialog={openEditSampleDialog} />
@@ -370,15 +376,17 @@ export default function EditForm() {
                     <Typography variant="body1" sx={{ overflow: "auto" }}>
                       {q.question}
                     </Typography>
-                    <Tooltip title="Delete Question" arrow>
-                      <IconButton
-                        onClick={() => {
-                          deleteQuestion(q.q_id);
-                        }}
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
-                    </Tooltip>
+                    {!formData?.standardized ? (
+                      <Tooltip title="Delete Question" arrow>
+                        <IconButton
+                          onClick={() => {
+                            deleteQuestion(q.q_id);
+                          }}
+                        >
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : null}
                   </Grid>
                   {q.description != "" ? (
                     <Typography
