@@ -72,37 +72,68 @@ export default function CourseMainContent(props: {
     <>
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
-          <Tabs value={value} onChange={handleChange} centered>
-            {isUsersCourse ? (
+          {isUsersCourse ? (
+            <Tabs value={value} onChange={handleChange} centered>
               <Tab icon={<RateReviewIcon />} label="Forms" {...a11yProps(0)} />
-            ) : null}
-            <Tab
-              icon={<DriveFileRenameOutlineIcon />}
-              label="Responses"
-              {...a11yProps(1)}
-            />
-            <Tab icon={<BarChart />} label="Charts" {...a11yProps(2)} />
-            <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(3)} />
-            <Tab icon={<GroupsIcon />} label="Students" {...a11yProps(4)} />
-          </Tabs>
+              <Tab
+                icon={<DriveFileRenameOutlineIcon />}
+                label="Responses"
+                {...a11yProps(1)}
+              />
+              <Tab icon={<BarChart />} label="Charts" {...a11yProps(2)} />
+              <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(3)} />
+              <Tab icon={<GroupsIcon />} label="Students" {...a11yProps(4)} />
+            </Tabs>
+          ) : (
+            <Tabs value={value} onChange={handleChange} centered>
+              <Tab
+                icon={<DriveFileRenameOutlineIcon />}
+                label="Responses"
+                {...a11yProps(0)}
+              />
+              <Tab icon={<BarChart />} label="Charts" {...a11yProps(1)} />
+              <Tab icon={<ReviewsIcon />} label="Reviews" {...a11yProps(2)} />
+              <Tab icon={<GroupsIcon />} label="Students" {...a11yProps(3)} />
+            </Tabs>
+          )}
         </Box>
         {isUsersCourse ? (
-          <TabPanel value={value} index={0}>
-            <Forms courseID={props.courseID} numStudents={props.numStudents} />
-          </TabPanel>
-        ) : null}
-        <TabPanel value={value} index={1}>
-          <Responses courseID={props.courseID} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Charts courseID={props.courseID} isStandard={true} />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <Reviews courseID={props.courseID} />
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <Students courseID={props.courseID} />
-        </TabPanel>
+          <>
+            <TabPanel value={value} index={0}>
+              <Forms
+                courseID={props.courseID}
+                numStudents={props.numStudents}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Responses courseID={props.courseID} />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Charts courseID={props.courseID} isStandard={true} />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <Reviews courseID={props.courseID} />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              <Students courseID={props.courseID} />
+            </TabPanel>
+          </>
+        ) : (
+          <>
+            <TabPanel value={value} index={0}>
+              <Responses courseID={props.courseID} />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Charts courseID={props.courseID} isStandard={true} />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Reviews courseID={props.courseID} />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <Students courseID={props.courseID} />
+            </TabPanel>
+          </>
+        )}
       </Grid>
     </>
   );
