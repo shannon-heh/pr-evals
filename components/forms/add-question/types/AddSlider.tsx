@@ -9,16 +9,20 @@ import Grid from "@mui/material/Grid";
 import SliderInput from "../../question-types/SliderInput";
 import Typography from "@mui/material/Typography";
 import { Dispatch, SetStateAction } from "react";
+import { SliderProps } from "../../../../src/Types";
 
 // Allow customization & render preview of Slider in Add Question Dialog
 export default function AddSlider(props: {
   setOptions: Dispatch<SetStateAction<{}>>;
+  options?: SliderProps;
 }) {
   // customization options
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(100);
-  const [step, setStep] = useState(10);
-  const [marks, setMarks] = useState([{ value: 50, label: "neutral" }]);
+  const [min, setMin] = useState(props.options.min ?? 0);
+  const [max, setMax] = useState(props.options.max ?? 100);
+  const [step, setStep] = useState(props.options.step ?? 10);
+  const [marks, setMarks] = useState(
+    props.options.marks ?? [{ value: 50, label: "neutral" }]
+  );
 
   // initial input validation
   const validationSchema = yup.object({
@@ -43,10 +47,14 @@ export default function AddSlider(props: {
 
   const formik = useFormik({
     initialValues: {
-      min: 0,
-      max: 100,
-      step: 10,
-      marks: "50,neutral",
+      min: min,
+      max: max,
+      step: step,
+      marks: marks
+        .map((mark) => {
+          return `${mark.value},${mark.label}`;
+        })
+        .join("\r\n"),
     },
     validationSchema,
     onSubmit: (values) => {
@@ -243,7 +251,13 @@ export default function AddSlider(props: {
       <Grid container item flexDirection="column">
         <Divider sx={{ my: 2 }} />
         <FormLabel>Preview</FormLabel>
-        <SliderInput min={min} max={max} step={step} marks={marks} />
+        <SliderInput
+          min={min}
+          max={max}
+          step={step}
+          marks={marks}
+          lgSlider={true}
+        />
       </Grid>
     </>
   );

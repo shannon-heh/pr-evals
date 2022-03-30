@@ -67,7 +67,10 @@ export default async function handler(
         // restructure to be {q1: r1, q2: r2...}
         const qToR = {};
         rData.responses.forEach((r: { q_id: number; response: any }) => {
-          if (typeof r.response == "object") {
+          if (r.response == null) {
+            // empty string for unanswered questions
+            qToR[form[`${r.q_id}`]] = "";
+          } else if (typeof r.response == "object") {
             qToR[form[`${r.q_id}`]] = r.response.join(",");
           } else {
             qToR[form[`${r.q_id}`]] = r.response;

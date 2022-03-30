@@ -10,13 +10,15 @@ import Typography from "@mui/material/Typography";
 import SingleSelectInput from "../../question-types/SingleSelectInput";
 import * as yup from "yup";
 import { Dispatch, SetStateAction } from "react";
+import { SelectProps } from "../../../../src/Types";
 
 // Allow customization & render preview of SingleSelect in Add Question Dialog
 export default function AddSingleSelect(props: {
   setOptions: Dispatch<SetStateAction<{}>>;
+  options?: SelectProps;
 }) {
   // customization options
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(props.options.options ?? []);
 
   // input validation
   const validationSchema = yup.object({

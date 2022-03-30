@@ -23,6 +23,7 @@ import useCAS from "../../hooks/useCAS";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import SampleQuestions from "../../components/forms/add-question/SampleQuestions";
 
 // Page for instructor to edit a form
 export default function EditForm() {
@@ -35,12 +36,17 @@ export default function EditForm() {
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openPublish, setOpenPublish] = useState(false);
+  const [openSampleQs, setOpenSampleQs] = useState(false);
+
+  // stores current sample question being processed
+  const [sampleQ, setSampleQ] = useState({});
 
   // open / close Add Question dialog
   const openAddDialog = () => {
     setOpenAdd(true);
   };
   const closeAddDialog = () => {
+    setSampleQ({});
     setOpenAdd(false);
   };
 
@@ -58,6 +64,20 @@ export default function EditForm() {
   };
   const closePublishDialog = () => {
     setOpenPublish(false);
+  };
+
+  // show/hide accordion of question categories
+  const openSampleAccordion = () => {
+    setOpenSampleQs(true);
+  };
+  const closeSampleAccordion = () => {
+    setOpenSampleQs(false);
+  };
+
+  // set current sample question and open Add dialog
+  const openEditSampleDialog = (question: QuestionMetadata) => {
+    setSampleQ(question);
+    openAddDialog();
   };
 
   const router: NextRouter = useRouter();
@@ -150,7 +170,7 @@ export default function EditForm() {
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
     let maxId: number = 0;
-    if (formData?.questions) {
+    if (formData?.questions && formData.questions.length > 0) {
       maxId = Math.max.apply(
         Math,
         formData.questions.map(function (q) {
@@ -186,11 +206,12 @@ export default function EditForm() {
         height="100vh"
         justifyContent="center"
       >
+        {/* FORM TITLE & DESCRIPTION */}
         <Grid
           item
           container
           flexDirection="column"
-          lg={6}
+          lg={7}
           md={8}
           sx={{ py: 3, px: 5, backgroundColor: blue[100] }}
         >
@@ -207,6 +228,8 @@ export default function EditForm() {
             <Typography variant="h2">{formData.title}</Typography>
             <Typography>{formData.description}</Typography>
           </Grid>
+
+          {/* FORM ACTIONS */}
           <Grid
             item
             container
@@ -215,16 +238,7 @@ export default function EditForm() {
             justifyContent="center"
             spacing={1}
           >
-            <Grid item container sm={4} justifyContent="center">
-              <Button
-                variant="contained"
-                onClick={openAddDialog}
-                sx={{ px: 4, width: "90%" }}
-              >
-                Add Question
-              </Button>
-            </Grid>
-            <Grid item container sm={4} justifyContent="center">
+            <Grid item container sm={6} justifyContent="center">
               <Button
                 type="submit"
                 variant="contained"
@@ -234,7 +248,7 @@ export default function EditForm() {
                 Done Editing
               </Button>
             </Grid>
-            <Grid item container sm={4} justifyContent="center">
+            <Grid item container sm={6} justifyContent="center">
               <Button
                 type="submit"
                 variant="contained"
@@ -244,11 +258,6 @@ export default function EditForm() {
                 Publish Form
               </Button>
             </Grid>
-            <AddQuestionDialog
-              addQuestion={addQuestion}
-              isOpen={openAdd}
-              closeDialog={closeAddDialog}
-            />
             <ConfirmationDialog
               title={"Are you done editing your form?"}
               isOpen={openEdit}
@@ -270,6 +279,49 @@ export default function EditForm() {
               Click 'Cancel' to continue editing.
             </ConfirmationDialog>
           </Grid>
+
+          <Grid
+            item
+            container
+            flexDirection="row"
+            sx={{ pb: 2 }}
+            justifyContent="center"
+            spacing={1}
+          >
+            <Grid item container sm={6} justifyContent="center">
+              <Button
+                variant="contained"
+                onClick={openAddDialog}
+                sx={{ px: 4, width: "90%" }}
+              >
+                Add Question
+              </Button>
+            </Grid>
+            <AddQuestionDialog
+              addQuestion={addQuestion}
+              isOpen={openAdd}
+              closeDialog={closeAddDialog}
+              sampleQ={sampleQ}
+            />
+            <Grid item container sm={6} justifyContent="center">
+              <Button
+                variant="contained"
+                onClick={
+                  openSampleQs ? closeSampleAccordion : openSampleAccordion
+                }
+                sx={{ px: 4, width: "90%" }}
+              >
+                {openSampleQs
+                  ? "Hide Sample Questions"
+                  : "View Sample Questions"}
+              </Button>
+            </Grid>
+          </Grid>
+          {openSampleQs ? (
+            <SampleQuestions openEditSampleDialog={openEditSampleDialog} />
+          ) : null}
+
+          {/* FORM QUESTIONS */}
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
