@@ -203,8 +203,8 @@ export default async function handler(
             .concat(overallQuestion),
           title: "Standardized Evaluations Form",
           standardized: true,
-          published: true,
-          time_published: new Date(),
+          published: false,
+          time_created: new Date(),
           released: false,
           course_id: course.course_id,
         };
