@@ -19,6 +19,7 @@ export default function Filters(props: {
   concentrationFilter: string;
   setYearFilter: Function;
   yearFilter: string;
+  disabled: boolean;
 }) {
   const { data: dataMajors, error: errorMajors } = useSWR(
     "/api/get-majors",
@@ -74,6 +75,8 @@ export default function Filters(props: {
           value={props.concentrationFilter}
           label="Select Concentration"
           onChange={handleConcentrationChange}
+          variant={props.disabled ? "filled" : "outlined"}
+          disabled={props.disabled}
         >
           {dataMajors?.majors.map((major: string) => (
             <MenuItem key={major} value={major}>
@@ -88,6 +91,8 @@ export default function Filters(props: {
           value={props.yearFilter}
           label="Select Year"
           onChange={handleYearChange}
+          variant={props.disabled ? "filled" : "outlined"}
+          disabled={props.disabled}
         >
           {dataYears?.map((year: string) => (
             <MenuItem key={year} value={year}>
