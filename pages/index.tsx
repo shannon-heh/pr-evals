@@ -28,7 +28,7 @@ export default function Home() {
               pr.evals
             </Typography>
             <Typography variant="h5" fontWeight={500} my={4}>
-              An app to preview, provide, and prepare course evaluations at
+              An app to prepare, provide, and preview course evaluations at
               Princeton.
             </Typography>
             <Typography
