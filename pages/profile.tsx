@@ -68,7 +68,7 @@ export default function Profile() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "100vh" }}
+        sx={{ mt: 10 }}
       >
         <Grid item sx={{ fontWeight: "bolder" }}>
           <Typography variant="h4" id="user-name">
