@@ -1,7 +1,6 @@
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import { blue } from "@mui/material/colors";
-import Link from "@mui/material/Link";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
@@ -14,6 +13,8 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import Tooltip from "@mui/material/Tooltip";
 import Error from "../../components/Error";
+import Link from "next/link";
+import Box from "@mui/material/Box";
 
 // Component to display Course Search on Dashboard
 export default function CourseSearch(props) {
@@ -99,30 +100,32 @@ export default function CourseSearch(props) {
     }
 
     return (
-      <Link
-        href={`/course/${courseID}`}
-        target="_blank"
-        id={`search-${courseID}`}
-        key={`search-${courseID}`}
-        underline="none"
-        sx={{ m: 0.75, color: "black" }}
-      >
-        <HoverCard sx={{ p: 1.25 }}>
-          <Grid
-            container
-            item
-            direction="row"
-            xs={12}
-            sx={{ justifyContent: "space-between", flexWrap: "nowrap" }}
-          >
-            <Grid item>
-              <Typography fontWeight="bold">{catalogTitle}</Typography>
-              <Typography>{course.course_title}</Typography>
-              <Typography fontStyle="italic">5 Forms Active</Typography>
-            </Grid>
-            <Grid item>{button}</Grid>
-          </Grid>
-        </HoverCard>
+      <Link href={`/course/${courseID}`} key={`search-${courseID}`}>
+        <a id={`search-${courseID}`} style={{ textDecoration: "none" }}>
+          <Box sx={{ m: 0.75, color: "black" }}>
+            <HoverCard sx={{ p: 1.25 }}>
+              <Grid
+                container
+                item
+                direction="row"
+                xs={12}
+                sx={{
+                  justifyContent: "space-between",
+                  flexWrap: "nowrap",
+                }}
+              >
+                <Grid item>
+                  <Typography fontWeight="bold" sx={{ textDecoration: "none" }}>
+                    {catalogTitle}
+                  </Typography>
+                  <Typography>{course.course_title}</Typography>
+                  <Typography fontStyle="italic">5 Forms Active</Typography>
+                </Grid>
+                <Grid item>{button}</Grid>
+              </Grid>
+            </HoverCard>
+          </Box>
+        </a>
       </Link>
     );
   });
