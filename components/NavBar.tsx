@@ -7,10 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import Link from "@mui/material/Link";
 import { useState } from "react";
 import useCAS from "../hooks/useCAS";
 import { SvgIcon, Tooltip } from "@mui/material";
+import Link from "next/link";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -29,15 +29,19 @@ export default function MenuAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <SvgIcon sx={{ mr: 2, mt: 0.4, height: 20 }}>
-            <Logo />
-          </SvgIcon>
-          <Link
-            href={isLoggedIn ? "/dashboard" : ""}
-            underline="none"
-            sx={{ color: "white", flexGrow: 1 }}
-          >
-            <Typography fontSize={22} fontWeight={500} component="div">
+          <Link href={isLoggedIn ? "/dashboard" : ""}>
+            <SvgIcon sx={{ mr: 2, mt: 0.4, height: 20, cursor: "pointer" }}>
+              <Logo />
+            </SvgIcon>
+          </Link>
+          <Link href={isLoggedIn ? "/dashboard" : ""}>
+            <Typography
+              fontSize={22}
+              fontWeight={500}
+              component="div"
+              flexGrow={1}
+              sx={{ cursor: "pointer" }}
+            >
               pr.evals
             </Typography>
           </Link>
@@ -70,17 +74,13 @@ export default function MenuAppBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <Link
-                  href="/dashboard"
-                  underline="none"
-                  sx={{ color: "black" }}
-                >
+                <Link href="/dashboard">
                   <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                 </Link>
-                <Link href="/profile" underline="none" sx={{ color: "black" }}>
+                <Link href="/profile">
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                 </Link>
-                <Link href="/logout" underline="none" sx={{ color: "black" }}>
+                <Link href="/logout">
                   <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Link>
               </Menu>
