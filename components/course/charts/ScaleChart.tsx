@@ -8,7 +8,6 @@ import {
   Typography,
   Tooltip as HoverTooltip,
 } from "@mui/material";
-import { green, purple } from "@mui/material/colors";
 import { useState } from "react";
 import {
   Bar,
@@ -32,6 +31,10 @@ export default function ScaleChart(props: {
   title: string;
   width: number;
   type: "Slider" | "Rating";
+  color?: string;
+  numResponses: number;
+  totalResponses: number;
+  omitQuestionType?: boolean;
 }) {
   const [chartType, setChartType] = useState("Bar");
 
@@ -52,8 +55,17 @@ export default function ScaleChart(props: {
       <HoverCard sx={{ mt: 2, p: 2.5 }}>
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
-          <br />
-          <i>Question type: {props.type}</i>
+          {props.omitQuestionType ? null : (
+            <>
+              <br />
+              <i>
+                Question type: {props.type} ({props.numResponses}{" "}
+                {pluralize("response", props.numResponses)} • 
+                {(100 * props.numResponses) / props.totalResponses}% response
+                rate)
+              </i>
+            </>
+          )}
         </Typography>
         {props.type == "Rating" ? (
           <HoverTooltip
@@ -91,18 +103,14 @@ export default function ScaleChart(props: {
         </FormControl>
         <ResponsiveContainer width="99%" aspect={1.78}>
           {chartType == "Bar" ? (
-            <BarChart
-              data={props.data}
-              layout="horizontal"
-              margin={{ left: 50 }}
-            >
+            <BarChart data={props.data} layout="vertical" margin={{ left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" type="category" />
-              <YAxis type="number" hide />
+              <YAxis dataKey="name" type="category" />
+              <XAxis type="number" hide />
               <Tooltip />
               <Bar
                 dataKey="value"
-                fill={props.type == "Slider" ? green[400] : purple[300]}
+                fill={props.color}
                 fillOpacity={0.6}
                 animationDuration={1000}
               />
@@ -124,7 +132,7 @@ export default function ScaleChart(props: {
               <Radar
                 animationDuration={1000}
                 dataKey="value"
-                fill={props.type == "Slider" ? green[400] : purple[300]}
+                fill={props.color}
                 fillOpacity={0.6}
               />
               <Tooltip />

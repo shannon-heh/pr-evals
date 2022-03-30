@@ -47,9 +47,9 @@ export type AdminData = {
 
 export type EvalsData = {
   text: string;
-  major: string;
-  year: string;
-  difficulty: number;
+  major?: string;
+  year?: string;
+  difficulty?: number;
 };
 
 export type ChartData = {
@@ -74,14 +74,14 @@ export type ChartItem = {
 
 export type FormMetadataResponses = {
   description?: string;
-  num_responses: number;
+  num_responses?: number;
   title: string;
-  time_published: Date;
+  time_published?: Date;
 };
 
 export type ResponseData = {
   responses: ChartData[];
-  meta: FormMetadataResponses;
+  meta?: FormMetadataResponses;
 };
 
 // form metadata stored in DB
@@ -199,3 +199,12 @@ export type FormResponseData = {
   time_submitted: Date;
   course_id: string;
 };
+
+const gradeMap = {
+  "2022": "Senior",
+  "2023": "Junior",
+  "2024": "Sophomore",
+  "2025": "First-year",
+};
+
+export default gradeMap;

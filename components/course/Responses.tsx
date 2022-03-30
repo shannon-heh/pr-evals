@@ -174,18 +174,9 @@ export default function Responses(props: { courseID: string }) {
           <ChartsHelper formid={id} />
         </>
       ) : (
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Skeleton>
-            <FormSelector />
-          </Skeleton>
-        </Box>
+        <Typography variant="subtitle1" fontWeight="medium" mt={2}>
+          Loading forms...
+        </Typography>
       )}
     </>
   );

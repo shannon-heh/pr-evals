@@ -15,7 +15,7 @@ export default async function handler(
   const data = await dbForms
     .find({
       course_id: courseid,
-      published: true,
+      released: true,
       form_id: /-\d*$/,
     })
     .project({ title: 1, form_id: 1, _id: 0 })

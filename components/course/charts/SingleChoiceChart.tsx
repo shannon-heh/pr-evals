@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { blue, green, orange, purple, red } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import {
   Cell,
   Legend,
@@ -8,22 +8,34 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { COLORS } from "../../../src/Helpers";
 import HoverCard from "../HoverCard";
+import pluralize from "pluralize";
 
 export default function SingleChoiceChart(props: {
   data: Object[];
   title: string;
   width: number;
+  totalResponses: number;
+  numResponses: number;
+  omitQuestionType?: boolean;
 }) {
-  const COLORS = [blue[400], orange[400], green[400], red[400], purple[400]];
-
   return (
     <Box sx={{ m: 0, p: 0 }}>
       <HoverCard sx={{ mt: 2, p: 2.5 }}>
         <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
           {props.title}
-          <br />
-          <i>Question type: Single Choice</i>
+          {props.omitQuestionType ? null : (
+            <>
+              <br />
+              <i>
+                Question type: Single Choice ({props.numResponses}{" "}
+                {pluralize("response", props.numResponses)} • 
+                {(100 * props.numResponses) / props.totalResponses}% response
+                rate)
+              </i>
+            </>
+          )}
         </Typography>
         <ResponsiveContainer width="99%" aspect={1.78}>
           <PieChart>

@@ -2,7 +2,7 @@ import { Collection } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getNetID } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
-import {
+import gradeMap, {
   ChartData,
   FormMetadataResponses,
   ResponseData,
@@ -17,13 +17,6 @@ const questionTypeMap = {
   5: "RATING",
 };
 
-const gradeMap = {
-  "2022": "Senior",
-  "2023": "Junior",
-  "2024": "Sophomore",
-  "2025": "First-year",
-};
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
@@ -33,6 +26,15 @@ export default async function handler(
   let formid = req.query.formid as string;
   const courseid = req.query.courseid as string;
   if (!formid && !courseid) return res.end();
+
+  if (courseid && req.query.demographics !== undefined) {
+    const data = await getStudentDemographicsData(courseid);
+    if (data.responses === []) return res.end();
+    return res.status(200).json(data);
+  }
+
+  const concentrationFilter = req.query.concentration as string;
+  const yearFilter = req.query.year as string;
 
   // if courseid is provided, we assume that the client wants the course's standardized form, so
   // set formid to the course's standardized formid
@@ -110,7 +112,7 @@ export default async function handler(
   });
 
   const allResponses = (await dbResponses
-    .find({ form_id: formid })
+    .find({ form_id: { $in: [formid] } })
     .project({ netid: 1, responses: 1, _id: 0 })
     .toArray()) as Object[];
 
@@ -133,7 +135,60 @@ export default async function handler(
     for (let i = 0; i < responses.length; i++) {
       const response: string | number | string[] = responses[i]["response"];
 
-      if (response == "" || response == []) continue;
+      if (
+        response === "" ||
+        response === [] ||
+        response === -1 ||
+        response === null
+      )
+        continue;
+
+      if (!data[i]) continue;
+
+      const netID = allResponses[_]["netid"];
+      if (!(netID in userDataCache)) {
+        let userData = await dbUsers.findOne({
+          netid: allResponses[_]["netid"],
+        });
+
+        const difficultyQuestionIdx = 2;
+        let userStdFormData: Object[] = await dbResponses
+          .find({
+            form_id: formid.split("-")[0] + "-std",
+            netid: netID,
+          })
+          .toArray();
+
+        userDataCache[netID] = {
+          data: userData,
+          difficulty:
+            userStdFormData.length > 0
+              ? userStdFormData[0]["responses"][difficultyQuestionIdx][
+                  "response"
+                ]
+              : 0,
+        };
+
+        if (
+          userDataCache[netID].difficulty < 1 ||
+          userDataCache[netID].difficulty > 5
+        )
+          userDataCache[netID].difficulty = 0;
+      }
+
+      // concentration filter
+      if (
+        concentrationFilter !== undefined &&
+        userDataCache[netID]["data"]["major_code"] !== concentrationFilter
+      )
+        continue;
+
+      // class year filter
+      if (
+        yearFilter !== undefined &&
+        userDataCache[netID]["data"]["class_year"] !== yearFilter
+      )
+        continue;
 
       switch (data[i].type) {
         case "SINGLE_SEL":
@@ -162,37 +217,6 @@ export default async function handler(
           });
           break;
         case "TEXT":
-          const netID = allResponses[_]["netid"];
-          if (!(netID in userDataCache)) {
-            let userData = await dbUsers.findOne({
-              netid: allResponses[_]["netid"],
-            });
-
-            const difficultyQuestionIdx = 2;
-            let userStdFormData: Object[] = await dbResponses
-              .find({
-                form_id: formid.split("-")[0] + "-std",
-                netid: netID,
-              })
-              .toArray();
-
-            userDataCache[netID] = {
-              data: userData,
-              difficulty:
-                userStdFormData.length > 0
-                  ? userStdFormData[0]["responses"][difficultyQuestionIdx][
-                      "response"
-                    ]
-                  : 0,
-            };
-
-            if (
-              userDataCache[netID].difficulty < 1 ||
-              userDataCache[netID].difficulty > 5
-            )
-              userDataCache[netID].difficulty = 0;
-          }
-
           data[i].data.push({
             text: response as string,
             major: userDataCache[netID]["data"]["major_code"],
@@ -219,7 +243,94 @@ export default async function handler(
     }
   });
 
-  return res
-    .status(200)
-    .json({ responses: data, meta: form[0] as FormMetadataResponses });
+  const formMeta = form[0] as FormMetadataResponses;
+  formMeta.num_responses = allResponses.length;
+
+  return res.status(200).json({ responses: data, meta: formMeta });
+}
+
+async function getStudentDemographicsData(
+  courseid: string
+): Promise<ResponseData> {
+  const numConcentrations = 10;
+
+  const dbForms = (await getDB()).collection("forms") as Collection;
+  const dbResponses = (await getDB()).collection("responses") as Collection;
+  const dbUsers = (await getDB()).collection("users") as Collection;
+
+  let _: Object = await dbForms.findOne({
+    course_id: courseid,
+    form_id: /-std$/,
+  });
+  if (!_) return { responses: [] };
+  const formid = _["form_id"];
+
+  const responsesRes: Object[] = await dbResponses
+    .find({ form_id: formid })
+    .project({ netid: 1 })
+    .toArray();
+  const netids: string[] = responsesRes.map((response) => {
+    return response["netid"];
+  });
+  const uniqueNetids = netids.filter((netid, i) => {
+    return netids.indexOf(netid) == i;
+  });
+
+  const usersRes: Object[] = await dbUsers
+    .find({ netid: { $in: uniqueNetids } })
+    .project({ major_code: 1, class_year: 1 })
+    .toArray();
+  const majors = usersRes.map((user) => {
+    return user["major_code"];
+  });
+  const years = usersRes.map((user) => {
+    return user["class_year"];
+  });
+
+  const majorCounts = {};
+  const yearCounts = {};
+  majors.forEach((major) => {
+    if (!major) return;
+    majorCounts[major] = majorCounts[major] ? majorCounts[major] + 1 : 1;
+  });
+  years.forEach((year) => {
+    if (!year) return;
+    yearCounts[year] = yearCounts[year] ? yearCounts[year] + 1 : 1;
+  });
+
+  let majorCountsData: Object[] = [];
+  for (let major in majorCounts)
+    majorCountsData.push({ name: major, value: majorCounts[major] });
+  majorCountsData.sort((a, b) => b["value"] - a["value"]);
+  majorCountsData = majorCountsData.slice(0, numConcentrations);
+
+  let yearCountsData: Object[] = [];
+  for (let year in yearCounts)
+    yearCountsData.push({ name: gradeMap[year], value: yearCounts[year] });
+  yearCountsData.sort((a, b) => b["value"] - a["value"]);
+
+  return {
+    responses: [
+      {
+        question: `Top ${numConcentrations} Student Concentrations`,
+        type: "SINGLE_SEL",
+        data: majorCountsData,
+      },
+      {
+        question: "Student Class Years",
+        type: "SINGLE_SEL",
+        data: yearCountsData,
+      },
+      {
+        question: `Top ${numConcentrations} Student Concentrations`,
+        type: "MULTI_SEL",
+        data: majorCountsData,
+      },
+      {
+        question: "Student Class Years",
+        type: "MULTI_SEL",
+        data: yearCountsData,
+      },
+    ],
+  };
 }
