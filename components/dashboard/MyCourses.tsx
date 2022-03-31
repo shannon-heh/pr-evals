@@ -71,7 +71,9 @@ export default function MyCourses(props) {
                   <Typography fontStyle="italic">
                     {isInstructor
                       ? `${stats.numForms} Forms Published`
-                      : `${stats.numSubmitted}/${stats.numForms} Forms Submitted`}
+                      : stats.numForms > 0
+                      ? `${stats.numSubmitted}/${stats.numForms} Forms Submitted`
+                      : "No Forms Published"}
                   </Typography>
                 </Grid>
                 {!props.isInstructor ? (
