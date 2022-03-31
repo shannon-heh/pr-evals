@@ -197,7 +197,13 @@ export default async function handler(
         const form: FormMetadata = {
           form_id: course.guid + "-std",
           description:
-            "Responses to this form are visualized/displayed in the Charts and Reviews tabs!",
+            "This form is the same across all courses; instructors cannot edit its questions." +
+            " " +
+            'It adapts "reliable, valid, and useful" terminology and phrasing from the Students\' Evaluation of Educational Quality (SEEQ) questionnaire, developed and tested by educational psychologist H. W. Marsh in 1982.' +
+            " " +
+            "The use of such a standardized survey ensures fairness and integrity when comparing across courses by preventing instructors and/or administrators from designing questions for a positive outcome." +
+            " " +
+            "Responses to this form are visualized in the Charts and Reviews tabs!",
           questions: academicRigorQuestions
             .concat(breadthQuestions)
             .concat(overallQuestion),
