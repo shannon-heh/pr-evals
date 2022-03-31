@@ -124,7 +124,8 @@ export default function SubmitForm() {
       return (
         <BlockAction pageTitle="Submit Form">
           This form has already been released. It is no longer accepting
-          responses. Return to the Course page to see the responses.
+          responses. <br />
+          Return to the Course page to see the responses.
         </BlockAction>
       );
     } else if (responseData?.time_submitted) {

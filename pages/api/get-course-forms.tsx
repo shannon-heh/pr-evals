@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { FormMetadata, CourseFormData } from "../../src/Types";
-import { getNetID } from "../../src/Helpers";
+import { getNetID, sortByReleased } from "../../src/Helpers";
 
 // API endpoint to get a course's forms given a course ID
 // For students, we also retrieve whether they completed each form
@@ -73,7 +73,7 @@ export default async function handler(
       );
     })
     .then((forms: CourseFormData[]) => {
-      forms.reverse(); // display forms in reverse chron order
+      forms.sort(sortByReleased);
       return res.status(200).json(forms);
     })
     .catch((err) => {

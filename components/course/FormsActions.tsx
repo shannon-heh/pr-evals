@@ -10,9 +10,19 @@ import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 import * as yup from "yup";
 import { useRouter } from "next/router";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { FormStatus } from "../../src/Types";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 // Actions on course page for instructor to start a new form
-export default function NewFormActions(props: { courseid: string }) {
+export default function FormsActions(props: {
+  courseid: string;
+  handleSortForms?: (status: FormStatus) => void;
+}) {
   const { netID } = useCAS();
   const router = useRouter();
 
@@ -23,12 +33,18 @@ export default function NewFormActions(props: { courseid: string }) {
   };
   const handleClose = (e, reason) => {
     if (reason && reason == "backdropClick") return;
-    formik.resetForm();
+    resetFormFields();
     setOpen(false);
   };
   const handleButtonClose = () => {
-    formik.resetForm();
+    resetFormFields();
     setOpen(false);
+  };
+
+  // reset title & description fields
+  const resetFormFields = () => {
+    formik.setFieldValue("title", "");
+    formik.setFieldValue("description", "");
   };
 
   // validate input fields
@@ -49,6 +65,7 @@ export default function NewFormActions(props: { courseid: string }) {
     initialValues: {
       title: "",
       description: "",
+      sort: FormStatus.Released,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -85,14 +102,52 @@ export default function NewFormActions(props: { courseid: string }) {
 
   return (
     <>
-      <Button
-        type="submit"
-        variant="contained"
-        onClick={handleClickOpen}
-        sx={{ mb: 2, px: 4, width: "50%" }}
+      <Grid
+        container
+        item
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
       >
-        Publish New Form
-      </Button>
+        <Grid item sm={4} xs={2}></Grid>
+        <Grid item sm={4} xs={8}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={handleClickOpen}
+            sx={{ px: 4, width: "100%", height: "50px" }}
+          >
+            Publish New Form
+          </Button>
+        </Grid>
+        <Grid
+          container
+          item
+          sm={4}
+          xs={2}
+          flexDirection="row"
+          justifyContent="end"
+        >
+          <FormControl sx={{ height: "50px" }}>
+            <InputLabel id="select-label">Sort By (Desc.)</InputLabel>
+            <Select
+              labelId="select-label"
+              name="sort"
+              value={formik.values.sort}
+              label="Sort By (Desc.)"
+              onChange={(e) => {
+                formik.handleChange(e);
+                props.handleSortForms(e.target.value as FormStatus);
+              }}
+            >
+              <MenuItem value={FormStatus.Released}>Released</MenuItem>
+              <MenuItem value={FormStatus.Published}>Published</MenuItem>
+              <MenuItem value={FormStatus.Created}>Created</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>Publish Feedback Form</DialogTitle>
         <DialogContent>

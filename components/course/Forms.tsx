@@ -4,7 +4,13 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import useSWR from "swr";
 import useCAS from "../../hooks/useCAS";
-import { dateToString, fetcher } from "../../src/Helpers";
+import {
+  dateToString,
+  fetcher,
+  sortByCreated,
+  sortByPublished,
+  sortByReleased,
+} from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
 import { red, green, amber, grey, blue } from "@mui/material/colors";
 import Link from "@mui/material/Link";
@@ -12,8 +18,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PublishIcon from "@mui/icons-material/Publish";
 import pluralize from "pluralize";
-import NewFormActions from "./NewFormActions";
-import { CourseFormData } from "../../src/Types";
+import FormsActions from "./FormsActions";
+import { CourseFormData, FormMetadata, FormStatus } from "../../src/Types";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import { useEffect, useRef, useState } from "react";
@@ -63,6 +69,9 @@ export default function Forms(props: {
     formid: "",
     courseid: "",
   });
+
+  // stores data for displayed forms
+  const [forms, setForms] = useState([]);
 
   // store reference to hidden CSV anchor link
   const inputRef = React.useRef(null);
@@ -131,12 +140,38 @@ export default function Forms(props: {
   // get data about each course form
   const formsUrl = `/api/get-course-forms?courseid=${props.courseID}&netid=${netID}`;
   let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
+
+  useEffect(() => {
+    setForms(formsData);
+  }, [formsData]);
+
   if (formsError)
     return <Typography my={2}>Failed to load this course's forms.</Typography>;
 
+  // sort forms on course page based on status selected
+  const handleSortForms = (status: FormStatus) => {
+    let newForms = forms;
+    if (status == FormStatus.Created) {
+      // reverse chron created order
+      newForms = [...forms].sort(sortByCreated);
+    } else if (status == FormStatus.Published) {
+      // reverse chron published order
+      newForms = [...forms].sort(sortByPublished);
+    } else if (status == FormStatus.Released) {
+      // reverse chron released order
+      newForms = [...forms].sort(sortByReleased);
+    }
+    setForms(newForms);
+  };
+
   return (
     <Grid container flexDirection="column" alignItems="center" py={2}>
-      {isInstructor ? <NewFormActions courseid={props.courseID} /> : null}
+      {isInstructor ? (
+        <FormsActions
+          courseid={props.courseID}
+          handleSortForms={handleSortForms}
+        />
+      ) : null}
       <Grid container flexDirection="row" spacing={2}>
         {formsData ? (
           isInstructor ? (
@@ -148,7 +183,7 @@ export default function Forms(props: {
                 hidden
               />
               <InstructorForms
-                forms={formsData}
+                forms={forms}
                 courseID={props.courseID}
                 numStudents={props.numStudents}
                 handleSetExportForm={handleSetExportForm}
@@ -179,7 +214,7 @@ export default function Forms(props: {
               </ConfirmationDialog>
             </>
           ) : (
-            <StudentForms forms={formsData} />
+            <StudentForms forms={forms} />
           )
         ) : null}
       </Grid>
@@ -320,25 +355,26 @@ function InstructorForms(props: {
   handleOpenRelease: () => void;
 }) {
   const { forms } = props;
-  const formCards = forms.map((form: CourseFormData, i: number) => {
+
+  const formCards = forms?.map((form: CourseFormData, i: number) => {
     // text for # and % of responses
     const responseStats = form.published
-      ? `${form.num_responses} (${
-          (form.num_responses / props.numStudents) * 100
-        }%) ${pluralize("Responses", form.num_responses)}`
+      ? `${pluralize("Responses", form.num_responses)}: ${
+          form.num_responses
+        } (${(form.num_responses / props.numStudents) * 100}%)`
       : "";
 
     // text for form created, publish, and released date
-    const createdDate = `Created ${dateToString(new Date(form.time_created))}`;
+    const createdDate = `Cr. ${dateToString(new Date(form.time_created))}`;
     const publishedDate = form.published
-      ? `Published ${dateToString(new Date(form.time_published))}`
+      ? `Pub. ${dateToString(new Date(form.time_published))}`
       : "";
     const releasedDate = form.released
-      ? `Released ${dateToString(new Date(form.time_released))}`
+      ? `Rel. ${dateToString(new Date(form.time_released))}`
       : "";
 
     // for subtext below title name
-    const subtextStyles = { fontSize: 16, width: "100%", fontStyle: "italic" };
+    const subtextStyles = { fontSize: 16, width: "100%" };
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>
@@ -379,13 +415,15 @@ function InstructorForms(props: {
             >
               {form.title}
             </Typography>
-            <Typography color="text.secondary" sx={subtextStyles}>
-              {responseStats}
-            </Typography>
             {form.released ? (
-              <Typography color="text.secondary" sx={subtextStyles}>
-                {releasedDate}
-              </Typography>
+              <>
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {releasedDate}
+                </Typography>
+                <Typography color="text.secondary" sx={subtextStyles}>
+                  {publishedDate}
+                </Typography>
+              </>
             ) : form.published ? (
               <Typography color="text.secondary" sx={subtextStyles}>
                 {publishedDate}
@@ -395,6 +433,12 @@ function InstructorForms(props: {
                 {createdDate}
               </Typography>
             )}
+            <Typography
+              color="text.secondary"
+              sx={{ ...subtextStyles, fontWeight: "bold" }}
+            >
+              {responseStats}
+            </Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -407,7 +451,7 @@ function InstructorForms(props: {
 // Form cards shown to students
 function StudentForms(props: { forms: CourseFormData[] }) {
   const { forms } = props;
-  const formCards = forms.map((form: CourseFormData, i: number) => {
+  const formCards = forms?.map((form: CourseFormData, i: number) => {
     if (!form.published) return;
 
     // text for form submit, publish, & release dates
@@ -415,14 +459,14 @@ function StudentForms(props: { forms: CourseFormData[] }) {
       ? `Submitted ${dateToString(new Date(form.time_submitted))}`
       : "Not Submitted";
     const publishedDate = form.published
-      ? `Published ${dateToString(new Date(form.time_published))}`
+      ? `Pub. ${dateToString(new Date(form.time_published))}`
       : "";
     const releasedDate = form.released
-      ? `Released ${dateToString(new Date(form.time_released))}`
+      ? `Rel. ${dateToString(new Date(form.time_released))}`
       : "";
 
     // for subtext below title name
-    const subtextStyles = { fontSize: 16, width: "100%", fontStyle: "italic" };
+    const subtextStyles = { fontSize: 16, width: "100%" };
 
     return (
       <Grid item key={i} xs={6} sm={4} md={3}>

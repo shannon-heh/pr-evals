@@ -24,7 +24,7 @@ export default function BlockAction(props: {
           justifyContent="center"
           style={{ minHeight: "100vh" }}
         >
-          <Grid item xs={3} sx={{ textAlign: "center" }}>
+          <Grid item xs={3} sx={{ textAlign: "center", width: "75%" }}>
             {props.error ? (
               <SvgIconError color="error" fontSize="large">
                 <ErrorIcon />

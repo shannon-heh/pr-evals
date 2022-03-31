@@ -208,3 +208,10 @@ const gradeMap = {
 };
 
 export default gradeMap;
+
+// Enum for a form's status
+export enum FormStatus {
+  Created,
+  Published,
+  Released,
+}
