@@ -36,7 +36,7 @@ export default async function handler(
     ? {
         questions: questions,
         published: true,
-        time_published: Date(),
+        time_published: new Date(),
       }
     : {
         questions: questions,
