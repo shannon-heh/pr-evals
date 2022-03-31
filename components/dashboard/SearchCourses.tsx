@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Error from "../../components/Error";
 import Link from "next/link";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // Component to display Course Search on Dashboard
 export default function CourseSearch(props) {
@@ -161,6 +162,13 @@ export default function CourseSearch(props) {
         {url != null ? (
           searchRes && searchRes.length == 0 ? (
             <Typography>No courses found.</Typography>
+          ) : searchRes === undefined ? (
+            <>
+              <CircularProgress size={16} />
+              <Typography ml={1} display="inline">
+                Loading results...
+              </Typography>
+            </>
           ) : (
             searchRes
           )
