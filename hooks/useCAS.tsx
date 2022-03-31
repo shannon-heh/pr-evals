@@ -15,18 +15,19 @@ export default function useCAS() {
     if (ticket === "" || ticket === null || ticket === undefined)
       setIsLoggedIn(false);
     // setTicket(ticket as string);
-    fetch(`/api/auth?ticket=${ticket}`).then((res: Response) => {
-      res.json().then((data: Object) => {
-        if (!("netid" in data && "isInstructor" in data)) {
-          router.push("/");
-          return;
-        }
-        setIsLoggedIn(true);
-        setNetID(data["netid"]);
-        setIsInstructor(data["isInstructor"]);
-        if (router.pathname === "/") router.push("/dashboard");
-      });
-    });
+    (async function () {
+      const res = await fetch(`/api/auth?ticket=${ticket}`);
+      const data = await res.json();
+
+      if (!("netid" in data && "isInstructor" in data)) {
+        router.push("/");
+        return;
+      }
+      setIsLoggedIn(true);
+      setNetID(data["netid"]);
+      setIsInstructor(data["isInstructor"]);
+      if (router.pathname === "/") router.push("/dashboard");
+    })();
   }, [router.query.ticket]);
 
   return {
