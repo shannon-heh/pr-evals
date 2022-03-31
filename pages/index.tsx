@@ -9,7 +9,7 @@ export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
   const [loginButtonDisabled, setLoginButtonDisabled] = useState(false);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isLoggedIn) return <Loading />;
 
   return (
     <>
