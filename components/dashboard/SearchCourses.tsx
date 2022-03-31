@@ -159,7 +159,7 @@ export default function CourseSearch(props) {
           color: "black",
         }}
       />
-      <Box sx={{ overflow: "scroll", pt: 1, height: "90%" }}>
+      <Box sx={{ overflow: "scroll", pt: 1, height: "90%", width: "100%" }}>
         {url != null ? (
           searchRes && searchRes.length == 0 ? (
             <Typography>No courses found.</Typography>
