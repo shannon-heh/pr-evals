@@ -54,8 +54,8 @@ export default function Charts(props: {
 
   const makeChart = (data: ChartData, i: number) => {
     if (
-      (data.data.length == 0 ||
-        data.data.every((sample) => sample["value"] == 0)) &&
+      (data?.data.length == 0 ||
+        data?.data.every((sample) => sample["value"] == 0)) &&
       !props.isStandard
     )
       return (
