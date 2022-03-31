@@ -121,7 +121,6 @@ export default function CourseSearch(props) {
                     {catalogTitle}
                   </Typography>
                   <Typography>{course.course_title}</Typography>
-                  <Typography fontStyle="italic">5 Forms Active</Typography>
                 </Grid>
                 <Grid item>{button}</Grid>
               </Grid>
