@@ -58,7 +58,7 @@ function FormSelector(props: {
               mt={2}
               color={red[500]}
             >
-              This course doesn't have any published forms (yet)!
+              This course doesn't have any released forms (yet)!
             </Typography>
           </>
         )}

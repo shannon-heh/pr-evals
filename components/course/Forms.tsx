@@ -536,5 +536,21 @@ function StudentForms(props: { forms: CourseFormData[] }) {
       </Grid>
     );
   });
-  return <>{formCards}</>;
+  return (
+    <>
+      {forms?.some((form) => form.published) ? (
+        formCards
+      ) : (
+        <Typography
+          variant="subtitle1"
+          fontWeight="medium"
+          mt={2}
+          mx="auto"
+          color={red[500]}
+        >
+          This course doesn't have any released forms (yet)!
+        </Typography>
+      )}
+    </>
+  );
 }
