@@ -134,11 +134,14 @@ export default function InstructorForms(props: {
     `/api/get-students?courseid=${props.courseID}`,
     fetcher
   );
-  const studentEmails: string = students
-    ?.map((name) => {
-      return `${name}@princeton.edu`;
-    })
-    .join(", ");
+  // construct student emails as csv
+  const studentEmails: string = studentsError
+    ? "Cannot retrieve student emails."
+    : students
+        ?.map((name) => {
+          return `${name}@princeton.edu`;
+        })
+        .join(", ");
 
   // store new data about form to export
   const handleSetEmailForm = (form) => {
