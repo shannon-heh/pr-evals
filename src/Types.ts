@@ -179,6 +179,7 @@ export type QuestionMetadata =
 // used to construct forms in Forms tab
 export type CourseFormData = {
   title: string;
+  description: string;
   form_id: string;
   completed: boolean;
   course_id?: string;

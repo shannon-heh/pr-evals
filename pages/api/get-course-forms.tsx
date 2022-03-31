@@ -27,6 +27,7 @@ export default async function handler(
         projection: {
           _id: 0,
           title: 1,
+          description: 1,
           form_id: 1,
           time_created: 1,
           published: 1,
