@@ -53,7 +53,11 @@ export default function Charts(props: {
     : (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
-    if (data.data.length == 0 && !props.isStandard)
+    if (
+      (data.data.length == 0 ||
+        data.data.every((sample) => sample["value"] == 0)) &&
+      !props.isStandard
+    )
       return (
         <ChartWrapper>
           <HoverCard sx={{ mt: 2, p: 2.5 }}>

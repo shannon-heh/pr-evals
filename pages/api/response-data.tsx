@@ -120,7 +120,11 @@ export default async function handler(
   if (
     allResponses.length == 0 ||
     allResponses.every(
-      (response) => (response["responses"] as Object[]).length == 0
+      (response) =>
+        (response["responses"] as Object[]).length == 0 ||
+        (response["responses"] as Object[]).every(
+          (response_) => response_["response"] === null
+        )
     )
   )
     return res
