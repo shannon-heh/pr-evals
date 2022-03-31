@@ -385,6 +385,8 @@ function InstructorForms(props: {
           }}
           sx={{
             transition: "transform .25s",
+            boxShadow:
+              "rgba(0, 0, 0, 0.03) 0px 0px 16px, rgba(0, 0, 0, 0.03) 0px 0px 16px;",
             "&:hover": {
               transform: "scale3d(1.05, 1.05, 1)",
               cursor: "pointer",
@@ -479,6 +481,8 @@ function StudentForms(props: { forms: CourseFormData[] }) {
             variant="outlined"
             sx={{
               transition: "transform .25s",
+              boxShadow:
+                "rgba(0, 0, 0, 0.03) 0px 0px 16px, rgba(0, 0, 0, 0.03) 0px 0px 16px;",
               "&:hover": {
                 transform: "scale3d(1.05, 1.05, 1)",
                 cursor: "pointer",
