@@ -46,8 +46,9 @@ export default function CourseSearch(props) {
 
   // handler when user clicks add course
   const handleAddCourse = (courseID: string) => {
-    fetch(`/api/modify-my-courses?courseid=${courseID}&action=add`);
-    props.setFlag();
+    fetch(`/api/modify-my-courses?courseid=${courseID}&action=add`).then(() => {
+      props.setFlag();
+    });
   };
 
   // construct cards for each search result
@@ -132,6 +133,7 @@ export default function CourseSearch(props) {
 
   return (
     <Grid
+      container
       item
       xs={6}
       direction="row"

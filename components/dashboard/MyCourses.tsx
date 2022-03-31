@@ -36,8 +36,11 @@ export default function MyCourses(props) {
 
   // handler when user clicks remove course
   const handleRemoveCourse = (courseID: string) => {
-    fetch(`/api/modify-my-courses?courseid=${courseID}&action=remove`);
-    props.setFlag();
+    fetch(`/api/modify-my-courses?courseid=${courseID}&action=remove`).then(
+      () => {
+        props.setFlag();
+      }
+    );
   };
 
   // construct cards for each course
