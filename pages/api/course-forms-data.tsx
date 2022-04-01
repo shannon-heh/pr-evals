@@ -29,7 +29,7 @@ export default async function handler(
 // Retrieves form data for a given courseID
 async function getFormStats(db, courseId: string): Promise<FormStats> {
   // get number of forms for a course
-  let numForms: number = 0;
+  let numForms = 0;
   try {
     numForms = await db
       .collection("forms")
@@ -41,7 +41,7 @@ async function getFormStats(db, courseId: string): Promise<FormStats> {
   // get number of completed forms for this student
   const netid = getNetID();
 
-  let numSubmitted: number = 0;
+  let numSubmitted = 0;
   try {
     numSubmitted = await db
       .collection("responses")

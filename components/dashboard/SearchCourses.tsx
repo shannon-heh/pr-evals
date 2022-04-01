@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
@@ -43,7 +43,7 @@ export default function CourseSearch(props) {
   }, [query]);
 
   // search for courses
-  let { data: courseData, error: courseError } = useSWR(url, fetcher);
+  const { data: courseData, error: courseError } = useSWR(url, fetcher);
   if (courseError) return <Error text="Failed to load Dashboard!" />;
 
   // handler when user clicks add course

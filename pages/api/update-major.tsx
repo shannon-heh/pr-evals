@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { isStudent, getNetID } from "../../src/Helpers";
+import { getNetID, isStudent } from "../../src/Helpers";
 
 // API endpoint to save major for user,
 // given major code and user's netid.

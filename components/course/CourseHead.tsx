@@ -1,5 +1,5 @@
 import { Grid, ThemeProvider, Tooltip, Typography } from "@mui/material";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import pluralize from "pluralize";
 import { prEvalsTheme } from "../../src/Helpers";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
@@ -14,8 +14,8 @@ export default function CourseHead(props: { data: CourseData }) {
     p: 5,
   };
 
-  let countUniqueSections = (classes: ClassData[]): Object[] => {
-    let counts = {};
+  const countUniqueSections = (classes: ClassData[]): Object[] => {
+    const counts = {};
     for (let { class_type, weekly_meetings_count } of classes) {
       class_type = class_type == "Unknown" ? "Other" : class_type;
       if (class_type != "Lecture" && weekly_meetings_count == 0) continue;

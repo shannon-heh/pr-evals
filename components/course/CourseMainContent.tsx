@@ -2,7 +2,7 @@ import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import GroupsIcon from "@mui/icons-material/Groups";
-import { Box, createTheme, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import Charts from "./Charts";
 import Reviews from "./Reviews";
@@ -13,7 +13,7 @@ import useCAS from "../../hooks/useCAS";
 import useSWR from "swr";
 import { fetcher, prEvalsTheme } from "../../src/Helpers";
 import Students from "./Students";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { ThemeProvider } from "@mui/material";
 
 export default function CourseMainContent(props: {

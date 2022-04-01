@@ -22,7 +22,7 @@ export default function Dashboard() {
 
   // get user's courses from DB
   const url = netID ? `/api/get-user-data?flag=${modifyFlag}` : "";
-  let { data: userData, error: userError } = useSWR(url, fetcher);
+  const { data: userData, error: userError } = useSWR(url, fetcher);
 
   // update user's courses
   useEffect(() => {

@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
 import useSWR from "swr";
@@ -22,14 +22,14 @@ export default function MyCourses(props) {
     myCourses.length != 0
       ? `/api/course-page-data?courseids=${myCourses.join(",")}`
       : null;
-  let { data: courseData, error: courseError } = useSWR(courseUrl, fetcher);
+  const { data: courseData, error: courseError } = useSWR(courseUrl, fetcher);
 
   // get stats for each course's forms
   const formsUrl =
     myCourses.length != 0
       ? `/api/course-forms-data?courseids=${myCourses.join(",")}`
       : null;
-  let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
+  const { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
 
   if (courseError || formsError)
     return <Typography>Failed to retrieve your courses!</Typography>;

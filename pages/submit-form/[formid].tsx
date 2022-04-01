@@ -5,7 +5,7 @@ import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import CustomHead from "../../components/CustomHead";
 import { CourseData, Question, QuestionMetadata } from "../../src/Types";
 import { useEffect, useState } from "react";
@@ -213,7 +213,7 @@ export default function SubmitForm() {
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
-              const name: string = String(q.q_id);
+              const name = String(q.q_id);
               if (q.type == Question.ShortText) {
                 input = <ShortTextInput name={name} formik={formik} />;
               } else if (q.type == Question.LongText) {

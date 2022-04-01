@@ -1,11 +1,11 @@
 import {
+  Bar,
   BarChart,
   CartesianGrid,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  Bar,
 } from "recharts";
 import { EvalsData } from "../../../src/Types";
 import HoverCard from "../HoverCard";
@@ -79,7 +79,7 @@ export default function WordSentimentChart(props: { evalsData: EvalsData[] }) {
           Each evaluation's sentiment is computed using the{" "}
           <a
             href="https://www2.imm.dtu.dk/pubdb/pubs/6010-full.html"
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             AFINN-165
           </a>{" "}

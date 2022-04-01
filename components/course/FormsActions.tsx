@@ -16,10 +16,8 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormStatus } from "../../src/Types";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import { ThemeProvider } from "@mui/material";
 import { prEvalsTheme } from "../../src/Helpers";
-import { blue } from "@mui/material/colors";
 
 // Actions on course page for instructor to start a new form
 export default function FormsActions(props: {

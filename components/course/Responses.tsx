@@ -10,7 +10,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { blue, grey, red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { useState } from "react";
 import useSWR from "swr";
 import { fetcher, prEvalsTheme } from "../../src/Helpers";

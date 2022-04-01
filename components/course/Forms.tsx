@@ -13,7 +13,7 @@ import {
   sortByReleased,
 } from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
-import { red, green, grey, deepOrange } from "@mui/material/colors";
+import { deepOrange, green, grey, red } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import FormsActions from "./FormsActions";
 import { CourseFormData, FormStatus } from "../../src/Types";
@@ -31,7 +31,7 @@ export default function Forms(props: {
 
   // get data about each course form
   const formsUrl = `/api/get-course-forms?courseid=${props.courseID}&netid=${netID}`;
-  let { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
+  const { data: formsData, error: formsError } = useSWR(formsUrl, fetcher);
 
   useEffect(() => {
     setForms(formsData);

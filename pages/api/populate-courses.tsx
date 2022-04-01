@@ -53,7 +53,7 @@ async function getAllCourses(
         const deptCode = subject["code"];
         const rawCourses = subject["courses"];
         const newCourses = rawCourses.map((data: Object) => {
-          let course: Object = {};
+          const course: Object = {};
           course["code"] = deptCode;
           course["guid"] = data["guid"];
           course["course_id"] = data["course_id"];

@@ -1,6 +1,5 @@
 import { fetcher } from "../../../src/Helpers";
 import useSWR from "swr";
-import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { blue, grey } from "@mui/material/colors";
@@ -11,7 +10,6 @@ import SingleSelectInput from "../question-types/SingleSelectInput";
 import MultiSelectInput from "../question-types/MultiSelectInput";
 import SliderInput from "../question-types/SliderInput";
 import RatingInput from "../question-types/RatingInput";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Accordion from "@mui/material/Accordion";

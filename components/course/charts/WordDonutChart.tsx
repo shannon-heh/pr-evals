@@ -23,8 +23,8 @@ export default function WordDonutChart(props: {
     evalsData: EvalsData[],
     numWords: number
   ): ChartItem[] => {
-    let wordCounts = generateWordCounts(evalsData);
-    let res: ChartItem[] = Array();
+    const wordCounts = generateWordCounts(evalsData);
+    const res: ChartItem[] = [];
     for (const [text, value] of Object.entries(wordCounts)) {
       res.push({
         label: text as string,

@@ -9,7 +9,6 @@ import {
   YAxis,
 } from "recharts";
 import HoverCard from "../HoverCard";
-import pluralize from "pluralize";
 
 export default function MultiChoiceChart(props: {
   data: Object[];

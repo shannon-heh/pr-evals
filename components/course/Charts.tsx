@@ -1,5 +1,5 @@
 import { Box, Grid, Skeleton, Typography } from "@mui/material";
-import { blue, grey, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { useState } from "react";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";

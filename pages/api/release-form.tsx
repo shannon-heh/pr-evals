@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateInstructor, getNetID } from "../../src/Helpers";
+import { getNetID, validateInstructor } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
 // API endpoint for instructors to release responses for form

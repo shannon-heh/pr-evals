@@ -1,5 +1,5 @@
 import { Box, Grid, Skeleton, Tooltip, Typography } from "@mui/material";
-import { blue, grey, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
 import { fetcher, prEvalsTheme } from "../../src/Helpers";

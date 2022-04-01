@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
 import { FormResponseData, QuestionMetadata } from "../../src/Types";
-import { validateInstructor, getNetID } from "../../src/Helpers";
+import { getNetID, validateInstructor } from "../../src/Helpers";
 import objectsToCsv from "objects-to-csv";
 
 // API endpoint to export responses for a form

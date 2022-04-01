@@ -5,7 +5,6 @@ import sessionstorage from "sessionstorage";
 import { CourseFormData, EvalsData } from "./Types";
 import {
   blue,
-  blueGrey,
   green,
   orange,
   purple,
@@ -87,7 +86,7 @@ export function dateToString(date: Date) {
 
 // Functions used for preparing data in charts on course pages
 export const prepText = (evalText: string): string[] => {
-  let rawLowercaseText = evalText.split(" ").map((word) => word.toLowerCase());
+  const rawLowercaseText = evalText.split(" ").map((word) => word.toLowerCase());
   const noPunctuationText: string[] = rawLowercaseText.map((word) =>
     removePunctuation(word)
   );
@@ -99,7 +98,7 @@ export const prepText = (evalText: string): string[] => {
 };
 
 export const generateWordCounts = (evalsData: EvalsData[]): Object => {
-  let wordCounts = {};
+  const wordCounts = {};
   evalsData.forEach((evalDoc: EvalsData) => {
     prepText(evalDoc.text).forEach((word: string) => {
       wordCounts[word] = wordCounts[word] ? wordCounts[word] + 1 : 1;

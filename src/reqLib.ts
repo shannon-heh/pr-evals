@@ -30,7 +30,7 @@ export class ReqLib {
 
   // Helper method to call endpoint
   async getJSONHelper(baseURL: string, endpoint: string, args: Object) {
-    let url = baseURL + endpoint + "?";
+    const url = baseURL + endpoint + "?";
     const query = Object.keys(args)
       .map(
         (k) => encodeURIComponent(k) + "=" + encodeURIComponent(args[k])

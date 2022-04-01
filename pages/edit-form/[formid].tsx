@@ -7,7 +7,7 @@ import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { blue, blueGrey, grey, lightBlue } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import CustomHead from "../../components/CustomHead";
 import { CourseData, Question, QuestionMetadata } from "../../src/Types";
 import AddQuestionDialog from "../../components/forms/add-question/AddQuestionDialog";
@@ -170,7 +170,7 @@ export default function EditForm() {
   // set state to existing questions from DB, if any
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
-    let maxId: number = 0;
+    let maxId = 0;
     if (formData?.questions && formData.questions.length > 0) {
       maxId = Math.max.apply(
         Math,

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { FormMetadata, CourseFormData } from "../../src/Types";
+import { CourseFormData, FormMetadata } from "../../src/Types";
 import { getNetID, sortByReleased } from "../../src/Helpers";
 
 // API endpoint to get a course's forms given a course ID

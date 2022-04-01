@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { AdminData } from "../../src/Types";
 import { getNetID } from "../../src/Helpers";
 import { Collection } from "mongodb";
 
