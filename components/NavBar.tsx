@@ -11,6 +11,7 @@ import { useState } from "react";
 import useCAS from "../hooks/useCAS";
 import { SvgIcon, Tooltip } from "@mui/material";
 import Link from "next/link";
+import { grey, blue } from "@mui/material/colors";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -27,7 +28,7 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: blue[900] }}>
         <Toolbar>
           <Link href={isLoggedIn ? "/dashboard" : ""}>
             <SvgIcon sx={{ mr: 2, mt: 0.4, height: 20, cursor: "pointer" }}>

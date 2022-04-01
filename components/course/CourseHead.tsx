@@ -6,7 +6,7 @@ import HoverCard from "./HoverCard";
 
 export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
-    background: blue[300],
+    background: "#edf2f3",
     borderColor: grey[400],
     alignItems: "center",
     color: grey[800],
@@ -44,8 +44,8 @@ export default function CourseHead(props: { data: CourseData }) {
           <Typography
             variant="h3"
             component="div"
-            color="white"
             fontWeight="bold"
+            color={blue[900]}
           >
             {props.data.catalog_title}
           </Typography>
@@ -63,7 +63,7 @@ export default function CourseHead(props: { data: CourseData }) {
               : {props.data.crosslisting_catalog_titles.join(" • ")}
             </Typography>
           ) : null}
-          <Typography variant="h5" component="div" fontWeight="bolder">
+          <Typography variant="h5" component="div" fontWeight="medium">
             {props.data.course_title}
           </Typography>
         </HoverCard>
@@ -76,17 +76,12 @@ export default function CourseHead(props: { data: CourseData }) {
           <Typography
             variant="h4"
             component="div"
-            color="white"
             fontWeight="bold"
+            color={blue[900]}
           >
             Quick Facts
           </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            fontWeight="medium"
-            fontSize="1.1em"
-          >
+          <Typography variant="subtitle1" component="div" fontWeight="medium">
             # Instructors:{" "}
             <Typography display="inline" fontWeight="normal">
               {props.data.instructors.length}
@@ -97,24 +92,14 @@ export default function CourseHead(props: { data: CourseData }) {
             placement="left"
             arrow
           >
-            <Typography
-              variant="subtitle1"
-              component="div"
-              fontWeight="medium"
-              fontSize="1.1em"
-            >
+            <Typography variant="subtitle1" component="div" fontWeight="medium">
               # Students:{" "}
               <Typography display="inline" fontWeight="normal">
                 {props.data.num_students}
               </Typography>
             </Typography>
           </Tooltip>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            fontWeight="medium"
-            fontSize="1.1em"
-          >
+          <Typography variant="subtitle1" component="div" fontWeight="medium">
             Meetings per week:{" "}
             <Typography
               display="inline"
@@ -149,10 +134,10 @@ export default function CourseHead(props: { data: CourseData }) {
           specialCourseHeaderFlex
         >
           <Typography
-            variant="h6"
+            variant="subtitle1"
             component="div"
-            color="white"
             fontWeight="bold"
+            color={blue[900]}
           >
             {pluralize("Instructor", props.data.instructors.length)}:{" "}
             <Typography

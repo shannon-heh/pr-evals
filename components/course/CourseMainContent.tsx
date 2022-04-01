@@ -2,7 +2,7 @@ import BarChart from "@mui/icons-material/BarChart";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import GroupsIcon from "@mui/icons-material/Groups";
-import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { Box, createTheme, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import Charts from "./Charts";
 import Reviews from "./Reviews";
@@ -13,6 +13,9 @@ import useCAS from "../../hooks/useCAS";
 import useSWR from "swr";
 import { fetcher } from "../../src/Helpers";
 import Students from "./Students";
+import { blue, red } from "@mui/material/colors";
+import { ThemeProvider } from "@emotion/react";
+import { palette } from "@mui/system";
 
 export default function CourseMainContent(props: {
   courseID: string;
@@ -69,11 +72,21 @@ export default function CourseMainContent(props: {
   };
 
   return (
-    <>
+    <ThemeProvider
+      theme={createTheme({ palette: { secondary: { main: blue[900] } } })}
+    >
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           {isUsersCourse ? (
-            <Tabs value={value} onChange={handleChange} centered>
+            <Tabs
+              textColor="secondary"
+              TabIndicatorProps={{
+                style: { color: red[100], backgroundColor: blue[900] },
+              }}
+              value={value}
+              onChange={handleChange}
+              centered
+            >
               <Tab icon={<RateReviewIcon />} label="Forms" {...a11yProps(0)} />
               <Tab
                 icon={<DriveFileRenameOutlineIcon />}
@@ -135,6 +148,6 @@ export default function CourseMainContent(props: {
           </>
         )}
       </Grid>
-    </>
+    </ThemeProvider>
   );
 }
