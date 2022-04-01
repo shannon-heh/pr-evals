@@ -164,6 +164,7 @@ export default function CourseSearch(props) {
           onChange={formik.handleChange}
           value={formik.values.search}
           sx={{
+            mx: 1.25,
             width: "100%",
             color: "black",
           }}
@@ -183,7 +184,7 @@ export default function CourseSearch(props) {
               searchRes
             )
           ) : (
-            <Typography>
+            <Typography px={1.25}>
               Enter 3+ characters to start finding courses.
             </Typography>
           )}
