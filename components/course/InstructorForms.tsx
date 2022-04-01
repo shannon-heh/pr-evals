@@ -2,9 +2,9 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { dateToString, fetcher } from "../../src/Helpers";
+import { dateToString, fetcher, prEvalsTheme } from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
-import { red, green, amber, grey } from "@mui/material/colors";
+import { red, green, amber, grey, deepOrange } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PublishIcon from "@mui/icons-material/Publish";
@@ -202,6 +202,8 @@ export default function InstructorForms(props: {
           }}
           sx={{
             transition: "transform .25s",
+            borderRadius: 2,
+            border: `1px solid ${grey[300]}`,
             boxShadow:
               "rgba(0, 0, 0, 0.03) 0px 0px 16px, rgba(0, 0, 0, 0.03) 0px 0px 16px;",
             "&:hover": {
@@ -210,7 +212,12 @@ export default function InstructorForms(props: {
             },
           }}
         >
-          <CardContent sx={{ backgroundColor: grey[200], padding: 0 }}>
+          <CardContent
+            sx={{
+              backgroundColor: prEvalsTheme.palette.secondary.dark,
+              padding: 0,
+            }}
+          >
             <InstructorActions
               handleSetExportForm={handleSetExportForm}
               handleOpenExport={handleOpenExport}
@@ -369,10 +376,10 @@ function InstructorActions(props: {
       sx={{
         fontSize: 16,
         backgroundColor: form.released
-          ? green[300]
+          ? green[600]
           : form.published
-          ? amber[300]
-          : red[300],
+          ? amber[600]
+          : deepOrange[800],
         padding: 0.25,
       }}
     >

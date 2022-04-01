@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { SxProps, Theme } from "@mui/material/styles";
 
 // wrapper component to create white cards with a hover effect
@@ -12,13 +13,11 @@ export default function HoverCard(props: {
   sx?: SxProps<Theme>;
   specialCourseHeaderFlex?: boolean;
 }) {
-  const darkGrey = "#dfe0e2";
-  const lightGrey = "#f4f4f5";
   return (
     <Box
       sx={{
-        background: darkGrey,
-        borderRadius: "0.75rem",
+        background: "#dfe0e2",
+        borderRadius: 2,
         display: props.specialCourseHeaderFlex ? "flex" : null,
         flexGrow: props.specialCourseHeaderFlex ? 1 : null,
       }}
@@ -31,8 +30,8 @@ export default function HoverCard(props: {
           background: "white",
           boxShadow:
             "rgba(0, 0, 0, 0.03) 0px 0px 16px, rgba(0, 0, 0, 0.03) 0px 0px 16px;",
-          border: `1px solid ${lightGrey}`,
-          borderRadius: "0.75rem",
+          border: `1px solid ${grey[300]}`,
+          borderRadius: 2,
           transition: "transform 250ms ease 0s, filter 250ms ease 0s",
           "&:hover": { transform: "translateY(-8px)" },
           ...props.sx,

@@ -11,11 +11,10 @@ import RateReviewIcon from "@mui/icons-material/RateReview";
 import Forms from "./Forms";
 import useCAS from "../../hooks/useCAS";
 import useSWR from "swr";
-import { fetcher } from "../../src/Helpers";
+import { fetcher, prEvalsTheme } from "../../src/Helpers";
 import Students from "./Students";
 import { blue, red } from "@mui/material/colors";
-import { ThemeProvider } from "@emotion/react";
-import { palette } from "@mui/system";
+import { ThemeProvider } from "@mui/material";
 
 export default function CourseMainContent(props: {
   courseID: string;
@@ -28,8 +27,8 @@ export default function CourseMainContent(props: {
   const { data: userData, error: userError } = useSWR(url, fetcher);
   const isUsersCourse: boolean = !userError
     ? isInstructor
-      ? userData?.instructor_courses.includes(props.courseID)
-      : userData?.student_courses.includes(props.courseID)
+      ? userData?.instructor_courses?.includes(props.courseID)
+      : userData?.student_courses?.includes(props.courseID)
     : false;
 
   type TabPanelProps = {
@@ -72,16 +71,17 @@ export default function CourseMainContent(props: {
   };
 
   return (
-    <ThemeProvider
-      theme={createTheme({ palette: { secondary: { main: blue[900] } } })}
-    >
+    <ThemeProvider theme={prEvalsTheme}>
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           {isUsersCourse ? (
             <Tabs
               textColor="secondary"
               TabIndicatorProps={{
-                style: { color: red[100], backgroundColor: blue[900] },
+                style: {
+                  color: red[100],
+                  backgroundColor: prEvalsTheme.palette.secondary.main,
+                },
               }}
               value={value}
               onChange={handleChange}

@@ -1,4 +1,3 @@
-// import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +11,7 @@ import useCAS from "../hooks/useCAS";
 import { SvgIcon, Tooltip } from "@mui/material";
 import Link from "next/link";
 import { grey, blue } from "@mui/material/colors";
+import { prEvalsTheme } from "../src/Helpers";
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,7 +28,13 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: blue[900] }}>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: prEvalsTheme.palette.secondary.main,
+          boxShadow: "none",
+        }}
+      >
         <Toolbar>
           <Link href={isLoggedIn ? "/dashboard" : ""}>
             <SvgIcon sx={{ mr: 2, mt: 0.4, height: 20, cursor: "pointer" }}>

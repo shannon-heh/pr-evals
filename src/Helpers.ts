@@ -3,10 +3,26 @@ import sw from "stopword";
 import stopwords from "stopwords-iso";
 import sessionstorage from "sessionstorage";
 import { CourseFormData, EvalsData } from "./Types";
-import { blue, green, orange, purple, red } from "@mui/material/colors";
+import {
+  blue,
+  blueGrey,
+  green,
+  orange,
+  purple,
+  red,
+} from "@mui/material/colors";
+import { createTheme } from "@mui/material";
 
 // fetcher for useSWR calls
 export const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
+// theme
+export const prEvalsTheme = createTheme({
+  palette: {
+    secondary: { main: blue[900], dark: "#eff4f5", light: blue[50] },
+    info: { main: blue[800] },
+  },
+});
 
 // color for charts
 export const COLORS = [

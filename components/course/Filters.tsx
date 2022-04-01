@@ -6,10 +6,11 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  ThemeProvider,
   Typography,
 } from "@mui/material";
 import useSWR from "swr";
-import { fetcher } from "../../src/Helpers";
+import { fetcher, prEvalsTheme } from "../../src/Helpers";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { red } from "@mui/material/colors";
 import gradeMap from "../../src/Types";
@@ -61,59 +62,63 @@ export default function Filters(props: {
     );
 
   return (
-    <Box
-      sx={{
-        mt: 2,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <FormControl sx={{ width: 200 }}>
-        <InputLabel>Select Concentration</InputLabel>
-        <Select
-          value={props.concentrationFilter}
-          label="Select Concentration"
-          onChange={handleConcentrationChange}
-          variant={props.disabled ? "filled" : "outlined"}
-          disabled={props.disabled}
-        >
-          {dataMajors?.majors.map((major: string) => (
-            <MenuItem key={major} value={major}>
-              {major}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ ml: 2, width: 200 }}>
-        <InputLabel>Select Year</InputLabel>
-        <Select
-          value={props.yearFilter}
-          label="Select Year"
-          onChange={handleYearChange}
-          variant={props.disabled ? "filled" : "outlined"}
-          disabled={props.disabled}
-        >
-          {dataYears?.map((year: string) => (
-            <MenuItem key={year} value={year}>
-              {gradeMap[year]}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ ml: 2, width: 100 }}>
-        <Button
-          startIcon={<DeleteIcon />}
-          variant="outlined"
-          size="large"
-          color="error"
-          onClick={() => {
-            handleFilterReset();
-          }}
-        >
-          Reset
-        </Button>
-      </FormControl>
-    </Box>
+    <ThemeProvider theme={prEvalsTheme}>
+      <Box
+        sx={{
+          mt: 2,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <FormControl sx={{ width: 200 }}>
+          <InputLabel>Select Concentration</InputLabel>
+          <Select
+            color="secondary"
+            value={props.concentrationFilter}
+            label="Select Concentration"
+            onChange={handleConcentrationChange}
+            variant={props.disabled ? "filled" : "outlined"}
+            disabled={props.disabled}
+          >
+            {dataMajors?.majors.map((major: string) => (
+              <MenuItem key={major} value={major}>
+                {major}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ ml: 2, width: 200 }}>
+          <InputLabel>Select Year</InputLabel>
+          <Select
+            color="secondary"
+            value={props.yearFilter}
+            label="Select Year"
+            onChange={handleYearChange}
+            variant={props.disabled ? "filled" : "outlined"}
+            disabled={props.disabled}
+          >
+            {dataYears?.map((year: string) => (
+              <MenuItem key={year} value={year}>
+                {gradeMap[year]}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ ml: 2, width: 100 }}>
+          <Button
+            startIcon={<DeleteIcon />}
+            variant="outlined"
+            size="large"
+            color="error"
+            onClick={() => {
+              handleFilterReset();
+            }}
+          >
+            Reset
+          </Button>
+        </FormControl>
+      </Box>
+    </ThemeProvider>
   );
 }

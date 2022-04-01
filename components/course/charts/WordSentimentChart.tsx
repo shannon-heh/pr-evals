@@ -67,7 +67,12 @@ export default function WordSentimentChart(props: { evalsData: EvalsData[] }) {
             <YAxis dataKey="count" />
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             <Tooltip />
-            <Bar type="monotone" dataKey="count" fill={blue[400]} />
+            <Bar
+              type="monotone"
+              dataKey="count"
+              fill={blue[400]}
+              fillOpacity={0.6}
+            />
           </BarChart>
         </ResponsiveContainer>
         <Typography fontStyle="italic">

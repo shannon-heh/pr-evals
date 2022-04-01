@@ -1,13 +1,13 @@
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { blue } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import useSWR from "swr";
 import { CourseData } from "../../src/Types";
-import { fetcher, getFullTitle } from "../../src/Helpers";
+import { fetcher, getFullTitle, prEvalsTheme } from "../../src/Helpers";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
@@ -16,6 +16,7 @@ import Error from "../../components/Error";
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import { ThemeProvider } from "@mui/material";
 
 // Component to display Course Search on Dashboard
 export default function CourseSearch(props) {
@@ -104,8 +105,14 @@ export default function CourseSearch(props) {
     return (
       <Link href={`/course/${courseID}`} key={`search-${courseID}`}>
         <a id={`search-${courseID}`} style={{ textDecoration: "none" }}>
-          <Box sx={{ m: 0.75, color: "black" }}>
-            <HoverCard sx={{ p: 1.25 }}>
+          <Box sx={{ m: 1.25, color: "black" }}>
+            <HoverCard
+              sx={{
+                p: 1.25,
+                background: prEvalsTheme.palette.secondary.dark,
+                borderColor: grey[300],
+              }}
+            >
               <Grid
                 container
                 item
@@ -132,51 +139,56 @@ export default function CourseSearch(props) {
   });
 
   return (
-    <Grid
-      container
-      item
-      xs={6}
-      direction="row"
-      sx={{
-        p: 2,
-        pt: 2.8,
-        height: "90vh",
-        overflow: "scroll",
-        borderRight: 1,
-        borderWidth: 3,
-        borderColor: blue[600],
-      }}
-    >
-      <TextField
-        id="search"
-        label="Search for courses"
-        variant="outlined"
-        name="search"
-        onChange={formik.handleChange}
-        value={formik.values.search}
+    <ThemeProvider theme={prEvalsTheme}>
+      <Grid
+        container
+        item
+        xs={6}
+        direction="row"
         sx={{
-          width: "100%",
-          color: "black",
+          p: 2,
+          pt: 2.8,
+          height: "90vh",
+          overflow: "scroll",
+          borderRight: 1,
+          borderWidth: 3,
+          borderColor: prEvalsTheme.palette.secondary.main,
         }}
-      />
-      <Box sx={{ overflow: "scroll", pt: 1, height: "90%", width: "100%" }}>
-        {url != null ? (
-          searchRes && searchRes.length == 0 ? (
-            <Typography>No courses found.</Typography>
-          ) : searchRes === undefined ? (
-            <>
-              <CircularProgress size={16} />
-              <Typography ml={1} display="inline">
-                Loading results...
-              </Typography>
-            </>
+      >
+        <TextField
+          id="search"
+          label="Search for courses"
+          variant="outlined"
+          color="secondary"
+          name="search"
+          onChange={formik.handleChange}
+          value={formik.values.search}
+          sx={{
+            width: "100%",
+            color: "black",
+          }}
+        />
+        <Box sx={{ overflow: "scroll", pt: 1, height: "90%", width: "100%" }}>
+          {url != null ? (
+            searchRes && searchRes.length == 0 ? (
+              <Typography>No courses found.</Typography>
+            ) : searchRes === undefined ? (
+              <>
+                <CircularProgress size={16} />
+                <Typography ml={1} display="inline">
+                  Loading results...
+                </Typography>
+              </>
+            ) : (
+              searchRes
+            )
           ) : (
-            searchRes
-          )
-        ) : (
-          <Typography>Enter 3+ characters to start finding courses.</Typography>
-        )}
-      </Box>
-    </Grid>
+            <Typography>
+              Enter 3+ characters to start finding courses.
+            </Typography>
+          )}
+        </Box>
+      </Grid>
+    </ThemeProvider>
   );
 }

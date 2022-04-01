@@ -1,10 +1,10 @@
 import Grid from "@mui/material/Grid";
-import { blue } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
 import HoverCard from "../course/HoverCard";
 import Typography from "@mui/material/Typography";
 import useSWR from "swr";
 import { CourseData } from "../../src/Types";
-import { fetcher, getFullTitle } from "../../src/Helpers";
+import { fetcher, getFullTitle, prEvalsTheme } from "../../src/Helpers";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
@@ -59,8 +59,14 @@ export default function MyCourses(props) {
     return (
       <Link href={`/course/${courseID}`} key={`search-${courseID}`}>
         <a id={`search-${courseID}`} style={{ textDecoration: "none" }}>
-          <Box sx={{ m: 0.75, color: "black" }}>
-            <HoverCard sx={{ p: 1.25, borderColor: blue[200] }}>
+          <Box sx={{ m: 1.25, color: "black" }}>
+            <HoverCard
+              sx={{
+                p: 1.25,
+                background: prEvalsTheme.palette.secondary.dark,
+                borderColor: grey[300],
+              }}
+            >
               <Grid
                 container
                 item

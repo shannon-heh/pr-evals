@@ -1,4 +1,4 @@
-import { fetcher, getFullTitle } from "../../src/Helpers";
+import { fetcher, getFullTitle, prEvalsTheme } from "../../src/Helpers";
 import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
 import Loading from "../../components/Loading";
@@ -20,6 +20,7 @@ import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 import BlockAction from "../../components/BlockAction";
+import { ThemeProvider } from "@mui/material";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
@@ -147,7 +148,7 @@ export default function SubmitForm() {
   }
 
   return (
-    <>
+    <ThemeProvider theme={prEvalsTheme}>
       <CustomHead pageTitle="Submit Form" />
       <Grid
         container
@@ -159,7 +160,12 @@ export default function SubmitForm() {
           item
           container
           flexDirection="column"
-          sx={{ width: "60%", py: 3, px: 5, backgroundColor: blue[100] }}
+          sx={{
+            width: "60%",
+            py: 3,
+            px: 5,
+            backgroundColor: prEvalsTheme.palette.secondary.light,
+          }}
         >
           <Grid>
             <Typography variant="h5" fontWeight="500">
@@ -183,6 +189,7 @@ export default function SubmitForm() {
               justifyContent="center"
             >
               <Button
+                color="info"
                 type="submit"
                 variant="contained"
                 onClick={openConfirmDialog}
@@ -271,6 +278,6 @@ export default function SubmitForm() {
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </ThemeProvider>
   );
 }

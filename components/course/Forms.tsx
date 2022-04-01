@@ -7,12 +7,13 @@ import useCAS from "../../hooks/useCAS";
 import {
   dateToString,
   fetcher,
+  prEvalsTheme,
   sortByCreated,
   sortByPublished,
   sortByReleased,
 } from "../../src/Helpers";
 import Grid from "@mui/material/Grid";
-import { red, green, grey, blue } from "@mui/material/colors";
+import { red, green, grey, deepOrange } from "@mui/material/colors";
 import Link from "@mui/material/Link";
 import FormsActions from "./FormsActions";
 import { CourseFormData, FormStatus } from "../../src/Types";
@@ -111,6 +112,8 @@ function StudentForms(props: { forms: CourseFormData[] }) {
             variant="outlined"
             sx={{
               transition: "transform .25s",
+              borderRadius: 2,
+              border: `1px solid ${grey[300]}`,
               boxShadow:
                 "rgba(0, 0, 0, 0.03) 0px 0px 16px, rgba(0, 0, 0, 0.03) 0px 0px 16px;",
               "&:hover": {
@@ -121,7 +124,7 @@ function StudentForms(props: { forms: CourseFormData[] }) {
           >
             <CardContent
               sx={{
-                backgroundColor: form.standardized ? blue[100] : grey[200],
+                backgroundColor: prEvalsTheme.palette.secondary.dark,
                 padding: 0,
               }}
             >
@@ -130,10 +133,10 @@ function StudentForms(props: { forms: CourseFormData[] }) {
                 sx={{
                   fontSize: 16,
                   backgroundColor: form.completed
-                    ? green[300]
+                    ? green[600]
                     : form.released
-                    ? grey[500]
-                    : red[300],
+                    ? grey[400]
+                    : deepOrange[800],
                   padding: 1,
                 }}
                 gutterBottom

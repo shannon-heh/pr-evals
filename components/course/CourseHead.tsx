@@ -1,15 +1,16 @@
-import { Grid, Tooltip, Typography } from "@mui/material";
+import { Grid, ThemeProvider, Tooltip, Typography } from "@mui/material";
 import { blue, grey } from "@mui/material/colors";
 import pluralize from "pluralize";
+import { prEvalsTheme } from "../../src/Helpers";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
 import HoverCard from "./HoverCard";
 
 export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
-    background: "#edf2f3",
-    borderColor: grey[400],
+    background: prEvalsTheme.palette.secondary.dark,
+    borderColor: grey[300],
     alignItems: "center",
-    color: grey[800],
+    color: "black",
     p: 5,
   };
 
@@ -32,7 +33,7 @@ export default function CourseHead(props: { data: CourseData }) {
   };
 
   return (
-    <>
+    <ThemeProvider theme={prEvalsTheme}>
       <Grid item container md={8} direction="column" sx={{ mt: 2 }}>
         <HoverCard
           sx={{
@@ -45,17 +46,12 @@ export default function CourseHead(props: { data: CourseData }) {
             variant="h3"
             component="div"
             fontWeight="bold"
-            color={blue[900]}
+            color="secondary"
           >
             {props.data.catalog_title}
           </Typography>
           {props.data.crosslisting_catalog_titles.length > 0 ? (
-            <Typography
-              variant="subtitle1"
-              component="div"
-              fontWeight="medium"
-              fontSize="1.1em"
-            >
+            <Typography variant="subtitle1" component="div">
               {pluralize(
                 "Crosslisting",
                 props.data.crosslisting_catalog_titles.length
@@ -63,7 +59,7 @@ export default function CourseHead(props: { data: CourseData }) {
               : {props.data.crosslisting_catalog_titles.join(" • ")}
             </Typography>
           ) : null}
-          <Typography variant="h5" component="div" fontWeight="medium">
+          <Typography variant="h5" component="div" mt={1}>
             {props.data.course_title}
           </Typography>
         </HoverCard>
@@ -77,7 +73,7 @@ export default function CourseHead(props: { data: CourseData }) {
             variant="h4"
             component="div"
             fontWeight="bold"
-            color={blue[900]}
+            color="secondary"
           >
             Quick Facts
           </Typography>
@@ -137,15 +133,10 @@ export default function CourseHead(props: { data: CourseData }) {
             variant="subtitle1"
             component="div"
             fontWeight="bold"
-            color={blue[900]}
+            color="secondary"
           >
             {pluralize("Instructor", props.data.instructors.length)}:{" "}
-            <Typography
-              display="inline"
-              variant="subtitle1"
-              fontWeight="medium"
-              color={grey[800]}
-            >
+            <Typography display="inline" variant="subtitle1" color="black">
               {props.data.instructors
                 .map((instr: InstructorData) => {
                   return instr["instructor_name"];
@@ -155,6 +146,6 @@ export default function CourseHead(props: { data: CourseData }) {
           </Typography>
         </HoverCard>
       </Grid>
-    </>
+    </ThemeProvider>
   );
 }

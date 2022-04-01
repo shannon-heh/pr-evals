@@ -10,9 +10,10 @@ import useSWR from "swr";
 import useCAS from "../hooks/useCAS";
 import CustomHead from "../components/CustomHead";
 import { StudentDataDB } from "../src/Types";
-import { fetcher } from "../src/Helpers";
+import { fetcher, prEvalsTheme } from "../src/Helpers";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import { ThemeProvider } from "@mui/material";
 
 // capitalize first letter of string
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -61,7 +62,7 @@ export default function Profile() {
 
   const user = userData as StudentDataDB;
   return (
-    <>
+    <ThemeProvider theme={prEvalsTheme}>
       <CustomHead pageTitle="Profile" />
       <Grid
         container
@@ -89,9 +90,10 @@ export default function Profile() {
           </Typography>
         </Grid>
 
-        <FormControl sx={{ flexDirection: "row", mt: "1rem", width: "250px" }}>
+        <FormControl sx={{ flexDirection: "row", mt: 4, width: "250px" }}>
           <InputLabel id="major-input-label">Concentration</InputLabel>
           <Select
+            color="secondary"
             labelId="major-input-label"
             id="user-major-select"
             name="major"
@@ -109,7 +111,7 @@ export default function Profile() {
             </MenuItem>
           </Select>
           <Button
-            color="primary"
+            color="info"
             variant="contained"
             fullWidth
             type="submit"
@@ -123,6 +125,6 @@ export default function Profile() {
           </Button>
         </FormControl>
       </Grid>
-    </>
+    </ThemeProvider>
   );
 }

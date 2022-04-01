@@ -17,6 +17,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { FormStatus } from "../../src/Types";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { ThemeProvider } from "@mui/material";
+import { prEvalsTheme } from "../../src/Helpers";
+import { blue } from "@mui/material/colors";
 
 // Actions on course page for instructor to start a new form
 export default function FormsActions(props: {
@@ -101,7 +104,7 @@ export default function FormsActions(props: {
   });
 
   return (
-    <>
+    <ThemeProvider theme={prEvalsTheme}>
       <Grid
         container
         item
@@ -113,10 +116,15 @@ export default function FormsActions(props: {
         <Grid item sm={4} xs={2}></Grid>
         <Grid item sm={4} xs={8}>
           <Button
+            color="info"
             type="submit"
             variant="contained"
             onClick={handleClickOpen}
-            sx={{ px: 4, width: "100%", height: "50px" }}
+            sx={{
+              px: 4,
+              width: "100%",
+              height: "50px",
+            }}
           >
             Publish New Form
           </Button>
@@ -132,6 +140,7 @@ export default function FormsActions(props: {
           <FormControl sx={{ height: "50px" }}>
             <InputLabel id="select-label">Sort By (Desc.)</InputLabel>
             <Select
+              color="secondary"
               labelId="select-label"
               name="sort"
               value={formik.values.sort}
@@ -220,6 +229,6 @@ export default function FormsActions(props: {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </ThemeProvider>
   );
 }
