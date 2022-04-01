@@ -22,10 +22,20 @@
         "unused-imports"
     ],
     "rules": {
-        "no-unused-vars": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "no-irregular-whitespace": "off",
+        "no-unexpected-multiline": "off",
+        "react/prop-types": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "prefer-spread": "off",
+        "react/no-unescaped-entities": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/ban-types": "off",
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
-        "warn",
+        "off",
         {
             "vars": "all",
             "varsIgnorePattern": "^_",
