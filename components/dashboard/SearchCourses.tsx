@@ -65,7 +65,7 @@ export default function CourseSearch(props) {
     // show Checked button if user has course, Add button otherwise
     let button = null;
     if (!props.isInstructor) {
-      const isMyCourse = props.myCourses.includes(courseID);
+      const isMyCourse = props.myCourses?.includes(courseID);
       button = isMyCourse ? (
         <Tooltip title="Added" arrow>
           <Button
