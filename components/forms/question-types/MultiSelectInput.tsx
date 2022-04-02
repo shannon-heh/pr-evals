@@ -18,6 +18,11 @@ export default function MultiSelectInput(
               control={
                 <Checkbox
                   name={option}
+                  checked={
+                    formik.values[name]
+                      ? formik.values[name].includes(option)
+                      : false
+                  }
                   onChange={(e) => {
                     if (!formik) return undefined;
                     // must manually set checkbox field value

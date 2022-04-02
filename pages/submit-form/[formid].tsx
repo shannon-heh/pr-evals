@@ -20,7 +20,9 @@ import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 import BlockAction from "../../components/BlockAction";
-import { ThemeProvider } from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
@@ -114,6 +116,12 @@ export default function SubmitForm() {
     formik.handleSubmit();
   };
 
+  // clear student response to a question
+  const clearResponse = (qId: number) => {
+    const id = String(qId);
+    formik.setFieldValue(id, null);
+  };
+
   // handle error / loading pages
   if ((courseData_ && !courseData) || formError || courseError || responseError)
     return <Error text="Failed to load form submission page!" />;
@@ -148,7 +156,7 @@ export default function SubmitForm() {
   }
 
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <CustomHead pageTitle="Submit Form" />
       <Grid
         container
@@ -269,7 +277,31 @@ export default function SubmitForm() {
                     pb: q.type == Question.Slider ? 4.5 : 1.5,
                   }}
                 >
-                  <Typography variant="body1">{q.question}</Typography>
+                  <Grid
+                    container
+                    item
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ flexWrap: "nowrap" }}
+                  >
+                    <Typography variant="body1">{q.question}</Typography>
+                    <Tooltip
+                      title={
+                        formik.values[q.q_id] == null ? "" : "Clear Response"
+                      }
+                      arrow
+                    >
+                      <IconButton
+                        disabled={formik.values[q.q_id] == null}
+                        onClick={() => {
+                          clearResponse(q.q_id);
+                        }}
+                      >
+                        <RestartAltIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
                   <Typography variant="caption">{q.description}</Typography>
                   {input}
                 </Grid>
@@ -278,6 +310,6 @@ export default function SubmitForm() {
           </Grid>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 }

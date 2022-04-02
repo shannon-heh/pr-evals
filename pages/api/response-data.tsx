@@ -139,13 +139,7 @@ export default async function handler(
     for (let i = 0; i < responses.length; i++) {
       const response: string | number | string[] = responses[i]["response"];
 
-      if (
-        response === "" ||
-        response === [] ||
-        response === -1 ||
-        response === null
-      )
-        continue;
+      if (response === "" || response === null) continue;
 
       if (!data[i]) continue;
 
