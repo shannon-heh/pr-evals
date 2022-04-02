@@ -19,7 +19,7 @@ export default function MultiSelectInput(
                 <Checkbox
                   name={option}
                   checked={
-                    formik.values[name]
+                    formik?.values[name]
                       ? formik.values[name].includes(option)
                       : false
                   }

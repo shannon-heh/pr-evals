@@ -32,10 +32,22 @@ export default function SampleQuestions(props) {
   const categories: string[] = Object.keys(questions?.sample_questions ?? {});
 
   return (
-    <Grid container item justifyContent="center" sx={{ width: "100%" }}>
+    <Grid
+      container
+      item
+      justifyContent="center"
+      sx={{ width: "100%", borderRadius: 2 }}
+    >
       {categories.map((category: string, i: number) => {
         return (
-          <Accordion key={i} sx={{ backgroundColor: blue[50], width: "100%" }}>
+          <Accordion
+            key={i}
+            sx={{
+              backgroundColor: "#fefefe",
+              width: "100%",
+              boxShadow: 0,
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
