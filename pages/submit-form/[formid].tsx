@@ -23,6 +23,8 @@ import BlockAction from "../../components/BlockAction";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import { SubmitFormTutorial } from "../../components/TutorialContents";
+import TutorialDialog from "../../components/TutorialDialog";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
@@ -310,6 +312,9 @@ export default function SubmitForm() {
           </Grid>
         </Grid>
       </Grid>
+      <TutorialDialog dialogTitle="Submit Form Tutorial">
+        <SubmitFormTutorial />
+      </TutorialDialog>
     </>
   );
 }

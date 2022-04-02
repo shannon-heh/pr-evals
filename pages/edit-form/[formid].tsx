@@ -24,6 +24,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import SampleQuestions from "../../components/forms/add-question/SampleQuestions";
+import TutorialDialog from "../../components/TutorialDialog";
+import { EditFormTutorial } from "../../components/TutorialContents";
 
 // Page for instructor to edit a form
 export default function EditForm() {
@@ -412,6 +414,9 @@ export default function EditForm() {
           </Grid>
         </Grid>
       </Grid>
+      <TutorialDialog dialogTitle="Edit Form Tutorial">
+        <EditFormTutorial />
+      </TutorialDialog>
     </>
   );
 }
