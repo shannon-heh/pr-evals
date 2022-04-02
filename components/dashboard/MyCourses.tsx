@@ -122,10 +122,23 @@ export default function MyCourses(props) {
         overflow: "scroll",
       }}
     >
-      <Typography variant="h5" sx={{ px: 1.25, color: "black" }}>
+      <Typography
+        variant="h5"
+        fontWeight={500}
+        sx={{ px: 1.25, color: "black" }}
+      >
         My Courses
       </Typography>
-      <Box sx={{ overflow: "scroll", pt: 1, height: "85%" }}>{courseRes}</Box>
+      <Box sx={{ overflow: "scroll", pt: 1, height: "85%" }}>
+        {courseRes ? (
+          courseRes
+        ) : (
+          <Typography sx={{ px: 1.25 }}>
+            Search for your enrolled courses and click the green (+) button to
+            add them here!
+          </Typography>
+        )}
+      </Box>
     </Grid>
   );
 }

@@ -35,7 +35,9 @@ export default function CourseSearch(props) {
   // wait for user to enter 3 characters before querying
   useEffect(() => {
     if (query.length >= 3) {
-      setUrl(`/api/search-courses?q=${query}`);
+      const sanitizedQuery = query.replace(/[^a-z0-9-,?!]/gi, "");
+      if (sanitizedQuery.length < 3) setUrl(null);
+      else setUrl(`/api/search-courses?q=${sanitizedQuery}`);
     } else {
       setUrl(null);
     }
@@ -163,6 +165,7 @@ export default function CourseSearch(props) {
           onChange={formik.handleChange}
           value={formik.values.search}
           sx={{
+            mx: 1.25,
             width: "100%",
             color: "black",
           }}
@@ -182,7 +185,7 @@ export default function CourseSearch(props) {
               searchRes
             )
           ) : (
-            <Typography>
+            <Typography px={1.25}>
               Enter 3+ characters to start finding courses.
             </Typography>
           )}
