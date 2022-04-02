@@ -6,6 +6,9 @@ import Published from "../assets/instr-forms/published.png";
 import Released from "../assets/instr-forms/released.png";
 import DashboardSearch from "../assets/dashboard/search.png";
 import InstructorPreaddedCourses from "../assets/dashboard/instructor-preadded.png";
+import DashboardAddCourse from "../assets/dashboard/add-button.png";
+import DashboardAddedCourse from "../assets/dashboard/added-button.png";
+import DashboardRemoveCourse from "../assets/dashboard/remove-button.png";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -18,6 +21,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import { Grid } from "@mui/material";
 
 // Slightly bold inline text (less bold than MUI-defined "bold")
 function LessBold(props: { children: React.ReactNode }) {
@@ -70,6 +74,51 @@ export function InstructorDashboardTutorial() {
         You may also view visualizations of responses to any forms you have
         released. Note that only students who add your courses to their My
         Courses list can fill out their evaluations forms!
+      </Wrapper>
+    </>
+  );
+}
+
+// Tutorial on dashboard for students
+export function StudentDashboardTutorial() {
+  return (
+    <>
+      <Wrapper break>Welcome to your pr.evals dashboard!</Wrapper>
+      <Wrapper break>
+        On the left, search for courses by their title, number, or crosslisting.
+        Click on any result to view a course's unique webpage.
+      </Wrapper>
+      <img src={DashboardSearch.src} width="100%" />
+      <br />
+      <Wrapper break>
+        If you're enrolled in a course and wish to participate in its
+        evaluations forms, click the green (+) button in its search result. The
+        button will change to a gray checkmark.
+      </Wrapper>
+      <Grid container>
+        <Grid container item md={6} justifyContent="center">
+          <img src={DashboardAddCourse.src} width="40%" />
+        </Grid>
+        <Grid container item md={6} justifyContent="center">
+          <img src={DashboardAddedCourse.src} width="40%" />
+        </Grid>
+      </Grid>
+      <br />
+      <Wrapper break>
+        This will add the course to your <LessBold>My Courses</LessBold> section
+        on the right and enable the <LessBold>Forms</LessBold> tab on the
+        course's webpage, giving you permission to complete any of its
+        evaluations forms.
+      </Wrapper>
+      <Wrapper break>
+        To remove a course from your My Courses section, simply click the red
+        (x) button in its card.
+      </Wrapper>
+      <img src={DashboardRemoveCourse.src} width="100%" />
+      <br />
+      <Wrapper>
+        The My Courses section is always visible on the dashboard, so you can
+        use it to quickly access your enrolled courses' webpages!
       </Wrapper>
     </>
   );
