@@ -16,8 +16,6 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormStatus } from "../../src/Types";
 import Grid from "@mui/material/Grid";
-import { ThemeProvider } from "@mui/material";
-import { prEvalsTheme } from "../../src/Helpers";
 
 // Actions on course page for instructor to start a new form
 export default function FormsActions(props: {
@@ -102,7 +100,7 @@ export default function FormsActions(props: {
   });
 
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <Grid
         container
         item
@@ -227,6 +225,6 @@ export default function FormsActions(props: {
           </Button>
         </DialogActions>
       </Dialog>
-    </ThemeProvider>
+    </>
   );
 }

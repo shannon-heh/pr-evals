@@ -1,4 +1,4 @@
-import { Grid, ThemeProvider, Tooltip, Typography } from "@mui/material";
+import { Grid, Tooltip, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import pluralize from "pluralize";
 import { prEvalsTheme } from "../../src/Helpers";
@@ -33,7 +33,7 @@ export default function CourseHead(props: { data: CourseData }) {
   };
 
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <Grid item container md={8} direction="column" sx={{ mt: 2 }}>
         <HoverCard
           sx={{
@@ -146,6 +146,6 @@ export default function CourseHead(props: { data: CourseData }) {
           </Typography>
         </HoverCard>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 }

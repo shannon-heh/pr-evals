@@ -10,10 +10,9 @@ import useSWR from "swr";
 import useCAS from "../hooks/useCAS";
 import CustomHead from "../components/CustomHead";
 import { StudentDataDB } from "../src/Types";
-import { fetcher, prEvalsTheme } from "../src/Helpers";
+import { fetcher } from "../src/Helpers";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
-import { ThemeProvider } from "@mui/material";
 
 // capitalize first letter of string
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -62,7 +61,7 @@ export default function Profile() {
 
   const user = userData as StudentDataDB;
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <CustomHead pageTitle="Profile" />
       <Grid
         container
@@ -125,6 +124,6 @@ export default function Profile() {
           </Button>
         </FormControl>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 }

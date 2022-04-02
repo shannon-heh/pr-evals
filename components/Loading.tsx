@@ -1,15 +1,9 @@
-import {
-  CircularProgress,
-  Container,
-  Grid,
-  ThemeProvider,
-} from "@mui/material";
-import { prEvalsTheme } from "../src/Helpers";
+import { CircularProgress, Container, Grid } from "@mui/material";
 import CustomHead from "./CustomHead";
 
 export default function Loading(props: { text?: string }) {
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <CustomHead pageTitle="Loading" />
       <Container maxWidth={false}>
         <Grid
@@ -26,6 +20,6 @@ export default function Loading(props: { text?: string }) {
           </Grid>
         </Grid>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

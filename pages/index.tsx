@@ -3,15 +3,7 @@ import CustomHead from "../components/CustomHead";
 import useCAS from "../hooks/useCAS";
 import { useState } from "react";
 import Loading from "../components/Loading";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
-import { prEvalsTheme } from "../src/Helpers";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 export default function Home() {
   const { isLoggedIn, isLoading, netID } = useCAS();
@@ -20,7 +12,7 @@ export default function Home() {
   if (isLoading || isLoggedIn) return <Loading />;
 
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <CustomHead pageTitle="Login" />
       <Container maxWidth="md">
         <Grid
@@ -69,6 +61,6 @@ export default function Home() {
           </Grid>
         </Grid>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

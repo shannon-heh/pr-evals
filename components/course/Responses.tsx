@@ -7,7 +7,6 @@ import {
   Select,
   SelectChangeEvent,
   Skeleton,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import { grey, red } from "@mui/material/colors";
@@ -175,10 +174,10 @@ export default function Responses(props: { courseID: string }) {
   return (
     <>
       {data ? (
-        <ThemeProvider theme={prEvalsTheme}>
+        <>
           <FormSelector data={data} setId={setId} id={id} />
           <ChartsHelper formid={id} />
-        </ThemeProvider>
+        </>
       ) : (
         <Typography variant="subtitle1" fontWeight="medium" mt={2}>
           Loading forms...

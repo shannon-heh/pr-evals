@@ -16,7 +16,6 @@ import Error from "../../components/Error";
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ThemeProvider } from "@mui/material";
 
 // Component to display Course Search on Dashboard
 export default function CourseSearch(props) {
@@ -139,7 +138,7 @@ export default function CourseSearch(props) {
   });
 
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <Grid
         container
         item
@@ -189,6 +188,6 @@ export default function CourseSearch(props) {
           )}
         </Box>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 }

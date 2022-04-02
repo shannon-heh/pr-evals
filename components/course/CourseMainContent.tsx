@@ -14,7 +14,6 @@ import useSWR from "swr";
 import { fetcher, prEvalsTheme } from "../../src/Helpers";
 import Students from "./Students";
 import { red } from "@mui/material/colors";
-import { ThemeProvider } from "@mui/material";
 
 export default function CourseMainContent(props: {
   courseID: string;
@@ -71,7 +70,7 @@ export default function CourseMainContent(props: {
   };
 
   return (
-    <ThemeProvider theme={prEvalsTheme}>
+    <>
       <Grid item container md={12} direction="column">
         <Box sx={{ borderBottom: 1, borderColor: "divider", mt: -2 }}>
           {isUsersCourse ? (
@@ -148,6 +147,6 @@ export default function CourseMainContent(props: {
           </>
         )}
       </Grid>
-    </ThemeProvider>
+    </>
   );
 }
