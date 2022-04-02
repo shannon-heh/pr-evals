@@ -9,6 +9,8 @@ import { fetcher } from "../src/Helpers";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
 import Container from "@mui/material/Container";
+import TutorialDialog from "../components/TutorialDialog";
+import { InstructorDashboardTutorial } from "../components/TutorialContents";
 
 export default function Dashboard() {
   const { isLoading, netID, isInstructor } = useCAS();
@@ -55,6 +57,13 @@ export default function Dashboard() {
             myCourses={myCourses}
             isInstructor={isInstructor}
           />
+          <TutorialDialog dialogTitle="Dashboard Tutorial">
+            {isInstructor ? (
+              <InstructorDashboardTutorial />
+            ) : (
+              <div>student</div>
+            )}
+          </TutorialDialog>
         </Grid>
       </Container>
     </>

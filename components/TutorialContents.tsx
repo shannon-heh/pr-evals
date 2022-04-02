@@ -4,6 +4,8 @@ import NoSubmitRel from "../assets/student-forms/no-submit-rel.png";
 import Created from "../assets/instr-forms/created.png";
 import Published from "../assets/instr-forms/published.png";
 import Released from "../assets/instr-forms/released.png";
+import DashboardSearch from "../assets/dashboard/search.png";
+import InstructorPreaddedCourses from "../assets/dashboard/instructor-preadded.png";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -35,6 +37,44 @@ function Wrapper(props: { children: React.ReactNode; break?: boolean }) {
   );
 }
 
+// Tutorial on dashboard for instructors
+export function InstructorDashboardTutorial() {
+  return (
+    <>
+      <Wrapper break>Welcome to your pr.evals dashboard!</Wrapper>
+      <Wrapper break>
+        On the left, search for courses by their title, number, or crosslisting.
+        Click on any result to view a course's unique webpage.
+      </Wrapper>
+      <img src={DashboardSearch.src} width="100%" />
+      <br />
+      <Wrapper break>
+        The courses in which you're listed as an instructor have been
+        automatically added to your <LessBold>My Courses</LessBold> section on
+        the right. For example, logging in as Professor Robert Fish displays
+        these courses:
+      </Wrapper>
+      <img src={InstructorPreaddedCourses.src} width="100%" />
+      <br />
+      <Wrapper break>
+        The My Courses section is always visible on the dashboard, so you can
+        use it to quickly access your courses' webpages!
+      </Wrapper>
+      <Wrapper break>
+        On the webpages for your courses, you will find a comprehensive
+        interface in the Forms tab for creating, editing, publishing, and
+        releasing evaluations forms, as well as a way to export anonymized
+        student responses.
+      </Wrapper>
+      <Wrapper>
+        You may also view visualizations of responses to any forms you have
+        released. Note that only students who add your courses to their My
+        Courses list can fill out their evaluations forms!
+      </Wrapper>
+    </>
+  );
+}
+
 // Tutorial on Course page for students
 export function StudentCourseTutorial(props) {
   const createData = (color: string, status: string, image: string) => {
@@ -45,12 +85,12 @@ export function StudentCourseTutorial(props) {
     createData("Green", "if you submitted a response", YesSubmit.src),
     createData(
       "Red",
-      "if you haven’t submitted a response, but still can",
+      "if you haven't submitted a response, but still can",
       NoSubmitPub.src
     ),
     createData(
       "Gray",
-      "if you haven’t submitted a response, and no longer can",
+      "if you haven't submitted a response, and no longer can",
       NoSubmitRel.src
     ),
   ];
@@ -63,7 +103,7 @@ export function StudentCourseTutorial(props) {
         supported by intuitive data visualizations and helpful context
         information.
       </Wrapper>
-      <LessBold>If you’re enrolled in this course, continue on: </LessBold>
+      <LessBold>If you're enrolled in this course, continue on: </LessBold>
       <br />
       <Wrapper break>
         As a student in this course, under the Forms tab, you can view all forms
@@ -138,7 +178,7 @@ export function InstructorCourseTutorial(props) {
         supported by intuitive data visualizations and helpful context
         information.
       </Wrapper>
-      <LessBold>If you’re an instructor for this course, read on:</LessBold>
+      <LessBold>If you're an instructor for this course, read on:</LessBold>
       <Typography>
         As an instructor of this course, under the Forms tab, you can view all
         created forms and perform some form actions.
@@ -147,7 +187,7 @@ export function InstructorCourseTutorial(props) {
       <Typography fontWeight="bold">Introducing the Forms Tab</Typography>
       <Typography component="div">
         Click the <LessBold>Publish New Form</LessBold> button to create a new
-        feedback form. You’ll be asked to enter a title and description. In your
+        feedback form. You'll be asked to enter a title and description. In your
         form description, it is incredibly important to{" "}
         <LessBold>specify the purpose of this form</LessBold> and how student
         feedback will be used. Studies have shown that clarifying this will
@@ -229,7 +269,7 @@ export function EditFormTutorial() {
   return (
     <>
       <Wrapper break>
-        You’re now in the Edit Form page. At this point, you have already
+        You're now in the Edit Form page. At this point, you have already
         specified a title and description for your form. Now, you can modify the
         form questions.
       </Wrapper>
@@ -259,14 +299,14 @@ export function EditFormTutorial() {
       </Wrapper>
 
       <Wrapper break>
-        When you’re done modifying the form, click the{" "}
+        When you're done modifying the form, click the{" "}
         <LessBold>Done Editing</LessBold> button. This saves your changes
         without publishing the form. Do not close the tab without saving your
         changes!
       </Wrapper>
 
       <Wrapper>
-        When you’re ready to publish your form, click the{" "}
+        When you're ready to publish your form, click the{" "}
         <LessBold>Publish Form</LessBold> button. After you confirm, you will no
         longer be able to edit the form.
       </Wrapper>
