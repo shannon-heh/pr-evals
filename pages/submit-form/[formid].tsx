@@ -105,7 +105,7 @@ export default function SubmitForm() {
     questions?.forEach((q: QuestionMetadata) => {
       const id = String(q.q_id);
       if (q.type == Question.Slider) {
-        formik.setFieldValue(id, formData?.standardized ? 3 : null);
+        formik.setFieldValue(id, null);
         return;
       }
       formik.setFieldValue(id, null);
