@@ -178,7 +178,11 @@ export default function InstructorForms(props: {
     const responseStats = form.published
       ? `${pluralize("Responses", form.num_responses)}: ${
           form.num_responses
-        } (${(form.num_responses / props.numStudents) * 100}%)`
+        } (${
+          props.numStudents !== 0
+            ? (form.num_responses / props.numStudents) * 100
+            : 0
+        }%)`
       : "";
 
     // text for form created, publish, and released date
