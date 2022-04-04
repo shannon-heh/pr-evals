@@ -57,6 +57,24 @@ export default async function handler(
   let id = 0;
   let likertIdx = 0;
 
+  const academicRigorQuestions: QuestionMetadata[] = [
+    "Course pace was...",
+    "Hours per week required outside of class",
+    "Course difficulty, relative to other courses, was...",
+    "Course workload, relative to other courses, was...",
+  ].map((questionText) => {
+    return {
+      question: questionText,
+      description: "Category: Academic Rigor",
+      q_id: id++,
+      type: Question.Slider,
+      min: 1,
+      max: 5,
+      step: 1,
+      marks: likertScales[++likertIdx],
+    };
+  }) as QuestionMetadata[];
+
   const organizationAndStructureQuestions: QuestionMetadata[] = [
     "I found the course intellectually challenging and stimulating.",
     "Required readings/texts were valuable.",
@@ -129,24 +147,6 @@ export default async function handler(
     .concat(instructorQuestions)
     .concat(assessmentAndFeedbackQuestions)
     .concat(personalInteractionsQuestions);
-
-  const academicRigorQuestions: QuestionMetadata[] = [
-    "Course pace was...",
-    "Hours per week required outside of class",
-    "Course difficulty, relative to other courses, was...",
-    "Course workload, relative to other courses, was...",
-  ].map((questionText) => {
-    return {
-      question: questionText,
-      description: "Category: Academic Rigor",
-      q_id: id++,
-      type: Question.Slider,
-      min: 1,
-      max: 5,
-      step: 1,
-      marks: likertScales[++likertIdx],
-    };
-  }) as QuestionMetadata[];
 
   const overallQuestion: QuestionMetadata[] = [
     {
