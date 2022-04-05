@@ -362,3 +362,165 @@ export function EditFormTutorial() {
     </>
   );
 }
+
+// Presents best practices for instructors creating feedback forms
+// and analyzing student responses
+export function InstructorBestPractices() {
+  return (
+    <>
+      <Wrapper break>
+        Instructors, we understand that getting feedback from all your
+        students--let alone constructive feedback--is a difficult task, and we
+        are here to help you. Increasing response rate on feedback forms is
+        important in improving the generalizability of feedback and countering
+        biases towards polarized responses.
+      </Wrapper>
+      <Wrapper>
+        <LessBold>Read through the following tips</LessBold>, inspired by
+        recommendations in Nulty (2008), to help improve the number and quality
+        of student responses:
+      </Wrapper>
+      <List>
+        <ListItem>
+          <Wrapper>
+            1. Ask for feedback <LessBold>throughout the semester</LessBold>.
+            Students are more likely to provide constructive feedback if they
+            know that they will personally benefit from it.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            2. Make it easy for students to access your feedback surveys, i.e.{" "}
+            <LessBold>keep your surveys centralized</LessBold> on this one
+            platform.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            3. Persuade students that their responses will be used to good
+            effect. In the form description and in reminder emails,{" "}
+            <LessBold>explain why you value their feedback</LessBold> and how
+            you plan to use their input for future improvement.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            4. <LessBold>Frequently remind</LessBold> students to fill out the
+            surveys. For published forms, we provide a ready-made reminder
+            message you can simply email to your students.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            5. Assure students of <LessBold>confidentiality</LessBold>. In this
+            app, anonymous responses are the default, so do not add questions
+            that may compromise a student’s identity.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            6. Keep the questionnaire brief and avoid repetitive questions.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            7. Consider providing rewards for survey completion, such as a small
+            grade boost or a lottery for a prize.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            8. Create surveys that seek constructive criticism.{" "}
+            <LessBold>Mix and match</LessBold>
+            between numerical questions that are easy to respond to, and written
+            questions that allow students to freely express their priorities and
+            concerns.
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            9. Make sure you give students enough time to complete the survey.
+          </Wrapper>
+        </ListItem>
+      </List>
+
+      <Wrapper break>
+        If you need some inspiration on questions to include in your survey,
+        check out the <LessBold>“View Sample Questions”</LessBold> button on the
+        edit form page. Clicking on it will show you a variety of pre-created
+        questions you can easily add to your form. Also, you can reach out to
+        the <LessBold>McGraw Center for Teaching and Learning</LessBold> and
+        reference their sample list of midterm questions:
+        https://mcgraw.princeton.edu/mid-term-evaluation-questions.
+      </Wrapper>
+
+      <Wrapper break>
+        Once you have finished gathering feedback, it is immediately time to
+        read through the responses. According to Kember et al. (2008), there are
+        four stages of self-reflection that you may encounter as you take in the
+        feedback. Quoting Benton and Cashin (2012),
+      </Wrapper>
+      <List>
+        <ListItem>
+          <Wrapper>
+            1. <LessBold>Nonreflection</LessBold>: “an instructor simply looks
+            through the ratings without giving them much thought”
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            2. <LessBold>Understanding</LessBold>: “the instructor attempts to
+            grasp what the ratings mean but does not relate them to his or her
+            own experiences”
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            3. <LessBold>Reflection</LessBold>: “instructors relate the results
+            to their own experience teaching the specifi course”
+          </Wrapper>
+        </ListItem>
+        <ListItem>
+          <Wrapper>
+            4. <LessBold>Critical reflection</LessBold>: “the teacher undergoes
+            a transformation in perspective”
+          </Wrapper>
+        </ListItem>
+      </List>
+
+      <Wrapper break>
+        Ideally, you would be able to reach this critical reflection phase and
+        turn it into actionable changes that can be made to the course. Research
+        has also suggested that discussing the ratings with a peer instructor or
+        consultant can significantly enhance the usefulness of the feedback
+        Benton and Cashin (2012). You could consider reaching out to peer
+        instructors in your department or consultants from the McGraw Center to
+        help identify ways to act upon student feedback.
+      </Wrapper>
+
+      <Wrapper break>
+        It's easy to resist critical student feedback -- however, you have to
+        remember that college students have been in school for many years and
+        house an expert understanding of their preferred teaching style and
+        course organization. If you approach student feedback with humility and
+        openness, you can explore ways to improve your pedagogical skills, while
+        simultaneously building up trust from your students.
+      </Wrapper>
+
+      <Typography component="div" fontSize={12}>
+        Benton, Stephen L., and William E. Cashin. "Student ratings of teaching:
+        A summary of research and literature." IDEA paper 50 (2012): 1-20.
+      </Typography>
+      <Typography component="div" fontSize={12}>
+        Kember, David, et al. "A four‐category scheme for coding and assessing
+        the level of reflection in written work." Assessment and evaluation in
+        higher education 33.4 (2008): 369-379.
+      </Typography>
+      <Typography component="div" fontSize={12}>
+        Nulty, Duncan D. "The adequacy of response rates to online and paper
+        surveys: what can be done?." Assessment and evaluation in higher
+        education 33.3 (2008): 301-314.
+      </Typography>
+    </>
+  );
+}

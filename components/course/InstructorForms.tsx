@@ -304,7 +304,7 @@ export default function InstructorForms(props: {
         By clicking 'Confirm', you will be making this form's responses
         available to all members of the Princeton community. Student identities
         will remain anonymous. You will also be able to export this form's
-        responses, but will no longer be able to edit its questions.
+        responses. Releasing responses is irreversible.
       </ConfirmationDialog>
       <EmailDialog
         openEmail={openEmail}

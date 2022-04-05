@@ -9,10 +9,11 @@ import CourseHead from "../../components/course/CourseHead";
 import CourseMainContent from "../../components/course/CourseMainContent";
 import { fetcher } from "../../src/Helpers";
 import { Container, Grid } from "@mui/material";
-import TutorialDialog from "../../components/TutorialDialog";
+import { TutorialDialog, ReadMeDialog } from "../../components/FabDialogs";
 import {
   InstructorCourseTutorial,
   StudentCourseTutorial,
+  InstructorBestPractices,
 } from "../../components/TutorialContents";
 
 export default function Course() {
@@ -51,6 +52,18 @@ export default function Course() {
               <StudentCourseTutorial title={courseTitle} />
             )}
           </TutorialDialog>
+          <TutorialDialog dialogTitle="Course Page Tutorial">
+            {isInstructor ? (
+              <InstructorCourseTutorial title={courseTitle} />
+            ) : (
+              <StudentCourseTutorial title={courseTitle} />
+            )}
+          </TutorialDialog>
+          {isInstructor ? (
+            <ReadMeDialog dialogTitle="Best Practices for Instructors">
+              <InstructorBestPractices />
+            </ReadMeDialog>
+          ) : null}
         </Grid>
       </Container>
     </>

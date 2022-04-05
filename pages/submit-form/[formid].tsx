@@ -24,7 +24,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { SubmitFormTutorial } from "../../components/TutorialContents";
-import TutorialDialog from "../../components/TutorialDialog";
+import { TutorialDialog } from "../../components/FabDialogs";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
