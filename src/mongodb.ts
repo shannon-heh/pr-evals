@@ -4,21 +4,16 @@ import { MongoClient } from "mongodb";
 
 // Connect to MongoDB
 async function connect() {
-    const client = new MongoClient(process.env.DATABASE_URL);
-    const dbName = "course-evals-iw";
-    await client.connect();
-    return client.db(dbName);
+  const client = new MongoClient(process.env.DATABASE_URL);
+  const dbName = "course-evals-iw";
+  await client.connect();
+  return client.db(dbName);
 }
 
 // Return DB object
 export async function getDB() {
-    // In development mode, set global DB object
-    if (process.env.NODE_ENV === 'development') {
-        if (!global.db) {
-            global.db = await connect();
-        }
-        return global.db
-    } else {
-        return await connect();
-    }
+  if (!global.db) {
+    global.db = await connect();
+  }
+  return global.db;
 }
