@@ -105,7 +105,11 @@ export default function CourseSearch(props) {
 
     return (
       <Link href={`/course/${courseID}`} key={`search-${courseID}`}>
-        <a id={`search-${courseID}`} style={{ textDecoration: "none" }}>
+        <a
+          id={`search-${courseID}`}
+          style={{ textDecoration: "none" }}
+          target="_blank"
+        >
           <Box sx={{ m: 1.25, color: "black" }}>
             <HoverCard
               sx={{
