@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getNetID, validateStudent } from "../../src/Helpers";
+import { withIronSessionApiRoute } from "iron-session/next";
+import { AUTH_COOKIE, validateStudent } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
 type Args = {
@@ -8,14 +9,14 @@ type Args = {
   courseid: string;
 };
 
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
+
 // API endpoint for students to submit completed form
 // Usage: call using POST request
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
+  const netid: string = user["netid"];
 
   const { formid, courseid, responses }: Args = req.body;
   if (!formid || !courseid || !responses)

@@ -1,16 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
-import { getNetID, isStudent } from "../../src/Helpers";
+import { AUTH_COOKIE, isStudent } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to save major for user,
 // given major code and user's netid.
 // Usage: /api/update-major?netid=NETID&major=MAJOR_CODE
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
+  const netid: string = user["netid"];
 
   const major = req.query.major as string;
   if (!major) return res.status(404).json("missing query parameters");

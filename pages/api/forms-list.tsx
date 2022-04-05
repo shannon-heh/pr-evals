@@ -1,14 +1,15 @@
 import { Collection } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
-import { getNetID } from "../../src/Helpers";
+import { NextApiRequest } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
+import { AUTH_COOKIE } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
+
 // endpoint to get form titles and IDs
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (!getNetID()) return res.end();
+async function handler(req: NextApiRequest, res) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
 
   const courseid = req.query.courseid as string;
   const dbForms = (await getDB()).collection("forms") as Collection;

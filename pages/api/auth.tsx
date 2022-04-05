@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import urllib from "urllib";
-import sessionstorage from "sessionstorage";
+import { AUTH_COOKIE } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 import { ReqLib } from "../../src/reqLib";
 
@@ -12,16 +13,16 @@ type Data = {
   isInstructor?: boolean;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
+
+async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   // attempt to retrieve netID from session (i.e. user logged in already)
-  let netid: string = sessionstorage.getItem("netid");
-  if (netid)
+  const user = req.session["user"];
+
+  if (user)
     return res.status(200).json({
-      netid: netid.toLowerCase(),
-      isInstructor: sessionstorage.getItem("isInstructor"),
+      netid: user.netid.toLowerCase(),
+      isInstructor: user.isInstructor,
     });
 
   // connect to DB
@@ -41,7 +42,7 @@ export default async function handler(
     return res.status(401).json({});
 
   // @shannon-heh hardcode a netID here to "login" as someone else
-  netid = casDataParts[1].toLowerCase();
+  const netid = casDataParts[1].toLowerCase();
 
   // retrieve and update user data from Users API
   const data: Object[] = await new ReqLib().getJSON(BASE_URL, USERS, {
@@ -114,8 +115,11 @@ export default async function handler(
       );
     });
 
-  sessionstorage.setItem("netid", netid);
-  sessionstorage.setItem("isInstructor", isInstructor);
+  req.session["user"] = {
+    netid: netid,
+    isInstructor: isInstructor,
+  };
+  await req.session.save();
 
   res.status(200).json({ netid: netid, isInstructor: isInstructor });
 }

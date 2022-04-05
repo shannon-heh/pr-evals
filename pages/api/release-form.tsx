@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getNetID, validateInstructor } from "../../src/Helpers";
+import { withIronSessionApiRoute } from "iron-session/next";
+import { AUTH_COOKIE, validateInstructor } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint for instructors to release responses for form
 // Usage: /api/release-form?formid=FORMID&courseid=COURSEID
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
+  const netid: string = user["netid"];
 
   const db = await getDB();
   const formid = req.query.formid as string;

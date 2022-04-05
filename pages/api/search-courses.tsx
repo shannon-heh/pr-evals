@@ -1,16 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { CourseData } from "../../src/Types";
 import { getDB } from "../../src/mongodb";
-import { getNetID } from "../../src/Helpers";
+import { AUTH_COOKIE } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to search for courses in DB
 // given a user query
 // Usage: /api/search-courses?q=QUERY
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (!getNetID()) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
 
   const q: string = req.query.q as string;
   const db = await getDB();
