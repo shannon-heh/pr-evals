@@ -1,16 +1,18 @@
 import removePunctuation from "remove-punctuation";
 import sw from "stopword";
 import stopwords from "stopwords-iso";
-import sessionstorage from "sessionstorage";
 import { CourseFormData, EvalsData } from "./Types";
-import {
-  blue,
-  green,
-  orange,
-  purple,
-  red,
-} from "@mui/material/colors";
+import { blue, green, orange, purple, red } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
+
+// secure auth cookie for iron session
+export const AUTH_COOKIE = {
+  cookieName: "CAS_session",
+  password: process.env.AUTH_COOKIE_PW,
+  cookieOptions: {
+    secure: process.env.NODE_ENV === "production",
+  },
+};
 
 // fetcher for useSWR calls
 export const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -86,7 +88,9 @@ export function dateToString(date: Date) {
 
 // Functions used for preparing data in charts on course pages
 export const prepText = (evalText: string): string[] => {
-  const rawLowercaseText = evalText.split(" ").map((word) => word.toLowerCase());
+  const rawLowercaseText = evalText
+    .split(" ")
+    .map((word) => word.toLowerCase());
   const noPunctuationText: string[] = rawLowercaseText.map((word) =>
     removePunctuation(word)
   );
@@ -106,10 +110,6 @@ export const generateWordCounts = (evalsData: EvalsData[]): Object => {
   });
   return wordCounts;
 };
-
-export function getNetID(): string | null {
-  return sessionstorage.getItem("netid");
-}
 
 // Sort course form data by creation, publish, release date
 export const sortByCreated = (f1: CourseFormData, f2: CourseFormData) => {

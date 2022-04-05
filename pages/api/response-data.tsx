@@ -1,6 +1,7 @@
 import { Collection } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
-import { getNetID } from "../../src/Helpers";
+import { NextApiRequest } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
+import { AUTH_COOKIE } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 import gradeMap, {
   ChartData,
@@ -17,11 +18,11 @@ const questionTypeMap = {
   5: "RATING",
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  if (!getNetID()) return res.end();
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
+
+async function handler(req: NextApiRequest, res) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
 
   let formid = req.query.formid as string;
   const courseid = req.query.courseid as string;

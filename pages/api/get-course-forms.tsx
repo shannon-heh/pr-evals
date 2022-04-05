@@ -1,17 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
 import { CourseFormData, FormMetadata } from "../../src/Types";
-import { getNetID, sortByReleased } from "../../src/Helpers";
+import { AUTH_COOKIE, sortByReleased } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to get a course's forms given a course ID
 // For students, we also retrieve whether they completed each form
 // Usage: /api/get-course-forms?courseid=COURSEID
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
+  const netid: string = user["netid"];
 
   const courseid = req.query.courseid as string;
   if (!courseid) return res.status(404).json("missing query parameters");

@@ -1,17 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
-import { getNetID, isStudent } from "../../src/Helpers";
+import { AUTH_COOKIE, isStudent } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to add or remove course for a student
 // (given their netid)
 // Usage: /api/get-user-data?netid=NETID&courseid=COURSEID&action=ACTION
 // ACTION is "add" or "remove"
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
+  const netid: string = user["netid"];
 
   const courseid = req.query.courseid as string;
   const action = req.query.action as string;

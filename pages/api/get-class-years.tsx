@@ -1,15 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
-import { getNetID } from "../../src/Helpers";
+import { AUTH_COOKIE } from "../../src/Helpers";
 import { Collection } from "mongodb";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to get list of class years from DB given a courseID
 // Usage: /api/get-class-years
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (!getNetID()) return res.status(401).end();
+async function handler(req: NextApiRequest, res) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
 
   const courseid = req.query.courseid as string;
 

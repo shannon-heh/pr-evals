@@ -1,17 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
 import { FormMetadata, Question, QuestionMetadata } from "../../src/Types";
-import { getNetID } from "../../src/Helpers";
+import { AUTH_COOKIE } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // APi endpoint to add a standard form for each course in DB
 // Only call-able by sheh or ntyp
 // Usage: /api/add-standard-forms
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid || (netid != "sheh" && netid != "ntyp"))
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user || (user["netid"] !== "sheh" && user["netid"] !== "ntyp"))
     return res.status(401).end();
 
   const db = await getDB();

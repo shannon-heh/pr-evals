@@ -14,7 +14,6 @@ export default function useCAS() {
     const { ticket } = router.query;
     if (ticket === "" || ticket === null || ticket === undefined)
       setIsLoggedIn(false);
-    // setTicket(ticket as string);
     (async function () {
       const res = await fetch(`/api/auth?ticket=${ticket}`);
       const data = await res.json();

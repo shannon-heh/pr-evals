@@ -1,16 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
 import { FormResponseData } from "../../src/Types";
-import { getNetID } from "../../src/Helpers";
+import { AUTH_COOKIE } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to get a student's form response given a form ID
 // Usage: /api/get-form-response?formid=FORMID
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const netid: string = getNetID();
-  if (!netid) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
+  const netid: string = user["netid"];
 
   const formid = req.query.formid as string;
   if (!formid) return res.status(404).json("missing query parameters");

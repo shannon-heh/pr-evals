@@ -1,16 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
-import { getNetID } from "../../src/Helpers";
+import { AUTH_COOKIE } from "../../src/Helpers";
 import { Collection } from "mongodb";
 import { AdminData } from "../../src/Types";
 
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
+
 // API endpoint to get list of concentrations from DB given a courseID
 // Usage: /api/get-majors
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (!getNetID()) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
 
   const courseid = req.query.courseid as string;
 

@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
 import { getDB } from "../../src/mongodb";
 import { AdminData } from "../../src/Types";
-import { getNetID } from "../../src/Helpers";
+import { AUTH_COOKIE } from "../../src/Helpers";
+
+export default withIronSessionApiRoute(handler, AUTH_COOKIE);
 
 // API endpoint to get sample questions from DB
 // Usage: /api/get-sample-questions
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (!getNetID()) return res.status(401).end();
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session["user"];
+  if (!user) return res.status(401).end();
 
   const db = await getDB();
   return await db
