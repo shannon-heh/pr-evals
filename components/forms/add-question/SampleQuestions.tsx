@@ -2,7 +2,7 @@ import { fetcher } from "../../../src/Helpers";
 import useSWR from "swr";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import { Question, QuestionMetadata } from "../../../src/Types";
 import ShortTextInput from "../question-types/ShortTextInput";
 import LongTextInput from "../question-types/LongTextInput";

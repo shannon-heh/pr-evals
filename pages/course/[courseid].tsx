@@ -9,11 +9,11 @@ import CourseHead from "../../components/course/CourseHead";
 import CourseMainContent from "../../components/course/CourseMainContent";
 import { fetcher } from "../../src/Helpers";
 import { Container, Grid } from "@mui/material";
-import { TutorialDialog, ReadMeDialog } from "../../components/FabDialogs";
+import { ReadMeDialog, TutorialDialog } from "../../components/FabDialogs";
 import {
+  InstructorBestPractices,
   InstructorCourseTutorial,
   StudentCourseTutorial,
-  InstructorBestPractices,
 } from "../../components/TutorialContents";
 
 export default function Course() {
@@ -31,7 +31,7 @@ export default function Course() {
     return <Error text="Error in fetching course!" />;
   if (isLoading || !data || !netID) return <Loading text="Loading course..." />;
 
-  const courseTitle: string = `${courseData.catalog_title}: ${courseData.course_title}`;
+  const courseTitle = `${courseData.catalog_title}: ${courseData.course_title}`;
 
   return (
     <>
