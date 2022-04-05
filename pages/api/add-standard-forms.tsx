@@ -75,6 +75,8 @@ export default async function handler(
     };
   }) as QuestionMetadata[];
 
+  likertIdx = 0;
+
   const organizationAndStructureQuestions: QuestionMetadata[] = [
     "I found the course intellectually challenging and stimulating.",
     "Required readings/texts were valuable.",
