@@ -1,9 +1,9 @@
 import { Box, Grid, Skeleton, Typography } from "@mui/material";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { useState } from "react";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
-import { COLORS, fetcher } from "../../src/Helpers";
+import { COLORS, fetcher, prEvalsTheme } from "../../src/Helpers";
 import { ChartData, ResponseData } from "../../src/Types";
 import MultiChoiceChart from "./charts/MultiChoiceChart";
 import ScaleChart from "./charts/ScaleChart";
@@ -53,7 +53,11 @@ export default function Charts(props: {
     : (chartData_ as ResponseData)?.responses;
 
   const makeChart = (data: ChartData, i: number) => {
-    if (data.data.length == 0 && !props.isStandard)
+    if (
+      (data?.data.length == 0 ||
+        data?.data.every((sample) => sample["value"] == 0)) &&
+      !props.isStandard
+    )
       return (
         <ChartWrapper>
           <HoverCard sx={{ mt: 2, p: 2.5 }}>
@@ -70,12 +74,12 @@ export default function Charts(props: {
       );
 
     let numResponses = 0;
-    data.data.forEach((sample) => {
+    data?.data.forEach((sample) => {
       if (data.type === "TEXT") numResponses++;
       else numResponses += sample["value"];
     });
 
-    switch (data.type) {
+    switch (data?.type) {
       case "SINGLE_SEL":
         return (
           <ChartWrapper key={i}>
@@ -227,16 +231,28 @@ export default function Charts(props: {
   return (
     <>
       {props.isStandard ? (
-        <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
-          <Typography variant="subtitle1" fontWeight="medium" color="white">
+        <HoverCard
+          sx={{
+            mt: 2,
+            p: 1,
+            background: prEvalsTheme.palette.secondary.dark,
+          }}
+        >
+          <Typography variant="subtitle1" fontWeight="medium" color="black">
             These charts visualize responses submitted to the standardized
             evaluations form.
           </Typography>
         </HoverCard>
       ) : null}
       {props.isDemographics ? (
-        <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
-          <Typography variant="subtitle1" fontWeight="medium" color="white">
+        <HoverCard
+          sx={{
+            mt: 2,
+            p: 1,
+            background: prEvalsTheme.palette.secondary.dark,
+          }}
+        >
+          <Typography variant="subtitle1" fontWeight="medium" color="black">
             These charts visualize demographics about the students who completed
             this course's standardized evaluations form.
           </Typography>
@@ -248,6 +264,8 @@ export default function Charts(props: {
           concentrationFilter={concentrationFilter}
           setYearFilter={setYearFilter}
           yearFilter={yearFilter}
+          disabled={chartData.length == 0 || chartData[0].data.length == 0}
+          courseID={props.courseID}
         />
       ) : null}
       {chartData.length == 0 || chartData[0].data.length == 0 ? (

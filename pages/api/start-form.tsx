@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateInstructor, getNetID } from "../../src/Helpers";
+import { getNetID, validateInstructor } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
 type Args = {
@@ -37,7 +37,7 @@ export default async function handler(
       { course_id: courseid },
       { projection: { _id: 0, counter: 1, guid: 1 } }
     );
-  const formid: string = `${guid}-${counter}`;
+  const formid = `${guid}-${counter}`;
 
   // increment counter for next form
   await db

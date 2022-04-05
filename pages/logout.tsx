@@ -7,7 +7,7 @@ import { fetcher } from "../src/Helpers";
 export default function Logout() {
   const router = useRouter();
   const { data, error } = useSWR("/api/logout", fetcher);
-  let loggedOut: boolean = !error && data;
+  const loggedOut: boolean = !error && data;
 
   if (loggedOut) {
     router.push("/").then(() => {

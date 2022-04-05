@@ -33,10 +33,10 @@ export default async function handler(
   );
 
   // validate CAS response
-  let casData: string = res_.data.toString();
+  const casData: string = res_.data.toString();
   if (!casData) return res.status(401).json({});
 
-  let casDataParts: string[] = casData.split("\n");
+  const casDataParts: string[] = casData.split("\n");
   if (casDataParts.length < 3 || casDataParts[0] != "yes")
     return res.status(401).json({});
 
@@ -44,7 +44,7 @@ export default async function handler(
   netid = casDataParts[1].toLowerCase();
 
   // retrieve and update user data from Users API
-  let data: Object[] = await new ReqLib().getJSON(BASE_URL, USERS, {
+  const data: Object[] = await new ReqLib().getJSON(BASE_URL, USERS, {
     uid: netid,
   });
   const userData = data[0];

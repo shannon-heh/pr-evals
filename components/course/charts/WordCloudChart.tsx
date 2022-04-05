@@ -18,8 +18,8 @@ export default function WordCloudChart(props: {
     evalsData: EvalsData[],
     numWords: number
   ): ChartWord[] => {
-    let wordCounts = generateWordCounts(evalsData);
-    let res: ChartWord[] = Array();
+    const wordCounts = generateWordCounts(evalsData);
+    const res: ChartWord[] = [];
     for (const [text, value] of Object.entries(wordCounts)) {
       res.push({
         value: text as string,

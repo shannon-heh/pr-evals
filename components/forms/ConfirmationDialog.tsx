@@ -14,25 +14,25 @@ export default function ConfirmationDialog(props: {
   handleSubmit;
 }) {
   return (
-    <div>
-      <Dialog
-        open={props.isOpen}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.children}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.closeDialog} autoFocus>
-            Cancel
-          </Button>
-          <Button onClick={props.handleSubmit}>Confirm</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog
+      open={props.isOpen}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      maxWidth="sm"
+      fullWidth
+    >
+      <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {props.children}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.closeDialog} autoFocus>
+          Cancel
+        </Button>
+        <Button onClick={props.handleSubmit}>Confirm</Button>
+      </DialogActions>
+    </Dialog>
   );
 }

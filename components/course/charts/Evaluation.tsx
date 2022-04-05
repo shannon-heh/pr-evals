@@ -66,7 +66,7 @@ function EvaluationBadges(props: { evalDoc: EvalsData }) {
   };
 
   const prepText = (evalText: string) => {
-    let rawLowercaseText = evalText
+    const rawLowercaseText = evalText
       .split(" ")
       .map((word) => word.toLowerCase());
     const noPunctuationText: string[] = rawLowercaseText.map((word) =>

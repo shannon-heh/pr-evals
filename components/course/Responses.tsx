@@ -9,10 +9,10 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import { blue, grey, red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { useState } from "react";
 import useSWR from "swr";
-import { fetcher } from "../../src/Helpers";
+import { fetcher, prEvalsTheme } from "../../src/Helpers";
 import { FormMetadataResponses, ResponseData } from "../../src/Types";
 import HoverCard from "./HoverCard";
 import Charts from "./Charts";
@@ -38,7 +38,12 @@ function FormSelector(props: {
       <FormControl sx={{ width: 330 }}>
         <InputLabel>Select Form</InputLabel>
         {props.data && props.data.length > 0 ? (
-          <Select value={props.id} label="Select Form" onChange={handleChange}>
+          <Select
+            color="secondary"
+            value={props.id}
+            label="Select Form"
+            onChange={handleChange}
+          >
             {props.data?.map((form, i) => (
               <MenuItem key={i} value={form["form_id"]}>
                 {form["title"]}
@@ -58,7 +63,7 @@ function FormSelector(props: {
               mt={2}
               color={red[500]}
             >
-              This course doesn't have any published forms (yet)!
+              This course doesn't have any released forms (yet)!
             </Typography>
           </>
         )}
@@ -72,30 +77,30 @@ function ChartsHelper(props: { formid?: string }) {
     const nonTitleColor = grey[800];
 
     return (
-      <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
+      <HoverCard
+        sx={{
+          mt: 2,
+          p: 2,
+          background: prEvalsTheme.palette.secondary.dark,
+        }}
+      >
         <Typography
           variant="h5"
           component="div"
           fontWeight="medium"
-          color="white"
+          color="secondary"
         >
           {props.meta.title}
         </Typography>
         <Typography
           variant="subtitle1"
           component="div"
-          fontWeight="medium"
           fontStyle="italic"
           color={nonTitleColor}
         >
           {props.meta.description}
         </Typography>
-        <Typography
-          variant="subtitle1"
-          component="div"
-          fontWeight="medium"
-          color={nonTitleColor}
-        >
+        <Typography variant="subtitle1" component="div" color={nonTitleColor}>
           Published on {props.meta.time_published.toString().split("T")[0]}
         </Typography>
       </HoverCard>

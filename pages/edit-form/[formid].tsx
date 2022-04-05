@@ -1,4 +1,4 @@
-import { fetcher, getFullTitle } from "../../src/Helpers";
+import { fetcher, getFullTitle, prEvalsTheme } from "../../src/Helpers";
 import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import CustomHead from "../../components/CustomHead";
 import { CourseData, Question, QuestionMetadata } from "../../src/Types";
 import AddQuestionDialog from "../../components/forms/add-question/AddQuestionDialog";
@@ -24,6 +24,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import SampleQuestions from "../../components/forms/add-question/SampleQuestions";
+import { TutorialDialog } from "../../components/FabDialogs";
+import { EditFormTutorial } from "../../components/TutorialContents";
 
 // Page for instructor to edit a form
 export default function EditForm() {
@@ -169,7 +171,7 @@ export default function EditForm() {
   // set state to existing questions from DB, if any
   useEffect(() => {
     setQuestions(formData?.questions ?? []);
-    let maxId: number = 0;
+    let maxId = 0;
     if (formData?.questions && formData.questions.length > 0) {
       maxId = Math.max.apply(
         Math,
@@ -213,7 +215,11 @@ export default function EditForm() {
           flexDirection="column"
           lg={7}
           md={8}
-          sx={{ py: 3, px: 5, backgroundColor: blue[100] }}
+          sx={{
+            py: 3,
+            px: 5,
+            backgroundColor: prEvalsTheme.palette.secondary.light,
+          }}
         >
           <Grid>
             <Typography variant="h5" fontWeight="500">
@@ -238,18 +244,22 @@ export default function EditForm() {
             justifyContent="center"
             spacing={1}
           >
+            {!formData?.standardized ? (
+              <Grid item container sm={6} justifyContent="center">
+                <Button
+                  color="info"
+                  type="submit"
+                  variant="contained"
+                  onClick={openEditDialog}
+                  sx={{ px: 4, width: "90%" }}
+                >
+                  Done Editing
+                </Button>
+              </Grid>
+            ) : null}
             <Grid item container sm={6} justifyContent="center">
               <Button
-                type="submit"
-                variant="contained"
-                onClick={openEditDialog}
-                sx={{ px: 4, width: "90%" }}
-              >
-                Done Editing
-              </Button>
-            </Grid>
-            <Grid item container sm={6} justifyContent="center">
-              <Button
+                color="info"
                 type="submit"
                 variant="contained"
                 onClick={openPublishDialog}
@@ -264,6 +274,10 @@ export default function EditForm() {
               closeDialog={closeEditDialog}
               handleSubmit={handleSubmit}
             >
+              Click 'Confirm' to save your changes. Your form will not be
+              published until you select 'Publish Form'.
+              <br />
+              <br />
               Click 'Cancel' to continue editing.
             </ConfirmationDialog>
             <ConfirmationDialog
@@ -288,34 +302,40 @@ export default function EditForm() {
             justifyContent="center"
             spacing={1}
           >
-            <Grid item container sm={6} justifyContent="center">
-              <Button
-                variant="contained"
-                onClick={openAddDialog}
-                sx={{ px: 4, width: "90%" }}
-              >
-                Add Question
-              </Button>
-            </Grid>
+            {!formData?.standardized ? (
+              <Grid item container sm={6} justifyContent="center">
+                <Button
+                  color="info"
+                  variant="contained"
+                  onClick={openAddDialog}
+                  sx={{ px: 4, width: "90%" }}
+                >
+                  Add Question
+                </Button>
+              </Grid>
+            ) : null}
             <AddQuestionDialog
               addQuestion={addQuestion}
               isOpen={openAdd}
               closeDialog={closeAddDialog}
               sampleQ={sampleQ}
             />
-            <Grid item container sm={6} justifyContent="center">
-              <Button
-                variant="contained"
-                onClick={
-                  openSampleQs ? closeSampleAccordion : openSampleAccordion
-                }
-                sx={{ px: 4, width: "90%" }}
-              >
-                {openSampleQs
-                  ? "Hide Sample Questions"
-                  : "View Sample Questions"}
-              </Button>
-            </Grid>
+            {!formData?.standardized ? (
+              <Grid item container sm={6} justifyContent="center">
+                <Button
+                  color="info"
+                  variant="contained"
+                  onClick={
+                    openSampleQs ? closeSampleAccordion : openSampleAccordion
+                  }
+                  sx={{ px: 4, width: "90%" }}
+                >
+                  {openSampleQs
+                    ? "Hide Sample Questions"
+                    : "View Sample Questions"}
+                </Button>
+              </Grid>
+            ) : null}
           </Grid>
           {openSampleQs ? (
             <SampleQuestions openEditSampleDialog={openEditSampleDialog} />
@@ -370,15 +390,17 @@ export default function EditForm() {
                     <Typography variant="body1" sx={{ overflow: "auto" }}>
                       {q.question}
                     </Typography>
-                    <Tooltip title="Delete Question" arrow>
-                      <IconButton
-                        onClick={() => {
-                          deleteQuestion(q.q_id);
-                        }}
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
-                    </Tooltip>
+                    {!formData?.standardized ? (
+                      <Tooltip title="Delete Question" arrow>
+                        <IconButton
+                          onClick={() => {
+                            deleteQuestion(q.q_id);
+                          }}
+                        >
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : null}
                   </Grid>
                   {q.description != "" ? (
                     <Typography
@@ -396,6 +418,9 @@ export default function EditForm() {
           </Grid>
         </Grid>
       </Grid>
+      <TutorialDialog dialogTitle="Edit Form Tutorial">
+        <EditFormTutorial />
+      </TutorialDialog>
     </>
   );
 }

@@ -2,11 +2,26 @@ import removePunctuation from "remove-punctuation";
 import sw from "stopword";
 import stopwords from "stopwords-iso";
 import sessionstorage from "sessionstorage";
-import { EvalsData } from "./Types";
-import { blue, green, orange, purple, red } from "@mui/material/colors";
+import { CourseFormData, EvalsData } from "./Types";
+import {
+  blue,
+  green,
+  orange,
+  purple,
+  red,
+} from "@mui/material/colors";
+import { createTheme } from "@mui/material";
 
 // fetcher for useSWR calls
 export const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
+// theme
+export const prEvalsTheme = createTheme({
+  palette: {
+    secondary: { main: blue[900], dark: "#eff4f5", light: blue[50] },
+    info: { main: blue[800] },
+  },
+});
 
 // color for charts
 export const COLORS = [
@@ -71,7 +86,7 @@ export function dateToString(date: Date) {
 
 // Functions used for preparing data in charts on course pages
 export const prepText = (evalText: string): string[] => {
-  let rawLowercaseText = evalText.split(" ").map((word) => word.toLowerCase());
+  const rawLowercaseText = evalText.split(" ").map((word) => word.toLowerCase());
   const noPunctuationText: string[] = rawLowercaseText.map((word) =>
     removePunctuation(word)
   );
@@ -83,7 +98,7 @@ export const prepText = (evalText: string): string[] => {
 };
 
 export const generateWordCounts = (evalsData: EvalsData[]): Object => {
-  let wordCounts = {};
+  const wordCounts = {};
   evalsData.forEach((evalDoc: EvalsData) => {
     prepText(evalDoc.text).forEach((word: string) => {
       wordCounts[word] = wordCounts[word] ? wordCounts[word] + 1 : 1;
@@ -95,3 +110,49 @@ export const generateWordCounts = (evalsData: EvalsData[]): Object => {
 export function getNetID(): string | null {
   return sessionstorage.getItem("netid");
 }
+
+// Sort course form data by creation, publish, release date
+export const sortByCreated = (f1: CourseFormData, f2: CourseFormData) => {
+  if (f1.time_created > f2.time_created) {
+    return -1;
+  } else if (f1.time_created < f2.time_created) {
+    return 1;
+  }
+  return 0;
+};
+
+export const sortByPublished = (f1: CourseFormData, f2: CourseFormData) => {
+  if (!f1.published && !f2.published) {
+    return sortByCreated(f1, f2);
+  }
+  if (!f1.published) {
+    return 1;
+  }
+  if (!f2.published) {
+    return -1;
+  }
+  if (f1.time_published > f2.time_published) {
+    return -1;
+  } else if (f1.time_published < f2.time_published) {
+    return 1;
+  }
+  return 0;
+};
+
+export const sortByReleased = (f1: CourseFormData, f2: CourseFormData) => {
+  if (!f1.released && !f2.released) {
+    return sortByPublished(f1, f2);
+  }
+  if (!f1.released) {
+    return 1;
+  }
+  if (!f2.released) {
+    return -1;
+  }
+  if (f1.time_released > f2.time_released) {
+    return -1;
+  } else if (f1.time_released < f2.time_released) {
+    return 1;
+  }
+  return 0;
+};

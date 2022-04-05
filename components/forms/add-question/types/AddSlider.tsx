@@ -63,7 +63,7 @@ export default function AddSlider(props: {
       const max = Number(values.max);
       const step = Number(values.step);
 
-      let hasError: boolean = false; // true if error is found below
+      let hasError = false; // true if error is found below
 
       // validate max > min
       if (max <= min) {

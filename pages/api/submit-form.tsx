@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { validateStudent, getNetID } from "../../src/Helpers";
+import { getNetID, validateStudent } from "../../src/Helpers";
 import { getDB } from "../../src/mongodb";
 
 type Args = {

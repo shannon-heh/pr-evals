@@ -15,7 +15,7 @@ export default function Loading(props: { text?: string }) {
           style={{ minHeight: "100vh" }}
         >
           <Grid item xs={3} sx={{ textAlign: "center" }}>
-            <CircularProgress />
+            <CircularProgress color="secondary" />
             <h2>{props.text || "Loading..."}</h2>
           </Grid>
         </Grid>

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getDB } from "../../src/mongodb";
-import { isStudent, getNetID } from "../../src/Helpers";
+import { getNetID, isStudent } from "../../src/Helpers";
 
 // API endpoint to add or remove course for a student
 // (given their netid)

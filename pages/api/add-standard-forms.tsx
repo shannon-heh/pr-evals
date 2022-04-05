@@ -57,6 +57,26 @@ export default async function handler(
   let id = 0;
   let likertIdx = 0;
 
+  const academicRigorQuestions: QuestionMetadata[] = [
+    "Course pace was...",
+    "Hours per week required outside of class",
+    "Course difficulty, relative to other courses, was...",
+    "Course workload, relative to other courses, was...",
+  ].map((questionText) => {
+    return {
+      question: questionText,
+      description: "Category: Academic Rigor",
+      q_id: id++,
+      type: Question.Slider,
+      min: 1,
+      max: 5,
+      step: 1,
+      marks: likertScales[++likertIdx],
+    };
+  }) as QuestionMetadata[];
+
+  likertIdx = 0;
+
   const organizationAndStructureQuestions: QuestionMetadata[] = [
     "I found the course intellectually challenging and stimulating.",
     "Required readings/texts were valuable.",
@@ -130,24 +150,6 @@ export default async function handler(
     .concat(assessmentAndFeedbackQuestions)
     .concat(personalInteractionsQuestions);
 
-  const academicRigorQuestions: QuestionMetadata[] = [
-    "Course pace was...",
-    "Hours per week required outside of class",
-    "Course difficulty, relative to other courses, was...",
-    "Course workload, relative to other courses, was...",
-  ].map((questionText) => {
-    return {
-      question: questionText,
-      description: "Category: Academic Rigor",
-      q_id: id++,
-      type: Question.Slider,
-      min: 1,
-      max: 5,
-      step: 1,
-      marks: likertScales[++likertIdx],
-    };
-  }) as QuestionMetadata[];
-
   const overallQuestion: QuestionMetadata[] = [
     {
       question:
@@ -197,14 +199,20 @@ export default async function handler(
         const form: FormMetadata = {
           form_id: course.guid + "-std",
           description:
-            "Responses to this form are visualized/displayed in the Charts and Reviews tabs!",
+            "This form is the same across all courses; instructors cannot edit its questions." +
+            " " +
+            'It adapts "reliable, valid, and useful" terminology and phrasing from the Students\' Evaluation of Educational Quality (SEEQ) questionnaire, developed and tested by educational psychologist H. W. Marsh in 1982.' +
+            " " +
+            "The use of such a standardized survey ensures fairness and integrity when comparing across courses by preventing instructors and/or administrators from designing questions for a positive outcome." +
+            " " +
+            "Responses to this form are visualized in the Charts and Reviews tabs!",
           questions: academicRigorQuestions
             .concat(breadthQuestions)
             .concat(overallQuestion),
           title: "Standardized Evaluations Form",
           standardized: true,
-          published: true,
-          time_published: new Date(),
+          published: false,
+          time_created: new Date(),
           released: false,
           course_id: course.course_id,
         };

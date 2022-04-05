@@ -19,13 +19,15 @@ export default function Filters(props: {
   concentrationFilter: string;
   setYearFilter: Function;
   yearFilter: string;
+  disabled: boolean;
+  courseID?: string;
 }) {
   const { data: dataMajors, error: errorMajors } = useSWR(
-    "/api/get-majors",
+    props.courseID ? `/api/get-majors?courseid=${props.courseID}` : null,
     fetcher
   );
   const { data: dataYears, error: errorYears } = useSWR(
-    "/api/get-class-years",
+    props.courseID ? `/api/get-class-years?courseid=${props.courseID}` : null,
     fetcher
   );
 
@@ -60,55 +62,63 @@ export default function Filters(props: {
     );
 
   return (
-    <Box
-      sx={{
-        mt: 2,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <FormControl sx={{ width: 200 }}>
-        <InputLabel>Select Concentration</InputLabel>
-        <Select
-          value={props.concentrationFilter}
-          label="Select Concentration"
-          onChange={handleConcentrationChange}
-        >
-          {dataMajors?.majors.map((major: string) => (
-            <MenuItem key={major} value={major}>
-              {major}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ ml: 2, width: 200 }}>
-        <InputLabel>Select Year</InputLabel>
-        <Select
-          value={props.yearFilter}
-          label="Select Year"
-          onChange={handleYearChange}
-        >
-          {dataYears?.map((year: string) => (
-            <MenuItem key={year} value={year}>
-              {gradeMap[year]}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ ml: 2, width: 100 }}>
-        <Button
-          startIcon={<DeleteIcon />}
-          variant="outlined"
-          size="large"
-          color="error"
-          onClick={() => {
-            handleFilterReset();
-          }}
-        >
-          Reset
-        </Button>
-      </FormControl>
-    </Box>
+    <>
+      <Box
+        sx={{
+          mt: 2,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <FormControl sx={{ width: 200 }}>
+          <InputLabel>Select Concentration</InputLabel>
+          <Select
+            color="secondary"
+            value={props.concentrationFilter}
+            label="Select Concentration"
+            onChange={handleConcentrationChange}
+            variant={props.disabled ? "filled" : "outlined"}
+            disabled={props.disabled}
+          >
+            {dataMajors?.map((major: string) => (
+              <MenuItem key={major} value={major}>
+                {major}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ ml: 2, width: 200 }}>
+          <InputLabel>Select Year</InputLabel>
+          <Select
+            color="secondary"
+            value={props.yearFilter}
+            label="Select Year"
+            onChange={handleYearChange}
+            variant={props.disabled ? "filled" : "outlined"}
+            disabled={props.disabled}
+          >
+            {dataYears?.map((year: string) => (
+              <MenuItem key={year} value={year}>
+                {gradeMap[year]}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ ml: 2, width: 100 }}>
+          <Button
+            startIcon={<DeleteIcon />}
+            variant="outlined"
+            size="large"
+            color="error"
+            onClick={() => {
+              handleFilterReset();
+            }}
+          >
+            Reset
+          </Button>
+        </FormControl>
+      </Box>
+    </>
   );
 }

@@ -8,6 +8,12 @@ import MyCourses from "../components/dashboard/MyCourses";
 import { fetcher } from "../src/Helpers";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import Container from "@mui/material/Container";
+import { TutorialDialog } from "../components/FabDialogs";
+import {
+  InstructorDashboardTutorial,
+  StudentDashboardTutorial,
+} from "../components/TutorialContents";
 
 export default function Dashboard() {
   const { isLoading, netID, isInstructor } = useCAS();
@@ -21,7 +27,7 @@ export default function Dashboard() {
 
   // get user's courses from DB
   const url = netID ? `/api/get-user-data?flag=${modifyFlag}` : "";
-  let { data: userData, error: userError } = useSWR(url, fetcher);
+  const { data: userData, error: userError } = useSWR(url, fetcher);
 
   // update user's courses
   useEffect(() => {
@@ -40,20 +46,29 @@ export default function Dashboard() {
   return (
     <>
       <CustomHead pageTitle="Dashboard" />
-      <Grid container sx={{ height: "100vh" }}>
-        <CourseSearch
-          netID={netID}
-          setFlag={flagHandler}
-          myCourses={myCourses}
-          isInstructor={isInstructor}
-        />
-        <MyCourses
-          netID={netID}
-          setFlag={flagHandler}
-          myCourses={myCourses}
-          isInstructor={isInstructor}
-        />
-      </Grid>
+      <Container maxWidth="xl">
+        <Grid container>
+          <CourseSearch
+            netID={netID}
+            setFlag={flagHandler}
+            myCourses={myCourses}
+            isInstructor={isInstructor}
+          />
+          <MyCourses
+            netID={netID}
+            setFlag={flagHandler}
+            myCourses={myCourses}
+            isInstructor={isInstructor}
+          />
+          <TutorialDialog dialogTitle="Dashboard Tutorial">
+            {isInstructor ? (
+              <InstructorDashboardTutorial />
+            ) : (
+              <StudentDashboardTutorial />
+            )}
+          </TutorialDialog>
+        </Grid>
+      </Container>
     </>
   );
 }

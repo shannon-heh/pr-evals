@@ -1,11 +1,11 @@
-import { fetcher, getFullTitle } from "../../src/Helpers";
+import { fetcher, getFullTitle, prEvalsTheme } from "../../src/Helpers";
 import { NextRouter, useRouter } from "next/router";
 import useSWR from "swr";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import CustomHead from "../../components/CustomHead";
 import { CourseData, Question, QuestionMetadata } from "../../src/Types";
 import { useEffect, useState } from "react";
@@ -20,6 +20,11 @@ import ConfirmationDialog from "../../components/forms/ConfirmationDialog";
 import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 import BlockAction from "../../components/BlockAction";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import { SubmitFormTutorial } from "../../components/TutorialContents";
+import { TutorialDialog } from "../../components/FabDialogs";
 
 // Page for student to submit a form response
 export default function SubmitForm() {
@@ -100,7 +105,7 @@ export default function SubmitForm() {
     questions?.forEach((q: QuestionMetadata) => {
       const id = String(q.q_id);
       if (q.type == Question.Slider) {
-        formik.setFieldValue(id, formData?.standardized ? 3 : null);
+        formik.setFieldValue(id, null);
         return;
       }
       formik.setFieldValue(id, null);
@@ -111,6 +116,12 @@ export default function SubmitForm() {
   const handleSubmit = () => {
     closeConfirmDialog();
     formik.handleSubmit();
+  };
+
+  // clear student response to a question
+  const clearResponse = (qId: number) => {
+    const id = String(qId);
+    formik.setFieldValue(id, null);
   };
 
   // handle error / loading pages
@@ -124,7 +135,8 @@ export default function SubmitForm() {
       return (
         <BlockAction pageTitle="Submit Form">
           This form has already been released. It is no longer accepting
-          responses. Return to the Course page to see the responses.
+          responses. <br />
+          Return to the Course page to see the responses.
         </BlockAction>
       );
     } else if (responseData?.time_submitted) {
@@ -158,7 +170,12 @@ export default function SubmitForm() {
           item
           container
           flexDirection="column"
-          sx={{ width: "60%", py: 3, px: 5, backgroundColor: blue[100] }}
+          sx={{
+            width: "60%",
+            py: 3,
+            px: 5,
+            backgroundColor: prEvalsTheme.palette.secondary.light,
+          }}
         >
           <Grid>
             <Typography variant="h5" fontWeight="500">
@@ -182,6 +199,7 @@ export default function SubmitForm() {
               justifyContent="center"
             >
               <Button
+                color="info"
                 type="submit"
                 variant="contained"
                 onClick={openConfirmDialog}
@@ -205,7 +223,7 @@ export default function SubmitForm() {
           <Grid item container flexDirection="column" sx={{ pb: 2 }}>
             {questions.map((q: QuestionMetadata, i: number) => {
               let input = null;
-              const name: string = String(q.q_id);
+              const name = String(q.q_id);
               if (q.type == Question.ShortText) {
                 input = <ShortTextInput name={name} formik={formik} />;
               } else if (q.type == Question.LongText) {
@@ -261,7 +279,31 @@ export default function SubmitForm() {
                     pb: q.type == Question.Slider ? 4.5 : 1.5,
                   }}
                 >
-                  <Typography variant="body1">{q.question}</Typography>
+                  <Grid
+                    container
+                    item
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ flexWrap: "nowrap" }}
+                  >
+                    <Typography variant="body1">{q.question}</Typography>
+                    <Tooltip
+                      title={
+                        formik.values[q.q_id] == null ? "" : "Clear Response"
+                      }
+                      arrow
+                    >
+                      <IconButton
+                        disabled={formik.values[q.q_id] == null}
+                        onClick={() => {
+                          clearResponse(q.q_id);
+                        }}
+                      >
+                        <RestartAltIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
                   <Typography variant="caption">{q.description}</Typography>
                   {input}
                 </Grid>
@@ -270,6 +312,9 @@ export default function SubmitForm() {
           </Grid>
         </Grid>
       </Grid>
+      <TutorialDialog dialogTitle="Submit Form Tutorial">
+        <SubmitFormTutorial />
+      </TutorialDialog>
     </>
   );
 }

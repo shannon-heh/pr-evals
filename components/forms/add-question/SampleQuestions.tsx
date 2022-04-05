@@ -1,6 +1,5 @@
 import { fetcher } from "../../../src/Helpers";
 import useSWR from "swr";
-import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { blue, grey } from "@mui/material/colors";
@@ -11,7 +10,6 @@ import SingleSelectInput from "../question-types/SingleSelectInput";
 import MultiSelectInput from "../question-types/MultiSelectInput";
 import SliderInput from "../question-types/SliderInput";
 import RatingInput from "../question-types/RatingInput";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Accordion from "@mui/material/Accordion";
@@ -34,10 +32,22 @@ export default function SampleQuestions(props) {
   const categories: string[] = Object.keys(questions?.sample_questions ?? {});
 
   return (
-    <Grid container item justifyContent="center" sx={{ width: "100%" }}>
+    <Grid
+      container
+      item
+      justifyContent="center"
+      sx={{ width: "100%", borderRadius: 2 }}
+    >
       {categories.map((category: string, i: number) => {
         return (
-          <Accordion key={i} sx={{ backgroundColor: blue[50], width: "100%" }}>
+          <Accordion
+            key={i}
+            sx={{
+              backgroundColor: "#fefefe",
+              width: "100%",
+              boxShadow: 0,
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"

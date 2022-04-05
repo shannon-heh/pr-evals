@@ -10,9 +10,18 @@ import { useFormik } from "formik";
 import useCAS from "../../hooks/useCAS";
 import * as yup from "yup";
 import { useRouter } from "next/router";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { FormStatus } from "../../src/Types";
+import Grid from "@mui/material/Grid";
 
 // Actions on course page for instructor to start a new form
-export default function NewFormActions(props: { courseid: string }) {
+export default function FormsActions(props: {
+  courseid: string;
+  handleSortForms?: (status: FormStatus) => void;
+}) {
   const { netID } = useCAS();
   const router = useRouter();
 
@@ -23,10 +32,18 @@ export default function NewFormActions(props: { courseid: string }) {
   };
   const handleClose = (e, reason) => {
     if (reason && reason == "backdropClick") return;
+    resetFormFields();
     setOpen(false);
   };
   const handleButtonClose = () => {
+    resetFormFields();
     setOpen(false);
+  };
+
+  // reset title & description fields
+  const resetFormFields = () => {
+    formik.setFieldValue("title", "");
+    formik.setFieldValue("description", "");
   };
 
   // validate input fields
@@ -36,13 +53,18 @@ export default function NewFormActions(props: { courseid: string }) {
       .trim()
       .required("Required field")
       .max(100, "Max 100 characters"),
-    description: yup.string().max(1000, "Max 1000 characters"),
+    description: yup
+      .string()
+      .trim()
+      .required("Required field")
+      .max(2000, "Max 2000 characters"),
   });
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
+      sort: FormStatus.Released,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -79,14 +101,58 @@ export default function NewFormActions(props: { courseid: string }) {
 
   return (
     <>
-      <Button
-        type="submit"
-        variant="contained"
-        onClick={handleClickOpen}
-        sx={{ mb: 2, px: 4, width: "50%" }}
+      <Grid
+        container
+        item
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
       >
-        Publish New Form
-      </Button>
+        <Grid item sm={4} xs={2}></Grid>
+        <Grid item sm={4} xs={8}>
+          <Button
+            color="info"
+            type="submit"
+            variant="contained"
+            onClick={handleClickOpen}
+            sx={{
+              px: 4,
+              width: "100%",
+              height: "50px",
+            }}
+          >
+            Publish New Form
+          </Button>
+        </Grid>
+        <Grid
+          container
+          item
+          sm={4}
+          xs={2}
+          flexDirection="row"
+          justifyContent="end"
+        >
+          <FormControl sx={{ height: "50px" }}>
+            <InputLabel id="select-label">Sort By (Desc.)</InputLabel>
+            <Select
+              color="secondary"
+              labelId="select-label"
+              name="sort"
+              value={formik.values.sort}
+              label="Sort By (Desc.)"
+              onChange={(e) => {
+                formik.handleChange(e);
+                props.handleSortForms(e.target.value as FormStatus);
+              }}
+            >
+              <MenuItem value={FormStatus.Released}>Released</MenuItem>
+              <MenuItem value={FormStatus.Published}>Published</MenuItem>
+              <MenuItem value={FormStatus.Created}>Created</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>Publish Feedback Form</DialogTitle>
         <DialogContent>
@@ -124,17 +190,27 @@ export default function NewFormActions(props: { courseid: string }) {
             onChange={formik.handleChange}
             type="text"
             multiline
+            minRows="2"
+            maxRows="6"
             fullWidth
             variant="standard"
             autoComplete="off"
             helperText={
               formik.touched.description && formik.errors.description
                 ? formik.errors.description
-                : null
+                : "Please specify the purpose of this form & how student feedback will be used. Studies have shown that clarifying this will increase response rates and encourage students to provide more constructive feedback."
             }
             FormHelperTextProps={{
-              style: { color: "red" },
+              style: {
+                color:
+                  formik.touched.description && formik.errors.description
+                    ? "red"
+                    : "black",
+                marginTop: "0.5em",
+                lineHeight: "1.25em",
+              },
             }}
+            required
           />
         </DialogContent>
         <DialogActions>

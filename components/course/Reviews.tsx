@@ -1,8 +1,8 @@
 import { Box, Grid, Skeleton, Tooltip, Typography } from "@mui/material";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import useSWR from "swr";
 import useWindowDimensions from "../../hooks/windowDimensions";
-import { fetcher } from "../../src/Helpers";
+import { fetcher, prEvalsTheme } from "../../src/Helpers";
 import { EvalsData, ResponseData } from "../../src/Types";
 import WordCloudChart from "./charts/WordCloudChart";
 import WordDonutChart from "./charts/WordDonutChart";
@@ -30,8 +30,14 @@ export default function Reviews(props: { courseID?: string }) {
 
   function Header() {
     return (
-      <HoverCard sx={{ mt: 2, p: 2.5, background: blue[300] }}>
-        <Typography variant="subtitle1" fontWeight="medium" color="white">
+      <HoverCard
+        sx={{
+          mt: 2,
+          p: 1,
+          background: prEvalsTheme.palette.secondary.dark,
+        }}
+      >
+        <Typography variant="subtitle1" fontWeight="medium" color="black">
           These written responses were submitted to the standardized evaluations
           form.
         </Typography>
@@ -57,6 +63,8 @@ export default function Reviews(props: { courseID?: string }) {
         concentrationFilter={concentrationFilter}
         setYearFilter={setYearFilter}
         yearFilter={yearFilter}
+        disabled={!evalsData || (evalsData as EvalsData[]).length == 0}
+        courseID={props.courseID}
       />
       {!evalsData || (evalsData as EvalsData[]).length == 0 ? (
         <Box sx={{ mt: 2 }}>

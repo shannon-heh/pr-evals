@@ -68,7 +68,7 @@ export default function Profile() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "100vh" }}
+        sx={{ mt: 10 }}
       >
         <Grid item sx={{ fontWeight: "bolder" }}>
           <Typography variant="h4" id="user-name">
@@ -89,9 +89,10 @@ export default function Profile() {
           </Typography>
         </Grid>
 
-        <FormControl sx={{ flexDirection: "row", mt: "1rem", width: "250px" }}>
+        <FormControl sx={{ flexDirection: "row", mt: 4, width: "250px" }}>
           <InputLabel id="major-input-label">Concentration</InputLabel>
           <Select
+            color="secondary"
             labelId="major-input-label"
             id="user-major-select"
             name="major"
@@ -109,7 +110,7 @@ export default function Profile() {
             </MenuItem>
           </Select>
           <Button
-            color="primary"
+            color="info"
             variant="contained"
             fullWidth
             type="submit"

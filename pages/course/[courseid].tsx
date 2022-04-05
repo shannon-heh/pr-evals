@@ -9,9 +9,15 @@ import CourseHead from "../../components/course/CourseHead";
 import CourseMainContent from "../../components/course/CourseMainContent";
 import { fetcher } from "../../src/Helpers";
 import { Container, Grid } from "@mui/material";
+import { TutorialDialog, ReadMeDialog } from "../../components/FabDialogs";
+import {
+  InstructorCourseTutorial,
+  StudentCourseTutorial,
+  InstructorBestPractices,
+} from "../../components/TutorialContents";
 
 export default function Course() {
-  const { isLoading, netID } = useCAS();
+  const { isLoading, netID, isInstructor } = useCAS();
 
   const router = useRouter();
   const { courseid } = router.query;
@@ -25,11 +31,11 @@ export default function Course() {
     return <Error text="Error in fetching course!" />;
   if (isLoading || !data || !netID) return <Loading text="Loading course..." />;
 
+  const courseTitle: string = `${courseData.catalog_title}: ${courseData.course_title}`;
+
   return (
     <>
-      <CustomHead
-        pageTitle={`${courseData.catalog_title}: ${courseData.course_title}`}
-      />
+      <CustomHead pageTitle={courseTitle} />
       <Container maxWidth="lg">
         <Grid container spacing={1} sx={{ textAlign: "center" }}>
           {/* Top of course page */}
@@ -39,6 +45,25 @@ export default function Course() {
             courseID={courseid as string}
             numStudents={courseData.num_students}
           />
+          <TutorialDialog dialogTitle="Course Page Tutorial">
+            {isInstructor ? (
+              <InstructorCourseTutorial title={courseTitle} />
+            ) : (
+              <StudentCourseTutorial title={courseTitle} />
+            )}
+          </TutorialDialog>
+          <TutorialDialog dialogTitle="Course Page Tutorial">
+            {isInstructor ? (
+              <InstructorCourseTutorial title={courseTitle} />
+            ) : (
+              <StudentCourseTutorial title={courseTitle} />
+            )}
+          </TutorialDialog>
+          {isInstructor ? (
+            <ReadMeDialog dialogTitle="Best Practices for Instructors">
+              <InstructorBestPractices />
+            </ReadMeDialog>
+          ) : null}
         </Grid>
       </Container>
     </>

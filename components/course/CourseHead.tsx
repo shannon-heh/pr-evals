@@ -1,20 +1,21 @@
 import { Grid, Tooltip, Typography } from "@mui/material";
-import { blue, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import pluralize from "pluralize";
+import { prEvalsTheme } from "../../src/Helpers";
 import { ClassData, CourseData, InstructorData } from "../../src/Types";
 import HoverCard from "./HoverCard";
 
 export default function CourseHead(props: { data: CourseData }) {
   const commonHeaderBoxStyles = {
-    background: blue[300],
-    borderColor: grey[400],
+    background: prEvalsTheme.palette.secondary.dark,
+    borderColor: grey[300],
     alignItems: "center",
-    color: grey[800],
+    color: "black",
     p: 5,
   };
 
-  let countUniqueSections = (classes: ClassData[]): Object[] => {
-    let counts = {};
+  const countUniqueSections = (classes: ClassData[]): Object[] => {
+    const counts = {};
     for (let { class_type, weekly_meetings_count } of classes) {
       class_type = class_type == "Unknown" ? "Other" : class_type;
       if (class_type != "Lecture" && weekly_meetings_count == 0) continue;
@@ -44,18 +45,13 @@ export default function CourseHead(props: { data: CourseData }) {
           <Typography
             variant="h3"
             component="div"
-            color="white"
             fontWeight="bold"
+            color="secondary"
           >
             {props.data.catalog_title}
           </Typography>
           {props.data.crosslisting_catalog_titles.length > 0 ? (
-            <Typography
-              variant="subtitle1"
-              component="div"
-              fontWeight="medium"
-              fontSize="1.1em"
-            >
+            <Typography variant="subtitle1" component="div">
               {pluralize(
                 "Crosslisting",
                 props.data.crosslisting_catalog_titles.length
@@ -63,7 +59,7 @@ export default function CourseHead(props: { data: CourseData }) {
               : {props.data.crosslisting_catalog_titles.join(" • ")}
             </Typography>
           ) : null}
-          <Typography variant="h5" component="div" fontWeight="bolder">
+          <Typography variant="h5" component="div" mt={1}>
             {props.data.course_title}
           </Typography>
         </HoverCard>
@@ -76,17 +72,12 @@ export default function CourseHead(props: { data: CourseData }) {
           <Typography
             variant="h4"
             component="div"
-            color="white"
             fontWeight="bold"
+            color="secondary"
           >
             Quick Facts
           </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            fontWeight="medium"
-            fontSize="1.1em"
-          >
+          <Typography variant="subtitle1" component="div" fontWeight="medium">
             # Instructors:{" "}
             <Typography display="inline" fontWeight="normal">
               {props.data.instructors.length}
@@ -97,24 +88,14 @@ export default function CourseHead(props: { data: CourseData }) {
             placement="left"
             arrow
           >
-            <Typography
-              variant="subtitle1"
-              component="div"
-              fontWeight="medium"
-              fontSize="1.1em"
-            >
+            <Typography variant="subtitle1" component="div" fontWeight="medium">
               # Students:{" "}
               <Typography display="inline" fontWeight="normal">
                 {props.data.num_students}
               </Typography>
             </Typography>
           </Tooltip>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            fontWeight="medium"
-            fontSize="1.1em"
-          >
+          <Typography variant="subtitle1" component="div" fontWeight="medium">
             Meetings per week:{" "}
             <Typography
               display="inline"
@@ -149,18 +130,13 @@ export default function CourseHead(props: { data: CourseData }) {
           specialCourseHeaderFlex
         >
           <Typography
-            variant="h6"
+            variant="subtitle1"
             component="div"
-            color="white"
             fontWeight="bold"
+            color="secondary"
           >
             {pluralize("Instructor", props.data.instructors.length)}:{" "}
-            <Typography
-              display="inline"
-              variant="subtitle1"
-              fontWeight="medium"
-              color={grey[800]}
-            >
+            <Typography display="inline" variant="subtitle1" color="black">
               {props.data.instructors
                 .map((instr: InstructorData) => {
                   return instr["instructor_name"];

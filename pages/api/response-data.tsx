@@ -41,7 +41,7 @@ export default async function handler(
   const dbForms = (await getDB()).collection("forms") as Collection;
 
   if (courseid) {
-    let _: Object = await dbForms.findOne({
+    const _: Object = await dbForms.findOne({
       course_id: courseid,
       form_id: /-std$/,
     });
@@ -120,7 +120,11 @@ export default async function handler(
   if (
     allResponses.length == 0 ||
     allResponses.every(
-      (response) => (response["responses"] as Object[]).length == 0
+      (response) =>
+        (response["responses"] as Object[]).length == 0 ||
+        (response["responses"] as Object[]).every(
+          (response_) => response_["response"] === null
+        )
     )
   )
     return res
@@ -135,24 +139,18 @@ export default async function handler(
     for (let i = 0; i < responses.length; i++) {
       const response: string | number | string[] = responses[i]["response"];
 
-      if (
-        response === "" ||
-        response === [] ||
-        response === -1 ||
-        response === null
-      )
-        continue;
+      if (response === "" || response === null) continue;
 
       if (!data[i]) continue;
 
       const netID = allResponses[_]["netid"];
       if (!(netID in userDataCache)) {
-        let userData = await dbUsers.findOne({
+        const userData = await dbUsers.findOne({
           netid: allResponses[_]["netid"],
         });
 
         const difficultyQuestionIdx = 2;
-        let userStdFormData: Object[] = await dbResponses
+        const userStdFormData: Object[] = await dbResponses
           .find({
             form_id: formid.split("-")[0] + "-std",
             netid: netID,
@@ -258,7 +256,7 @@ async function getStudentDemographicsData(
   const dbResponses = (await getDB()).collection("responses") as Collection;
   const dbUsers = (await getDB()).collection("users") as Collection;
 
-  let _: Object = await dbForms.findOne({
+  const _: Object = await dbForms.findOne({
     course_id: courseid,
     form_id: /-std$/,
   });
@@ -299,13 +297,13 @@ async function getStudentDemographicsData(
   });
 
   let majorCountsData: Object[] = [];
-  for (let major in majorCounts)
+  for (const major in majorCounts)
     majorCountsData.push({ name: major, value: majorCounts[major] });
   majorCountsData.sort((a, b) => b["value"] - a["value"]);
   majorCountsData = majorCountsData.slice(0, numConcentrations);
 
-  let yearCountsData: Object[] = [];
-  for (let year in yearCounts)
+  const yearCountsData: Object[] = [];
+  for (const year in yearCounts)
     yearCountsData.push({ name: gradeMap[year], value: yearCounts[year] });
   yearCountsData.sort((a, b) => b["value"] - a["value"]);
 
