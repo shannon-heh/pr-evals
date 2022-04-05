@@ -265,6 +265,7 @@ export default function Charts(props: {
           setYearFilter={setYearFilter}
           yearFilter={yearFilter}
           disabled={chartData.length == 0 || chartData[0].data.length == 0}
+          courseID={props.courseID}
         />
       ) : null}
       {chartData.length == 0 || chartData[0].data.length == 0 ? (

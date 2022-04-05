@@ -20,13 +20,14 @@ export default function Filters(props: {
   setYearFilter: Function;
   yearFilter: string;
   disabled: boolean;
+  courseID?: string;
 }) {
   const { data: dataMajors, error: errorMajors } = useSWR(
-    "/api/get-majors",
+    props.courseID ? `/api/get-majors?courseid=${props.courseID}` : null,
     fetcher
   );
   const { data: dataYears, error: errorYears } = useSWR(
-    "/api/get-class-years",
+    props.courseID ? `/api/get-class-years?courseid=${props.courseID}` : null,
     fetcher
   );
 
@@ -80,7 +81,7 @@ export default function Filters(props: {
             variant={props.disabled ? "filled" : "outlined"}
             disabled={props.disabled}
           >
-            {dataMajors?.majors.map((major: string) => (
+            {dataMajors?.map((major: string) => (
               <MenuItem key={major} value={major}>
                 {major}
               </MenuItem>

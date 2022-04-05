@@ -64,6 +64,7 @@ export default function Reviews(props: { courseID?: string }) {
         setYearFilter={setYearFilter}
         yearFilter={yearFilter}
         disabled={!evalsData || (evalsData as EvalsData[]).length == 0}
+        courseID={props.courseID}
       />
       {!evalsData || (evalsData as EvalsData[]).length == 0 ? (
         <Box sx={{ mt: 2 }}>
