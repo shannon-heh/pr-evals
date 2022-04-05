@@ -17,7 +17,7 @@ export default function useCAS() {
     (async function () {
       const res = await fetch(`/api/auth?ticket=${ticket}`);
       const data = await res.json();
-
+      console.log(data);
       if (!("netid" in data && "isInstructor" in data)) {
         router.push("/");
         return;
