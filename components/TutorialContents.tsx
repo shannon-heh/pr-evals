@@ -116,9 +116,16 @@ export function StudentDashboardTutorial() {
       </Wrapper>
       <img src={DashboardRemoveCourse.src} width="100%" />
       <br />
-      <Wrapper>
+      <Wrapper break>
         The My Courses section is always visible on the dashboard, so you can
         use it to quickly access your enrolled courses' webpages!
+      </Wrapper>
+      <Wrapper>
+        One last thing: don't forget to set your major under the{" "}
+        <LessBold>Profile</LessBold> page. Your major will be tied to your
+        written evaluations and will be used in displaying the major
+        distribution for each course. This is completely anonymous -- your name
+        will not be displayed on any course pages.
       </Wrapper>
     </>
   );

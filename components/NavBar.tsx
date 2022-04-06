@@ -15,7 +15,7 @@ import { prEvalsTheme } from "../src/Helpers";
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const { isLoggedIn } = useCAS();
+  const { isLoggedIn, isInstructor } = useCAS();
 
   const handleMenu = (e) => {
     setAnchorEl(e.currentTarget);
@@ -83,9 +83,11 @@ export default function MenuAppBar() {
                 <Link href="/dashboard">
                   <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                 </Link>
-                <Link href="/profile">
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                </Link>
+                {!isInstructor ? (
+                  <Link href="/profile">
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  </Link>
+                ) : null}
                 <Link href="/logout">
                   <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Link>
