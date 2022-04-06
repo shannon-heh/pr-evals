@@ -119,7 +119,7 @@ export default function CourseHead(props: { data: CourseData }) {
           </Typography>
         </HoverCard>
       </Grid>
-      <Grid item container md={12} direction="column" sx={{ my: 2 }}>
+      <Grid item container md={12} direction="column" sx={{ mt: 0.5 }}>
         <HoverCard
           sx={{
             ...commonHeaderBoxStyles,
@@ -143,6 +143,28 @@ export default function CourseHead(props: { data: CourseData }) {
                 })
                 .join(" • ")}
             </Typography>
+          </Typography>
+        </HoverCard>
+      </Grid>
+      <Grid item container md={12} direction="column" sx={{ mt: 0.5, mb: 2 }}>
+        <HoverCard
+          sx={{
+            ...commonHeaderBoxStyles,
+            py: 1.2,
+            px: 5,
+            justifyContent: "center",
+          }}
+          specialCourseHeaderFlex
+        >
+          <Typography
+            variant="subtitle2"
+            fontWeight="normal"
+            color="black"
+            lineHeight={1.5}
+          >
+            View standardized form responses in the Charts and Reviews tabs, and
+            other responses in the Responses tab. <br /> Student responses are
+            always anonymous and optional.
           </Typography>
         </HoverCard>
       </Grid>

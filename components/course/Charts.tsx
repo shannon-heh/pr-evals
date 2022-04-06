@@ -11,7 +11,6 @@ import SingleChoiceChart from "./charts/SingleChoiceChart";
 import TextChart from "./charts/TextChart";
 import HoverCard from "./HoverCard";
 import Filters from "./Filters";
-import WordCloudChart from "./charts/WordCloudChart";
 
 export default function Charts(props: {
   courseID?: string;
@@ -265,7 +264,6 @@ export default function Charts(props: {
           setYearFilter={setYearFilter}
           yearFilter={yearFilter}
           disabled={chartData.length == 0 || chartData[0].data.length == 0}
-          courseID={props.courseID}
         />
       ) : null}
       {chartData.length == 0 || chartData[0].data.length == 0 ? (
@@ -285,22 +283,6 @@ export default function Charts(props: {
         <Grid container sx={{ textAlign: "center", mb: 2 }}>
           {/* Move the last two standardized form questions to the Demographics tab */}
           {processChartData(chartData)}
-          {props.isDemographics ? (
-            <>
-              <ChartWrapper key={-1}>
-                <WordCloudChart
-                  width={width}
-                  evalsData={convertToWordCloudData(chartData.slice(0, 1))}
-                />
-              </ChartWrapper>
-              <ChartWrapper key={-2}>
-                <WordCloudChart
-                  width={width}
-                  evalsData={convertToWordCloudData(chartData.slice(1, 2))}
-                />
-              </ChartWrapper>
-            </>
-          ) : null}
         </Grid>
       )}
     </>

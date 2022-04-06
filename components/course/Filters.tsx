@@ -13,6 +13,7 @@ import { fetcher } from "../../src/Helpers";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { red } from "@mui/material/colors";
 import gradeMap from "../../src/Types";
+import { useRouter } from "next/router";
 
 export default function Filters(props: {
   setConcentrationFilter: Function;
@@ -20,14 +21,16 @@ export default function Filters(props: {
   setYearFilter: Function;
   yearFilter: string;
   disabled: boolean;
-  courseID?: string;
 }) {
+  const router = useRouter();
+  const { courseid } = router.query;
+
   const { data: dataMajors, error: errorMajors } = useSWR(
-    props.courseID ? `/api/get-majors?courseid=${props.courseID}` : null,
+    courseid ? `/api/get-majors?courseid=${courseid}` : null,
     fetcher
   );
   const { data: dataYears, error: errorYears } = useSWR(
-    props.courseID ? `/api/get-class-years?courseid=${props.courseID}` : null,
+    courseid ? `/api/get-class-years?courseid=${courseid}` : null,
     fetcher
   );
 

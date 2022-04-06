@@ -320,16 +320,6 @@ async function getStudentDemographicsData(
         type: "SINGLE_SEL",
         data: yearCountsData,
       },
-      {
-        question: `Top ${numConcentrations} Student Concentrations`,
-        type: "MULTI_SEL",
-        data: majorCountsData,
-      },
-      {
-        question: "Student Class Years",
-        type: "MULTI_SEL",
-        data: yearCountsData,
-      },
     ],
   };
 }
