@@ -5,6 +5,7 @@ import Created from "../assets/instr-forms/created.png";
 import Published from "../assets/instr-forms/published.png";
 import Released from "../assets/instr-forms/released.png";
 import DashboardSearch from "../assets/dashboard/search.png";
+import DashboardSearchInstr from "../assets/dashboard/search-instr.png";
 import InstructorPreaddedCourses from "../assets/dashboard/instructor-preadded.png";
 import DashboardAddCourse from "../assets/dashboard/add-button.png";
 import DashboardAddedCourse from "../assets/dashboard/added-button.png";
@@ -50,7 +51,7 @@ export function InstructorDashboardTutorial() {
         On the left, search for courses by their title, number, or crosslisting.
         Click on any result to view a course's unique webpage.
       </Wrapper>
-      <img src={DashboardSearch.src} width="100%" />
+      <img src={DashboardSearchInstr.src} width="100%" />
       <br />
       <Wrapper break>
         The courses in which you're listed as an instructor have been
@@ -438,10 +439,9 @@ export function InstructorBestPractices() {
         <ListItem>
           <Wrapper>
             8. Create surveys that seek constructive criticism.{" "}
-            <LessBold>Mix and match</LessBold>
-            between numerical questions that are easy to respond to, and written
-            questions that allow students to freely express their priorities and
-            concerns.
+            <LessBold>Mix and match</LessBold> between numerical questions that
+            are easy to respond to, and written questions that allow students to
+            freely express their priorities and concerns.
           </Wrapper>
         </ListItem>
         <ListItem>
@@ -453,7 +453,7 @@ export function InstructorBestPractices() {
 
       <Wrapper break>
         If you need some inspiration on questions to include in your survey,
-        check out the <LessBold>“View Sample Questions”</LessBold> button on the
+        check out the <LessBold>View Sample Questions</LessBold> button on the
         edit form page. Clicking on it will show you a variety of pre-created
         questions you can easily add to your form. Also, you can reach out to
         the <LessBold>McGraw Center for Teaching and Learning</LessBold> and

@@ -13,12 +13,19 @@ import { StudentDataDB } from "../src/Types";
 import { fetcher } from "../src/Helpers";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 // capitalize first letter of string
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export default function Profile() {
-  const { netID } = useCAS();
+  const { netID, isInstructor } = useCAS();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isInstructor) router.push("/dashboard");
+  });
 
   // get user's profile data
   const url: string = netID ? `/api/get-user-data?netid=${netID}` : "";
