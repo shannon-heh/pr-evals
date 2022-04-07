@@ -188,7 +188,13 @@ export default function SubmitForm() {
           </Grid>
           <Grid item container flexDirection="column" sx={{ py: 1 }}>
             <Typography variant="h2">{formData.title}</Typography>
-            <Typography>{formData.description}</Typography>
+            <Typography>
+              {formData.description}
+              <br />
+              <br />
+              Your response is anonymous to all students and instructors, and
+              all questions are optional.
+            </Typography>
           </Grid>
           {!isInstructor ? (
             <Grid

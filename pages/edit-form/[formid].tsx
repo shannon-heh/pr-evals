@@ -288,7 +288,8 @@ export default function EditForm() {
             >
               By clicking 'Confirm', you will be publishing this form, opening
               it for submission from students in your course. You will no longer
-              be able to edit the form. <br />
+              be able to edit the form. Publishing the form is irreversible.
+              <br />
               <br />
               Click 'Cancel' to continue editing.
             </ConfirmationDialog>
