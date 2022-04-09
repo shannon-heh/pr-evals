@@ -38,8 +38,9 @@ export default function Reviews(props: { courseID?: string }) {
         }}
       >
         <Typography variant="subtitle1" fontWeight="medium" color="black">
-          These written responses were submitted to the standardized evaluations
-          form.
+          These statements were submitted to the standardized evaluations form
+          in response to the question: <br /> "Would you recommend this course
+          to a student considering taking it? Why or why not?"
         </Typography>
       </HoverCard>
     );

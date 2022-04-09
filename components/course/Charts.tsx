@@ -238,8 +238,8 @@ export default function Charts(props: {
           }}
         >
           <Typography variant="subtitle1" fontWeight="medium" color="black">
-            These charts visualize responses submitted to the standardized
-            evaluations form.
+            These charts visualize non-written responses submitted to the
+            standardized evaluations form.
           </Typography>
         </HoverCard>
       ) : null}
