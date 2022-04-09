@@ -31,8 +31,8 @@ export default function SingleChoiceChart(props: {
               <i>
                 Question type: Single Choice ({props.numResponses}{" "}
                 {pluralize("response", props.numResponses)} • 
-                {(100 * props.numResponses) / props.totalResponses}% response
-                rate)
+                {((100 * props.numResponses) / props.totalResponses).toFixed(0)}
+                % response rate)
               </i>
             </>
           )}
@@ -42,7 +42,7 @@ export default function SingleChoiceChart(props: {
             <Pie
               data={props.data}
               dataKey="value"
-              outerRadius={100}
+              outerRadius={70}
               fill={blue[400]}
               animationDuration={1000}
               animationBegin={0}

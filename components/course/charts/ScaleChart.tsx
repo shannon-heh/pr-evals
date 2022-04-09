@@ -61,8 +61,8 @@ export default function ScaleChart(props: {
               <i>
                 Question type: {props.type} ({props.numResponses}{" "}
                 {pluralize("response", props.numResponses)} • 
-                {(100 * props.numResponses) / props.totalResponses}% response
-                rate)
+                {((100 * props.numResponses) / props.totalResponses).toFixed(0)}
+                % response rate)
               </i>
             </>
           )}
