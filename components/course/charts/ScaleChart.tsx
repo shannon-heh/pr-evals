@@ -103,10 +103,23 @@ export default function ScaleChart(props: {
         </FormControl>
         <ResponsiveContainer width="99%" aspect={1.78}>
           {chartType == "Bar" ? (
-            <BarChart data={props.data} layout="vertical" margin={{ left: 50 }}>
+            <BarChart
+              data={props.data}
+              layout={props.type === "Slider" ? "vertical" : "horizontal"}
+              margin={{ left: 50 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
-              <YAxis dataKey="name" type="category" />
-              <XAxis type="number" hide />
+              {props.type === "Slider" ? (
+                <>
+                  <YAxis dataKey="name" type="category" />
+                  <XAxis type="number" hide />
+                </>
+              ) : (
+                <>
+                  <XAxis dataKey="name" type="category" />
+                  <YAxis type="number" hide />
+                </>
+              )}
               <Tooltip />
               <Bar
                 dataKey="value"
