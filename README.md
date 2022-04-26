@@ -1,10 +1,11 @@
 # pr.evals
 
-_An app to prepare, provide, and preview course evaluations at Princeton. Designed and developed by Shannon Heh '23 and Nicholas Padmanabhan '23._
+> An app to prepare, provide, and preview course evaluations at Princeton. Designed and developed by Shannon Heh '23 and Nicholas Padmanabhan '23.
 
-> Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Engineering.\
-> Department of Computer Science\
-> Princeton University
+**URL: [pr-evals.herokuapp.com](https://pr-evals.herokuapp.com/)**
+
+Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Engineering.\
+Department of Computer Science, Princeton University
 
 ## Papers
 
