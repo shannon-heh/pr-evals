@@ -4,7 +4,7 @@
 
 **URL: [pr-evals.herokuapp.com](https://pr-evals.herokuapp.com/)**
 
-Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Engineering.\
+Submitted in fulfillment of the Independent Work requirement for the degree of Bachelor of Science in Engineering.\
 Department of Computer Science, Princeton University
 
 ## Papers
