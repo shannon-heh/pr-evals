@@ -1,27 +1,14 @@
 # pr.evals
 
-### COS Independent Work (Spring 2022)
+_An app to prepare, provide, and preview course evaluations at Princeton. Designed and developed by Shannon Heh '23 and Nicholas Padmanabhan '23._
 
-### Shannon Heh '23, Nicholas Padmanabhan '23
+> Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Engineering.\
+> Department of Computer Science\
+> Princeton University
 
-The following commands are done in the root directory.
+## Papers
 
-To run dev server:
-
-```
-npm run dev
-```
-
-To install packages for the app:
-
-```
-npm i
-```
-
-For formatting, use Prettier with default settings.
-
-To declare environment variables, create a file named `.env.local` in the root directory. See the [docs](https://nextjs.org/docs/basic-features/environment-variables#loading-environment-variables) for how to input key-value pairs in this file. To use environment variables in code, call:
-
-```
-process.env.<VAR>
-```
+| Title                                                       | Author               | Link                                                                                               |
+| ----------------------------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------- |
+| pr.evals: A Novel System for Princeton’s Course Evaluations | Shannon Heh          | [Google Drive](https://drive.google.com/file/d/12KiXPz_9e-XhES3PyhcKkHIVmYxAW1sn/view?usp=sharing) |
+| pr.evals: Re-imagining Course Evaluations at Princeton      | Nicholas Padmanabhan | [Google Drive](https://drive.google.com/file/d/1tdK9_4pDEQ2UJ40DU7kdEA6nTW7M-klR/view?usp=sharing) |
