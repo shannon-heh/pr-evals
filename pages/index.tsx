@@ -38,6 +38,22 @@ export default function Home() {
               mt={4}
               mb={10}
             >
+              See{" "}
+              <a
+                href="https://drive.google.com/file/d/12KiXPz_9e-XhES3PyhcKkHIVmYxAW1sn/view?usp=sharing"
+                target="_blank"
+              >
+                Shannon's paper
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://drive.google.com/file/d/1tdK9_4pDEQ2UJ40DU7kdEA6nTW7M-klR/view?usp=sharing"
+                target="_blank"
+              >
+                Nicholas's paper
+              </a>{" "}
+              to learn more!
+              <br />
               A COS Independent Work project by Shannon Heh '23 and Nicholas
               Padmanabhan '23.
               <br />
