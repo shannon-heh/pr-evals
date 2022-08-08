@@ -1,4 +1,10 @@
 {
+  "name": "pr-evals",
+  "description": "An app to prepare, provide, and preview course evaluations at Princeton. Created by Shannon Heh '23 and Nicholas Padmanabhan '23.",
+  "version": "1.0",
+  "engines": {
+    "node": "16.15.0"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -21,7 +27,7 @@
     "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "17.0.2",
     "react-tagcloud": "^2.2.0",
-    "recharts": "^2.1.9",
+    "recharts": "2.1.12",
     "remove-punctuation": "0.0.4",
     "sentiment": "^5.0.2",
     "stopword": "^1.0.11",
