@@ -31,33 +31,22 @@ export default function Home() {
               An app to prepare, provide, and preview course evaluations at
               Princeton.
             </Typography>
-            <Typography
-              fontSize={18}
-              lineHeight={2}
-              fontWeight={400}
-              mt={4}
-              mb={10}
-            >
-              See{" "}
-              <a
-                href="https://drive.google.com/file/d/12KiXPz_9e-XhES3PyhcKkHIVmYxAW1sn/view?usp=sharing"
-                target="_blank"
-              >
-                Shannon's paper
-              </a>{" "}
-              and{" "}
-              <a
-                href="https://drive.google.com/file/d/1tdK9_4pDEQ2UJ40DU7kdEA6nTW7M-klR/view?usp=sharing"
-                target="_blank"
-              >
-                Nicholas's paper
-              </a>{" "}
-              to learn more!
-              <br />
+            <Typography fontSize={18} lineHeight={2} fontWeight={400} my={4}>
               A COS Independent Work project by Shannon Heh '23 and Nicholas
               Padmanabhan '23.
               <br />
               Advised by Professor David Walker.
+            </Typography>
+            <Typography fontSize={18} lineHeight={2} fontWeight={400} my={4}>
+              Codebase and links to our papers are in{" "}
+              <a
+                href="https://github.com/shannon-heh/pr-evals"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
+              !
             </Typography>
             <Box>
               <Button
